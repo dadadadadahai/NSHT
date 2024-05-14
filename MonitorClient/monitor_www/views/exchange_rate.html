@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- basic styles -->
+
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+	
+		<link rel="stylesheet" href="css/chosen.css">
+		<link rel="stylesheet" href="css/ace.min.css" />
+		<link rel="stylesheet" href="css/gm.css" />
+		<link rel="stylesheet" href="css/bootstrap-datetimepicker.css" />
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+<body class="bg-layout">
+
+	<div class="page-content">
+		<div class="row">
+			<div class="table-search">
+				
+				<a class="btn btns-green btn-refresh btns-tables" href="javascript:add();" >添加</a>
+                
+			</div>
+			<div class="table-header">
+				汇率配置列表
+			</div>
+			<div class="table-responsive content-details">
+				<table  id="sample-table-3" class="gameTable table table-hover">
+					<thead>
+						<tr>
+							<th>汇率转换</th>
+							<th align="center">时间</th>
+							<th>汇率</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+				
+				
+			</div>
+		</div>	
+	</div><!-- /.page-content -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+					<h4 class="modal-title" id="myModalLabel">操作</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="modify_gamename">汇率转换</label>
+                        <select name="currency" style="width:180px;" id="currency" class="dept_select" tabIndex="1" class="form-control"> 
+							<option value="1" >美元（美元->雷亚尔)</option>
+							<option value="2" >欧元（欧元->美元)</option>
+							<option value="3" >雷亚尔（雷亚尔->美元)</option>
+						</select>
+						
+					</div>
+					<div class="form-group">
+						<label for="modify_gamename">时间</label>
+                        <input type="text" class="form-control" id="timedate"  placeholder="日期" style="width:260px;" readonly>
+						
+					</div>
+					<div class="form-group">
+						<label for="modify_gamekey">汇率</label>
+						<input type="text" name="exchange_rate" class="form-control" id="exchange_rate" style="width:260px;">
+					</div>
+					<div class="form-group">
+						<label for="modify_gamekey">
+
+
+						</label>
+					</div>
+                </div>
+
+				<div class="modal-footer" style="background-color: #fff;border-top:#fff;text-align: left;">
+					<button type="button" id="btn_gamemodify" class="btn btn-primary" onclick="btn_gamemodify()">提交</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+		
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="js/bootstrap.min.js"></script>
+		
+		<script src="js/jquery.dataTables.min.js"></script>
+		<script src="js/jquery.dataTables.bootstrap.js"></script>
+
+		<script src="js/ace-elements.min.js"></script>
+		<script src="js/ace.min.js"></script>
+		
+		<script src="layer/layer.js"></script>
+		<script src="js/jquery.cookie.js"></script> 
+		<script src="js/date-time/bootstrap-datetimepicker.js"></script> 
+		<!-- inline scripts related to this page -->
+		<script>
+			var time  = "";
+			var exchange_rate = 0;
+			var type = 1;
+			var currency = 1;
+
+			function modfily_gamemessage(times,exchange_rate , currency){
+				
+				$("#exchange_rate").val(exchange_rate);
+                $("#timedate").val(times);
+				$('#myModal').modal();
+				$("#timedate").attr("disabled" , true);
+				$("#currency").find("option[value="+currency+"]").attr("selected",true);
+				$("#currency").attr("disabled" , true);
+
+				time  = times;
+				exchange_rate = exchange_rate;
+				type = 2;
+				currency = currency
+			}
+            function add(){
+				$("#exchange_rate").val('');
+				$("#timedate").attr("disabled" , false);
+				$("#currency").attr("disabled" , false);
+				$('#myModal').modal();
+				type = 1;
+
+            }
+			jQuery(function($) {
+				$('#sample-table-3').dataTable();
+			});
+
+			$(document).ready(function (){
+				$('#timedate').datetimepicker({
+					timepicker:false,
+					format: "yyyy-mm-dd",
+					autoclose: true,
+					minView:2,
+					maxDateNow: true,
+					pickerPosition: "bottom-left"
+				});
+				searchallgameinfo();
+
+			})
+
+			function btn_gamemodify(){//修改信息
+
+				var time1 = $("#timedate").val();
+				var exchange_rate1 = $("#exchange_rate").val();
+				var currency1 = $("#currency").val();
+
+				if(time1 == '' || exchange_rate1 == '' || currency == ''){
+					alert("参数不完整，请确认输入");
+					return
+				}
+
+				if(type ==2){
+					if(time1==time&&exchange_rate1==exchange_rate &&currency1==currency){
+						alert("请输入修改项，如不修改则点击取消！");
+						return
+					}
+				}
+				var gameid = Number($.cookie("gameid")) || 0;
+				$.post("/monitor/http", {
+                    cmd: "exchange_rate_update",
+                    exchange_rate:exchange_rate1,
+                    time:time1,
+					currency:currency1,
+					type:type,
+					gameid:gameid
+                },
+                function(data){
+                    if (data.retcode == 1) {
+                        alert(data.retdesc);
+                    } else {
+                        alert(data.retdesc);
+                        $("#cancel").click()
+                        searchallgameinfo();
+                    }
+                }, "json");
+			}
+			function searchallgameinfo(){//查询信息
+				var gameid = Number($.cookie("gameid")) || 0;
+				$.post("/monitor/http", {cmd: "exchange_rate_list",gameid:gameid},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								if(data.data==null){
+									// alert("加载失败！")
+									return
+								}
+								$('#sample-table-3').DataTable( {
+									"data":data.data,
+									"aoColumns": [
+										{ "data": null,"render":function(data1,type,row,meat){
+												switch(row.currency){
+													case "1":
+														return "美元->雷亚尔";
+													case "2":
+														return "欧元->美元";
+													case "3":
+														return "雷亚尔->美元";
+													default:
+														return "";
+												}
+											} },
+										{ "data": "times" },
+										{ "data": "exchange_rate" },
+										{ "data": null,"render":function(data1,type,row,meat){
+												var time = '"'+ row.times +'"';
+						                        var html ="<a href='javascript:modfily_gamemessage(" + time +" , "+ row.exchange_rate +", "+ row.currency +");'>修改</a>";
+												
+												return html;
+											} },
+									],
+									"order": [[1, 'desc']]
+								});
+
+							}
+						}, "json");
+			}
+		</script>
+	
+	
+</body>
+</html>
+

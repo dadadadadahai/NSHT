@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                 <form action="">                 	               
+                 	
+                    <div class="jmform-group">
+                        <input id="uid" type="text" placeholder="玩家ID" class="jminput jminput-sm jminput-size04" name="">
+                    </div>
+					
+                    <div class="jmform-group">
+                        <div class="jqtransform fleft">
+                            <select id="changetype" name="select" class="select_new">
+                            	<option value="0" selected>变动类型</option>                                
+                            	<option value="1">消耗</option>
+                                <option value="2">获取</option>                                       
+                            </select>
+                        </div>
+                    </div>     
+                    <div class="jmform-group">
+                        <input id="starttime" type="text" placeholder="开始时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy/MM/dd HH:mm:ss'})" value="" autocomplete="off">
+                    </div>
+                    <div class="jmform-group">
+                        <input id="endtime" type="text" placeholder="结束时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy/MM/dd HH:mm:ss'})" value="" autocomplete="off">
+                    </div>
+                    <div class="jmform-group">
+                        <a id="gm_log_searchBtn" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>查询</a>
+                    </div>
+                    <!-- <div class="jmform-group">
+                        <a class="jmbtn jmbtn-succeed" href="javascript:;" onClick ="$('#cc_loginprops_table').tableExport({type:'excel',escape:'false'});">导出报表</a>
+                    </div> -->
+                    
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">货币日志</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <div id="inventory" style="height:600px"></div>
+        </div>
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<!--报表导出 js -->
+<script src="js/export/tableExport.js"></script>
+<script src="js/export/jquery.base64.js"></script>
+<script src="js/highcharts.js"></script>
+<script type="text/javascript">
+	template.helper("changechips" , function (data) {
+
+		return (data / 100).toFixed(2)
+
+	})
+ 
+
+    function dateFormat(date, format){
+        date = new Date(date * 1000);  
+        var map = {  
+           "M": date.getMonth() + 1, //月份   
+           "d": date.getDate(), //日   
+           "h": date.getHours(), //小时   
+           "m": date.getMinutes(), //分   
+           "s": date.getSeconds(), //秒   
+           "q": Math.floor((date.getMonth() + 3) / 3), //季度   
+           "S": date.getMilliseconds() //毫秒   
+       };  
+       format = format.replace(/([yMdhmsqS])+/g, function(all, t){  
+           var v = map[t];  
+           if(v !== undefined){  
+               if(all.length > 1){  
+                   v = '0' + v;  
+                   v = v.substr(v.length-2);  
+               }  
+               return v;  
+           }  
+           else if(t === 'y'){  
+               return (date.getFullYear() + '').substr(4 - all.length);  
+           }  
+           return all;  
+       });  
+       return format;  
+
+    }
+       
+    function research(id) {
+       
+		var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+        var starttime = Date.parse($("#starttime").val())/1000 || 0;
+        var endtime = Date.parse($("#endtime").val())/1000 || 0;
+		var uid  =  $("#uid").val();
+		var nickname = $("#nickname").val();
+		var optype  =  $("#optype").val();
+		var changetype = $("#changetype").val();
+
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+		var perpage = 300;
+
+		if(uid == ""){
+			alert("请输入玩家ID查询！");
+			return false;
+		}
+        
+		var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "gm_log_currency", gameid:gameid, zoneid:zoneid, starttime: starttime, endtime: endtime,curpage:toCurPage,charid:uid,nickname:nickname,perpage:perpage,changetype:changetype ,optype:optype,querytype:2},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.data&&data.data.length>0) {
+
+                        initchart(data.data)
+                    } 					
+				}
+			}
+		});	
+    }
+	function listToPage(id){
+		var ids = id
+		research(ids);
+		};
+    $(document).ready(function(){
+        $("#gm_log_searchBtn").click(research);
+		// research();
+    });
+    function initchart(data){
+        var arrayTime = new Array();
+		var arrayItems = new Array();
+        var arrayorder = new Array();
+        var arraycash = new Array();
+        var array4 = new Array();
+        for(var i=0; i<data.length; i++) {
+            arrayTime.push(dateFormat(data[i].timestamp,'yyyy-MM-dd hh:mm:ss'));
+            arrayItems.push(parseFloat((data[i].balance / 100).toFixed(2)) );//根据传进来的ID变量，取不同的值
+            arrayorder.push(parseFloat((data[i].totalrechargechips /100).toFixed(2)) );
+            arraycash.push(parseFloat((data[i].chipswithdraw/100).toFixed(2)) );
+            array4.push(parseFloat((data[i].cancovertchips/100).toFixed(2)))
+        }
+       
+
+        var chart = new Highcharts.Chart({
+             chart: {
+                 type: 'spline',
+                 renderTo:"inventory"
+                 },
+            title: {
+                text: '货币变化日志'
+            },
+           
+            xAxis: {
+                categories: arrayTime,
+                labels: {enabled:false}
+            },
+            yAxis: {
+                title: {
+                    text: '金币 (元)'
+                },
+                min:0
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        // 开启数据标签
+                        enabled: true          
+                    },
+                    // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+                    enableMouseTracking: false
+                }
+                
+            },
+            series: [{
+                name: '充值',
+                data:arrayorder,
+                marker: { 
+                    radius: 3 
+                }
+            },{
+                name: '提现',
+                data:arraycash,
+                marker: { 
+                    radius: 3 
+                }
+            },{
+                name: '货币',
+                data:arrayItems,
+                marker: { 
+                    radius: 2 
+                }
+            },{
+                name: '可兑换额度',
+                data:array4,
+                marker: { 
+                    radius: 2 
+                }
+            }]
+	    });
+    }
+</script>
+</body>
+</html>

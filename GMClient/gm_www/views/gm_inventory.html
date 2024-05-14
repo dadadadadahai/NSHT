@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                 <form action="">    
+                    <div class="jmform-group">
+                       
+                        <div class=" fleft">
+                            <select id="sub_game" name="select" class="select_new">
+                            	<option value="0">公用</option>
+                                <option value="127">生肖slots</option>
+                            </select>
+                        </div>
+                    </div> 
+                    <div class="jmform-group">
+                     
+                        <!-- <div class=" fleft">
+                            <select id="search_sessions" name="select" class="select_new">
+                                <option value="0" selected>场次</option>  
+                                <option value="1">初级场</option>
+                                <option value="2">中级场</option>
+                                <option value="3">高级场</option>
+                                
+                                <option value="100">非充值玩家</option>
+                            </select>
+                        </div> -->
+                    </div>             	               
+                    <div class="jmform-group">
+                        <a id="gm_log_searchBtn" class="jmbtn jmbtn-succeed ">查询</a>
+                    </div>
+                </form>
+            </div>           
+        </div>
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">库存配置</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="cc_loginprops_table">
+                <thead>
+                    <tr>
+                        <th>游戏</th>
+                        <!-- <th>场次</th>  -->
+                        <th>抽水比例(万分比)</th>
+                        <th>当前库存</th>
+                        <th>初始库存</th>
+                       
+						<th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">
+						<%for(i = 0; i < datas.length; i++) {%>    
+						<tr taxpercent=<%=changechipss(datas[i].taxpercent) %> curstocknum=<%=changechips(datas[i].curstocknum)%> initstocknum=<%=changechips(datas[i].initstocknum)%> subgametype=<%=datas[i].subgametype%> subgametypename=<%=subgametype(datas[i].subgametype)%> subgamename=<%=gamename(datas[i].subgameid)%>  subgameid=<%=datas[i].subgameid%> id=<%=datas[i].id%>>
+                            <td> <%=gamename(datas[i].subgameid)%></td>
+							<!-- <td> <%=subgametype(datas[i].subgametype)%> </td> -->
+							<td> <%=changechipss(datas[i].taxpercent) %></td>
+                            <td> <%=changechips(datas[i].curstocknum)%></td>
+                            <td> <%=changechips(datas[i].initstocknum)%></td>
+							
+							<td><a class='jmbtn jmbtn jmbtn-info update'>修改</a>
+                                <!-- <a class='jmbtn jmbtn jmbtn-success delete'>删除</a></td> -->
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div>
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+           
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+<!-- 弹窗信息 start -->
+<div id="itemInfo" style="overflow-y: auto;width: 700px;" class="popupCon " sty>
+    <h2 class="f16 newTitle" >库存配置</h2>
+    <a href="javascript:closeCont('itemInfo');"   class="btnClose">×</a>
+    <!--popupBox start-->
+    <div class="popupBox" >
+        <div class="blockbox" >
+            <div class="box-inner clearfix" style="min-height:300px">
+                <div class="jmform-vertical add-itemInfo">
+                    <!-- <div class="jmform-vgroup" id="number1">
+                        <label class="control-label" style="width: 25%;" >游戏</label>
+                        <div class="fillform">
+                            <input id="subgame" type="text" class="jminput jminput-size05" name="subgame" disabled/>
+                        </div>
+                    </div> -->
+                    <!-- <div class="jmform-vgroup" id="number1">
+                        <label class="control-label" style="width: 25%;" >场次</label>
+                        <div class="fillform">
+                            <input id="session" type="text" class="jminput jminput-size05" name="session" disabled/>
+                        </div>
+                    </div> -->
+                    
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">抽水比例：</label>
+                        <div class="fillform">
+                            <input id="taxpercent" type="text" class="jminput jminput-size05" name="taxpercent" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">当前库存：</label>
+                        <div class="fillform">
+                            <input id="curstocknum" type="text" class="jminput jminput-size05" name="curstocknum" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn jmbtn-info" href="javascript:void(0)" onclick="submit()">提交</a>  
+							<a class="jmbtn jmbtn jmbtn-default" href="javascript:closeCont('itemInfo');">取消</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--popupBox end-->
+</div>
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<!--报表导出 js -->
+<script src="js/export/tableExport.js"></script>
+<script src="js/export/jquery.base64.js"></script>
+<style>
+.select_new{
+  width:150px;height:36px; border:1px solid #ddd;border-radius: 5px;color: #555555
+}
+</style>
+<script type="text/javascript">
+	var number  = 0;
+	var taxpercent = 0;
+	var curstocknum   = 0;
+    var initstocknum = 0;
+    var subgametype  =  0;
+	var optype  = 1;
+    var perpage = 50;
+    var jsonPlat;
+    var subgametypename;
+    var subgamename = 1;
+    var subgameid = 0;
+    var id = 0;
+    var jsonPlat;
+	template.helper('gamename', function (data) {  
+        
+        if (data ==0){
+            return "公用";
+        }
+        if (data == 127){
+            return "生肖slots";
+        }
+        for(var i=0; i<jsonPlat.length; i++) {
+            if(jsonPlat[i].subgameid == data){
+               return jsonPlat[i].subgamename;
+               break;
+            }
+        }
+   	})
+    template.helper("changechips" , function (data) {
+
+        return (data / 100).toFixed(2)
+
+    })
+    template.helper("changechipss" , function (data) {
+
+        return (data / 10000).toFixed(4)
+
+    })
+    template.helper("subgametype" , function (data) {
+
+        switch(data){
+            case 1:return "初级场";
+            case 2:return "中级场";
+            case 3:return "高级场";
+            case 127001:return "生肖slots初级场";
+            case 127002:return "生肖slots中级场";
+            case 127003:return "生肖slots高级场";
+            case 100:return "非充值玩家";
+        }
+
+    })
+    //判断是否有数据，记录为空
+    template.helper('isenptydata', function (data) {
+        if($.isEmptyObject(data)){
+            return true;
+        }else{
+            return false;
+        }
+    })
+    function research(id) {
+        optype = 1
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+
+        let sessions       = Number($('#search_sessions').val());
+        let subgame       = Number($('#sub_game').val());
+        
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+        
+        var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "inventory_controll_list", gameid: gameid,zoneid:zoneid, optype: optype, curpage: toCurPage , perpage :perpage,subgametype:sessions , subgameid:subgame},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.datas&&data.datas.length>0) {
+                        var html = template("gm_cc_RecordData", data); 
+                        $("#gm_cc_RecordHtml").html(html);
+                    }else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+					
+				}
+			}
+		});
+    }
+	// function listToPage(id){
+	// 	var ids = id
+	// 	research(ids);
+	// 	};
+    $(document).ready(function(){
+        $("#gm_log_searchBtn").click(research);
+        
+        research(1);
+        // let gameid = $.cookie("gameid");
+
+        // $.getJSON("js/json/game/1002.json", function(allplat){
+        //     jsonPlat = eval(allplat.data);
+        //     var html = "<option value='0'>请选择游戏</option>";
+        //     for(var i=0; i<jsonPlat.length; i++) {
+        //         if(jsonPlat[i].gametype == 1){
+        //             html += "<option value='"+jsonPlat[i].subgameid+"'>"+jsonPlat[i].subgamename+"</option>";
+        //         }
+        //     }
+            
+        //     $("#sub_game").html(html)
+        // });
+		
+    });
+    $('.update').live('click',function(){
+        var trItem = $(this).parent('td').parent('tr');
+        optype  = 10;
+
+        taxpercent  = trItem.attr("taxpercent");
+        curstocknum  = trItem.attr("curstocknum");
+        initstocknum = trItem.attr("initstocknum");
+        subgametype  =  trItem.attr("subgametype");
+        subgametypename = trItem.attr("subgametypename");
+        id = trItem.attr("id");
+
+        subgamename = trItem.attr("subgamename");
+        subgameid = trItem.attr("subgameid");
+     
+        $("#session").val(subgametypename);
+        // $("#subgame").val(subgamename);
+        $('#taxpercent').val(taxpercent);
+        $('#curstocknum').val(curstocknum);
+
+		showCont('itemInfo');
+
+	})
+	function submit(){
+        let gameid = $.cookie("gameid");
+        let zoneid = $.cookie("zoneid");
+  
+        let sessions     = Number(subgametype);
+        let sgameid    = Number(subgameid);
+        let sid    = Number(id);
+        let taxpercent   = Number($('#taxpercent').val() * 10000);
+        let curstocknum  = Number($('#curstocknum').val() * 100);
+
+        // if(id == number && chips == gold && control == autocontrolvalue ){
+        //     alert("数据没有任何修改");
+        //     return false;
+        // }
+
+        let res = confirm('是否确认提交？');
+        if(res != true) {
+            return;
+        }
+
+        $.post("/gm/http", {cmd: "inventory_controll_list", gameid: gameid,zoneid:zoneid, optype: optype, subgametype:sessions,taxpercent:Math.round(taxpercent),curstocknum:Math.round(curstocknum),optype: 2,subgameid:sgameid , id:sid},
+        function(data){
+            alert(data.retdesc);
+            if(data.retcode == 0){
+                closeCont('itemInfo');
+                research(1);
+            }
+        }, "json");
+        
+ 
+    }
+
+    
+</script>
+</body>
+</html>

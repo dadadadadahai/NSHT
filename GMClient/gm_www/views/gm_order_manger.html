@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                 <form action="">                 	               
+
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">支付管理</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="cc_loginprops_table">
+                <thead>
+                    <tr>
+                        <th>支付平台</th>
+                        <th>状态</th>
+						<th>操作</th>
+                    </tr>
+                </thead>               
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">
+						<%for(i = 0; i < data.length; i++) {%>    
+						<tr id=<%=data[i].id%> status=<%=data[i].status%>>
+                            <td><%=data[i].platname%></td>
+                            <td><%=data[i].status==0?"禁用":"启用"%></td>
+                            <td>
+                                <%if(data[i].status==0){%>
+                                    <a class='releaseBtn' style="color:blue;">启用</a>
+                                <%}else{%>
+                                    <a class='releaseBtn' style="color:red;">禁用</a>
+                                <%}%>
+                            </td>
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</div>
+<script type="text/javascript" src="js/effect.js"></script>
+<!--报表导出 js -->
+<script src="js/export/tableExport.js"></script>
+<script src="js/export/jquery.base64.js"></script>
+<style>
+	.select_new{
+	  width:150px;height:36px; border:1px solid #ddd;border-radius: 5px;color: #555555
+	}
+	</style>
+<script type="text/javascript">
+    var gameid = Number($.cookie("gameid")) || 0;
+    var zoneid = Number($.cookie("zoneid")) || 0;
+    $(document).ready(function(){
+        search();
+        
+    });
+    function search(){
+        $.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "gm_order_manger", gameid: gameid,zoneid:zoneid,optype:1,reqtype:1},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.data&&data.data.length>0) {
+                        var html = template("gm_cc_RecordData", data); 
+                        $("#gm_cc_RecordHtml").html(html);              
+                    }else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+										
+				}
+			}
+		});	
+        
+    }
+    $('.releaseBtn').live('click',function(){
+        let res = confirm('是否确认修改状态？');
+        if(res != true) {         
+            return;
+        }
+        var trItem = $(this).parent('td').parent('tr');
+        id = trItem.attr("id");
+        status = trItem.attr("status") == 1 ? 0 : 1;
+ 
+        $.post("/gm/http", {cmd: "gm_order_manger", gameid: gameid,zoneid:0, optype: 2, id:id, status:status,reqtype:1},
+        function(data){
+            alert(data.retdesc);
+            if(data.retcode == 0){
+                search();
+            }
+        }, "json");
+
+    })
+	
+</script>
+</body>
+</html>

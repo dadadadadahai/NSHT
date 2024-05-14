@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<link rel="stylesheet" type="text/css" href="css/ui-dialog.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script>
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">
+    	<!-- jm-navbar start-->
+    	<div class="jm-navbar">
+        	<div class="jmform-search clearfix">
+            	 <form action="">
+                    
+                    <div class="jmform-group">
+                        <div class="jqtransform fleft">
+                            <select id="optype" name="select" style="width: 120px;">
+                                <option value="6" selected>IP</option>
+                                <option value="7">机器码</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="jmform-group">
+                        <input id="code" type="text" placeholder="账号" class="jminput jminput-sm jminput-size04" name="">
+                    </div>
+                    <div class="jmform-group" style="display: none;"> 
+                        <div class="jqtransform fleft">
+                            <select id="limittype" name="select" style="width: 120px;">
+                               
+                                <option value="0" selected>全部</option>
+                                <option value="1">登录</option>
+                                <option value="2">注册</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="jmform-group">
+                        <input id="starttime" type="text" placeholder="开始时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy/MM/dd HH:mm:ss'})" value="" autocomplete="off">
+                    </div>
+                    <div class="jmform-group">
+                        <input id="endtime" type="text" placeholder="结束时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy/MM/dd HH:mm:ss'})" value="" autocomplete="off">
+                    </div>  
+                    <div class="jmform-group">
+                        <a id="gm_punish_record" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>查询</a>
+                    </div>
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">处罚信息</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01 aList_table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <!-- <th>游戏ID</th>
+						<th>区服ID</th> -->
+						<th>限制类型</th>
+                        <th>限制账号</th>
+                        <!-- <th>限制操作</th> -->
+                        <th>限制原因</th>
+                        <th>开始时间</th>
+                        <th>结束时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	
+                </tbody>
+                
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html" >
+						<%for(i = 0; i < data.length; i++) {%>    
+							<tr id=<%=data[i].taskid%> dptype=<%=data[i].ptype%> >
+								<td><%=data[i].taskid%></td>
+                                <!-- <td><%=data[i].gameid%></td>
+								<td><%=data[i].zoneid%></td> -->
+                                <td><%=data[i].ptype == 6 ? 'IP' : '机器码'%></td>
+                                <td><%=data[i].punishvalue%></td>
+                                <!-- <td><%=data[i].limittype == 1 ? '登录' : '注册'%></td> -->
+                                <td><%=data[i].reason%></td>
+								<td><%=dateFormat(data[i].starttime,'yyyy-MM-dd hh:mm:ss')%></td>
+								<td><%=dateFormat(data[i].endtime,'yyyy-MM-dd hh:mm:ss')%></td>
+                                <td><%if(data[i].state == 1) {%> <%='已结束'%> <%}else {%> <%='未结束'%> <span class='sline'>|</span><a class='releaseBtn'>解除</a> <%}%> </td>
+														
+							</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div>
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+        	<div class="jm-epages" id="pageHtml">
+            	<script type="text/html" id="pageData">
+				<%if(isenptydata(data)){%>
+					<div style="color:#ff6600" class="fleft">暂无查询记录！</div>
+				<%} else{%>
+					<div class = "fright">
+					<%if(curpage != 1) {%>   
+						<a href="javascript:listToPage(1);">首页</a>
+						<a href="javascript:listToPage(<%=curpage - 1%>);">上一页</a>
+					<%}%>
+					<%if(curpage == 1 && maxpage != 0 && maxpage != 1) {%>  
+						<a>首页</a>
+						<a>上一页</a>
+					<%}%>				
+					<%if(maxpage <= 8){%> 
+						<%for(i = 1; i <= maxpage; i++) {%>  
+						<%if(curpage == i) {%>  
+							<a href="#" class="on"><%=i%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+						<%}%>  
+					<%}%>  
+					<%}else {%>  
+						<%if(curpage == 1) {%>  
+							<a href="#" class="on">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							<a href="javascript:listToPage(3);">3</a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage < 6) {%>  
+							<%for(i = 1; i <= curpage - 1; i++ ) {%>  
+								<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+							<%}%>  
+							<span class="on"><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage >= 6 && curpage < maxpage - 4) {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<a href="javascript:listToPage(<%=curpage - 1%>);"><%=curpage - 1%></a>  
+							<span class="on"><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage-1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<%for(i = maxpage - 4; i <= maxpage; i++) {%>  
+								<%if(curpage == i) {%>  
+									<span class="on"><%=i%></span>  
+								<%}else {%>  
+									<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+								<%}%>  
+							<%}%>  
+						<%}%>  
+					<%}%>  
+					<%if(curpage < maxpage) {%>  
+						<a href="javascript:listToPage(<%=curpage + 1%>);">下一页</a>  
+						<a href="javascript:listToPage(<%=maxpage%>);">尾页</a>  
+					<%}%> 
+					<span>第<input type="text" id="choise_page" style="width: 30px;">页 <button type="button" onclick="choise()">跳转</button></span>
+					<div>
+				<%}%>
+				</script>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+	template.helper('dateFormat',function(date,format){
+		date = new Date(date * 1000);  
+       var map = {  
+           "M": date.getMonth() + 1, //月份   
+           "d": date.getDate(), //日   
+           "h": date.getHours(), //小时   
+           "m": date.getMinutes(), //分   
+           "s": date.getSeconds(), //秒   
+           "q": Math.floor((date.getMonth() + 3) / 3), //季度   
+           "S": date.getMilliseconds() //毫秒   
+       };  
+       format = format.replace(/([yMdhmsqS])+/g, function(all, t){  
+           var v = map[t];  
+           if(v !== undefined){  
+               if(all.length > 1){  
+                   v = '0' + v;  
+                   v = v.substr(v.length-2);  
+               }  
+               return v;  
+           }  
+           else if(t === 'y'){  
+               return (date.getFullYear() + '').substr(4 - all.length);  
+           }  
+           return all;  
+       });  
+       return format;  
+	}); 
+    template.helper('isenptydata', function (data) {    
+   		if($.isEmptyObject(data)){
+			return true;
+		}else{
+			return false;
+		}
+   	})
+    function gm_punish_record(id) {
+
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+        
+		var optype = Number($("#optype option:selected").val())||0;
+		var limittype = Number($("#limittype option:selected").val())||0;
+        var starttime = Date.parse($("#starttime").val())/1000 || 0;
+		var endtime = Date.parse($("#endtime").val())/1000 || 0;
+        var code = $("#code").val();
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+        //alert(pid);
+		var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "gm_punish_record", gameid:gameid, zoneid: zoneid, ptype:optype, starttime:starttime, endtime:endtime,code:code,curpage:toCurPage,punishvalue:code},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					console.log(data);
+					if (data.data&&data.data.length>0) {
+	                      var html = template("gm_cc_RecordData", data);
+	                      $("#gm_cc_RecordHtml").html(html);              
+	                }else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+					var pageHtml = template("pageData", data);  
+					$("#pageHtml").html(pageHtml);						
+				}
+			}
+		});	
+    }
+	
+	$('.releaseBtn').live('click', function(){			
+			var stId = $(this).parent('td');
+			var spId = $(stId).parent('tr').attr('id');
+			
+            var ptype = $(stId).parent('tr').attr('ptype');
+			var gameid = Number($.cookie("gameid"));
+        	var zoneid = Number($.cookie("zoneid"));
+			
+			$.ajax({
+			    url:"/gm/http",
+				type : "POST",
+				data: {cmd: "gm_punish_delete", taskid: spId,  gameid:gameid, zoneid:zoneid,ptype:ptype},
+				dataType : "json",
+				success:function(data) {					
+					//修改成功
+					if(true){
+						$(stId).text('已结束');	
+						}else{
+							return false;
+						}
+					//console.log(data);
+				}
+			 })
+			
+		});
+	
+	function listToPage(id){
+		var ids = id
+		gm_punish_record(ids);
+		};
+	
+    $(document).ready(function(){
+        gm_punish_record();
+        $("#gm_punish_record").click(gm_punish_record);
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="js/template-native.js"></script>
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                 <form action="">
+					
+                 	<div class="jmform-group">
+                        <input id="accid" type="text" placeholder="账号ID" class="jminput jminput-sm jminput-size04" name="">
+                    </div>
+                   
+                    <div class="jmform-group">
+                        <a id="user_online_search" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>查询</a>
+                        <a class="jmbtn  jmbtn-warn" href="javascript:control_sumit(2)">取消点控</a>
+                    </div>
+                   
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">点控用户信息</h3>
+			<span id="totalHtml">
+				<script id="totalinfo" type="text/html">
+					<h4 class="h3type txt-white">
+						
+                    </h4>
+				</script>
+					
+			</span>
+			
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="user_list_table">
+
+                <thead>
+					
+                    <tr>
+                        <th class="allcheck_box"><label><input type="checkbox" class="selectAll" />全选</label></th>
+                    	<th>玩家ID</th>
+                        <th>注册来源</th>
+                        <th>玩家携带金币</th>
+						<th>玩家当前金币</th>
+						<th>玩家金币变化</th>
+						<th>当前下注金额</th>
+						<th>手动点杀</th>
+						<th>rtp系数</th>
+                        <th>点杀时长(分)</th>
+                        <th>点杀开始时间</th>
+                        <th>所在游戏</th>
+                        <!-- <th>所在场次</th> -->
+                        <th>总充值</th>
+						<th>累计金币兑换</th>
+
+						<th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">
+						
+						
+						<%for(i = 0; i < datas.length; i++) {%> 
+
+						<tr charid=<%=datas[i].charid%> >
+                            <input type='checkbox' name="charid[]">
+							<td><a href="javascript:jumpToPage('user_info_search' , 'charid=<%=datas[i].charid%>')"><%=datas[i].charid%></a></td>
+							
+							<td><%=datas[i].regflag == 1 ? "投放": "非投放"%></td>
+							<td><%=changechips(datas[i].enterchips)%></td>
+							<td><%=changechips(datas[i].curchips)%></td>
+							<td><%=changechips(datas[i].changechips)%></td>
+							<td><%=changechips(datas[i].betMoney)%></td>
+							<td><%= changechips(datas[i].controlvalue)%></td>
+							<td>
+								RTP:<%=datas[i].rtpxs%><br>
+								倍数:<%=datas[i].maxmul%>
+							</td>
+							
+							<td><%=time(datas[i].time)%></td>
+							<td><%=datas[i].timedate%></td>
+                            <td><%=gamename(datas[i].gameid)%></td>
+							<!-- <td><%=gametype(datas[i].gametype)%></td> -->
+                            <td><%=changechips(datas[i].totalrechargechips)%></td>
+							<td><%=changechips(datas[i].totalcovertchips)%></td>
+
+							<td></span><a class='releaseBtn' style="color:blue;" href="javascript:control_sumit(1,<%=datas[i].charid%>);">取消点杀</a></td>
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+           <div class="jm-epages" id="pageHtml">
+            	<script type="text/html" id="pageData">
+				<%if(isenptydata(datas)){%>
+					<div style="color:#ff6600" class="fleft">暂无查询记录！</div>
+				<%} else{%>
+					<div class = "fright">
+					<%if(curpage != 1) {%>
+						<a href="javascript:listToPage(1);">首页</a>
+						<a href="javascript:listToPage('<%=curpage - 1%>');">上一页</a>
+					<%}%>
+					<%if(curpage == 1 && maxpage != 0 && maxpage != 1) {%>
+						<a>首页</a>
+						<a>上一页</a>
+					<%}%>
+					<%if(maxpage <= 8){%>
+						<%for(i = 1; i <= maxpage; i++) {%>
+						<%if(curpage == i) {%>
+							<a href="#" class="on"><%=i%></a>
+						<%}else {%>
+							<a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+						<%}%>
+					<%}%>
+					<%}else {%>
+						<%if(curpage == 1) {%>
+							<a href="#" class="on">1</a>
+							<a href="javascript:listToPage(2);">2</a>
+							<a href="javascript:listToPage(3);">3</a>
+							...
+							<a href="javascript:listToPage('<%=maxpage - 1%>');"><%=Maxpage - 1%></a>
+							<a href="javascript:listToPage('<%=maxpage%>');"><%=Maxpage%></a>
+						<%}else if(curpage < 6) {%>
+							<%for(i = 1; i <= Curpage - 1; i++ ) {%>
+								<a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+							<%}%>
+							<span class="on"><%=curpage%></span>
+							<a href="javascript:listToPage('<%=curpage + 1%>');"><%=curpage + 1%></a>
+							...
+							<a href="javascript:listToPage('<%=maxpage - 1%>');"><%=maxpage - 1%></a>
+							<a href="javascript:listToPage('<%=maxpage%>');"><%=maxpage%></a>
+						<%}else if(curpage >= 6 && curpage < maxpage - 4) {%>
+							<a href="javascript:listToPage(1);">1</a>
+							<a href="javascript:listToPage(2);">2</a>
+							...
+							<a href="javascript:listToPage('<%=Curpage - 1%>');"><%=curpage - 1%></a>
+							<span class="on"><%=curpage%></span>
+							<a href="javascript:listToPage('<%=Curpage + 1%>');"><%=curpage + 1%></a>
+							...
+							<a href="javascript:listToPage('<%=maxpage-1%>');"><%=maxpage - 1%></a>
+							<a href="javascript:listToPage('<%=maxpage%>');"><%=maxpage%></a>
+						<%}else {%>
+							<a href="javascript:listToPage(1);">1</a>
+							<a href="javascript:listToPage(2);">2</a>
+							...
+							<%for(i = maxpage - 4; i <= maxpage; i++) {%>
+								<%if(curpage == i) {%>
+									<span class="on"><%=i%></span>
+								<%}else {%>
+									<a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+								<%}%>
+							<%}%>
+						<%}%>
+					<%}%>
+					<%if(curpage < maxpage) {%>
+						<a href="javascript:listToPage('<%=curpage + 1%>');">下一页</a>
+						<a href="javascript:listToPage('<%=maxpage%>');">尾页</a>
+					<%}%>
+					<span>第<input type="text" id="choise_page" style="width: 30px;">页 <button type="button" onclick="choise()">跳转</button></span>
+					</div>
+				<%}%>
+				</script>
+            </div>
+            <!-- epages -->
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+<script type="text/javascript" src="js/effect.js"></script>
+<style>
+	.select_new{
+	  width:150px;height:36px; border:1px solid #ddd;border-radius: 5px;color: #555555
+	}
+	</style>
+<script type="text/javascript">
+	var jsonPlat ;
+    template.helper('isenptydata', function (data) {    
+   		if($.isEmptyObject(data)){
+			return true;
+		}else{
+			return false;
+		}
+   	})
+	
+	template.helper('gametype', function (data) {    
+   		switch(data){
+			case 1:
+				return "初级场";
+			case 2:
+				return "中级场";
+			case 3:
+				return "高级场";
+		}
+   	})	
+	template.helper('gamename', function (data) {    
+        for(var i=0; i<jsonPlat.length; i++) {
+            if(jsonPlat[i].subgameid == data){
+               return jsonPlat[i].subgamename;
+               break;
+            }
+        }
+   	})
+	template.helper("changechips" , function (data) {
+
+		return (data / 100).toFixed(2)
+
+	})
+    template.helper("time" , function (data) {
+
+        return (data / 60).toFixed(0)
+
+    })
+    function rolesearch(id) {
+        var accid  = Number($("#accid").val()) || 0;
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+		
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+        var perpage = 100;
+		var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "user_controll_list", charid: accid, gameid:gameid, charname:charname, zoneid:zoneid,curpage:toCurPage,perpage:perpage,optype:1},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.datas&&data.datas.length>0) {
+						var html = template("gm_cc_RecordData", data); 
+						$("#gm_cc_RecordHtml").html(html);              
+	                }else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+					var pageHtml = template("pageData", data);  
+					$("#pageHtml").html(pageHtml);
+					var totalHtml = template("totalinfo", data);  
+					$("#totalHtml").html(totalHtml);						
+				}
+			}
+		});	
+    }
+	
+	function listToPage(id){
+		var ids = id
+		rolesearch(ids);
+	};
+    $(document).ready(function(){
+        listToPage(1);
+        $("#user_online_search").click(rolesearch);
+		let gameid = $.cookie("gameid");
+		
+		$.getJSON("js/json/game/1002.json", function(allplat){
+			jsonPlat = eval(allplat.data);
+			
+		});
+    });
+	
+	function control_sumit(type , id){
+
+		let gameid 	= Number($.cookie("gameid")) || 0;
+        let zoneid 	= Number($.cookie("zoneid")) || 0;
+		let stId;
+        let charid = "";
+        if (type == 1){
+            charid = id
+        }else{
+            $('input[name="charid[]"]:checked').each(function()
+            {
+                stId = $(this).parent('td');
+                var id = $(stId).parent('tr').attr('charid');
+                charid += id+","; 
+            })
+
+        }
+		layer.confirm('是否确认取消玩家点控？', function(index){
+			layer.close(layer.index);
+			
+			$.post("/gm/http", {cmd: "user_controll_list", gameid: gameid,zoneid:zoneid, charid:charid, optype:2},
+                function(data){
+                    if (!data) {
+                        alert("执行超时");
+                    } else if (data.retcode != 0){
+                        alert("执行失败");
+                    } else {
+                        alert("执行成功");
+                    }
+                    
+            }, "json");
+		});
+
+		
+	}
+</script>
+</body>
+</html>

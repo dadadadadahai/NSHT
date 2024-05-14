@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- basic styles -->
+
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link rel="stylesheet" href="css/datepicker.css" />
+		<link rel="stylesheet" href="css/bootstrap-datetimepicker.css" />
+		<link rel="stylesheet" href="css/daterangepicker.css" />
+		<link rel="stylesheet" href="css/chosen.css">
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<link rel="stylesheet" href="css/ace.min.css" />
+		<link rel="stylesheet" href="css/gm.css" />
+		<link rel="stylesheet" href="css/multiple-select.min.css">
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script src="js/ace-extra.min.js"></script>
+		<script src="js/jquery-1.10.2.min.js"></script>
+		<script src="js/jquery.cookie.js"></script> 
+		<script src="js/multiple-select.min.js"></script> 
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+<body class="bg-layout">
+	
+	<div class="page-content">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="table-search">
+									
+									<!--form -->
+									<form>
+                                        
+										<div class="platform-warps">
+											<select class="input-sm tInput" id="gamePlat" name="gamePlat" tabIndex="1" multiple="multiple">
+												<option value="1" >5R5</option>
+												<option value="2" >5R5win2</option>
+												<option value="5" >5R5win5</option>
+												<option value="6" >5R5win6</option>
+												<option value="8" >5R5win8</option>
+                                        	</select>	
+										</div>
+										<div class="platform-warps">
+											<select class="input-sm tInput" id="Plattype" name="Plattype"  multiple="multiple">
+												<option value="1" >正式包</option>
+												<option value="2" >分享包</option>
+												<option value="3" >自然下载包</option>
+                                        	</select>	
+										</div>	
+										<!-- 投放渠道 -->
+										<div class="bootstrap-select dropdown">
+											<select class="input-sm tInput" id="lacunch" name="lacunch">
+											
+												<option value="all" selected>所有投放渠道</option>
+                                                <option value="Organic" >自然用户</option>
+												<option value="Share" >分享用户</option>
+												<option value="unattributed" >FaceBook推广</option>
+												<option value="Google Ads ACI" >Google推广</option>
+												<option value="Kwai for Business" >Kwai推广</option>
+											</select>										
+										</div>	
+										<!-- 投放账户 -->
+										<!-- <div class="bootstrap-select">
+											
+											<input list="launchAccount" class="input-sm tInput" name="launchAccount" autocomplete="off" id="launchAccountval">
+											<datalist id="launchAccount" >
+												
+											</datalist>
+										</div>	 -->
+										<div class="bootstrap-select dropdown ">
+	                                        <div id="reportrange" class="btn dropdown-toggle btn-default"  >
+	                                            <i class="icon-calendar"> </i>
+	                                            <span id="reportrange-inner"> </span>
+	                                            <input type="hidden" name="reportrange" id="reportrange-input" />
+	                                            <b class="caret"> </b>
+	                                            
+	                                        </div>
+	                                    </div>
+                                        <div class="bootstrap-select">
+											<input class="input-sm tInput"  placeholder="角色ID" type="text" value="" id="userid">					
+										</div>
+										
+										
+	                                    <a class="btn btns-green btn-refresh btns-tables" href="javascript:;" ><i class="icon-search bigger-110"> </i>查询</a>
+										<a class="btn btns-green btn-export btns-tables" href="javascript:;" onClick ="$('#sample-table-2').tableExport({type:'excel',escape:'false', mso: {fileFormat: 'xlsx'}});">导出报表</a>
+									</form>
+									<!-- form end-->
+								</div>
+                                <!-- content details -->
+								<div class="table-header">
+									注册来源变化
+								</div>
+								<div class="table-responsive content-details">
+									<table id="sample-table-2" class="table table-striped table-bordered table-hover center">
+										<thead>
+											
+											<tr>
+												<th>用户ID</th>
+												<th>注册时间</th>
+												<th>变化前包名</th>
+												<th>变化前渠道</th>
+												<th>变换前关键字</th>
+												<th>变化后包名</th>
+												<th>变化后渠道</th>
+												<th>变换后关键字</th>
+                                                <th>变化时间</th>
+											</tr>
+										</thead>
+
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+					</div><!-- /.page-content -->
+					
+					<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/typeahead-bs2.min.js"></script>
+		<script src="js/chosen.jquery.min.js"></script>
+		<script src="js/date-time/boostrap-daterangepicker-zh_CN.js"></script>
+        <script src="js/date-time/date.js"></script>
+		<!-- page specific plugin scripts -->
+
+		<script src="js/jquery.dataTables.min.js"></script>
+		<script src="js/jquery.dataTables.bootstrap.js"></script>
+
+		<!-- ace scripts -->
+
+		<script src="js/ace-elements.min.js"></script>
+		<script src="js/ace.min.js"></script>
+
+		<!-- inline scripts related to this page -->
+
+		<script type="text/javascript">
+		jQuery(function($) {
+			$('#sample-table-2').dataTable();				
+		});
+		
+		</script>
+		<script src="pageJs/platlist.js"></script>
+        
+       <script type="text/javascript">
+			var plat = {
+						
+						"1":"5R5",
+						"101":"5R5分享包",
+						"1001":"5R5自然下载包",
+						"2":"5R5win2",
+						"102":"5R5win2分享包",
+						"1002":"5R5win2自然下载包",
+						"5":"5R5win5",
+						"105":"5R5win5分享包",
+						"1005":"5R5win5自然下载包",
+						"6":"5R5win6",
+						"106":"5R5win6分享包",
+						"1006":"5R5win6自然下载包",
+						"8":"5R5win8",
+						"108":"5R5win8分享包",
+						"1008":"5R5win8自然下载包",
+	  				};
+			var launch = {
+				"Organic":"自然用户",
+				"Share":"分享用户",
+				"Unattributed":"FaceBook推广",
+				"Google Ads ACI":"Google推广",
+				"Kwai for Business":"Kwai推广",
+
+			}
+       		function search(){
+				var platarr = eval(plat);
+				var launcharr = eval(launch);
+				
+				var systype = Number($("#gameSystem").attr("data-id")) || 0;
+				var platid = $("#gamePlat").val();
+		        var zoneid = Number($("#gameZone option:selected").val())||0;
+		        var Plattype = $("#Plattype").val();
+
+				var platlist = getPlatlist(Plattype, platid);
+		        var gameid = Number($.cookie("gameid")) || 0;		        
+		        var userid = Number($('#userid').val());
+		        var tmpdata = $("#reportrange #reportrange-input").val();
+                var stime = tmpdata.substring(0, tmpdata.indexOf('/'));
+				var etime = tmpdata.substring(tmpdata.indexOf('/')+1, tmpdata.length);
+			
+				var gameSystem =$("#lacunch option:selected").val();
+				var launchAccount = $("#launchAccountval").val()
+		        
+				$.post("/monitor/http", {cmd: "user_change_info", gameid: gameid, zoneid: zoneid, platlist:platlist.join(","), starttime: stime, endtime: etime, userid:userid ,gameSystem:gameSystem , launchAccount : launchAccount }, function(data){
+
+					$('#sample-table-2').DataTable( {		 
+						"data":data.data,
+						"aoColumns": [
+				            { "data": "userid" },
+							{ "data": "reg_time" },
+							{ "data": null,"render":function(data1,type,row,meat){
+
+												return platarr[row.befor_platid]??"未知"
+											} },
+				           
+							{ "data": null,"render":function(data1,type,row,meat){
+
+												return launcharr[row.befor_launchid]??"未知"
+						                        
+											} },
+							{ "data": "befor_ad_account" },
+							{ "data": null,"render":function(data1,type,row,meat){
+												return platarr[row.after_platid]??"未知"
+						                        
+											} },
+		
+							{ "data": null,"render":function(data1,type,row,meat){
+												return launcharr[row.after_launchid]??"未知"
+											} },
+				            { "data": "after_ad_account" },
+				            { "data": "created_at" }
+				        ],
+						"order": [[1, 'desc']]  
+					});
+				}, "json");
+			}
+			$(document).ready(function() {	
+				$("#gamePlat , #Plattype").multipleSelect({
+					placeholder: "全部",
+					selectAllText:'全部',
+					allSelected:'全部'
+				});
+
+				//select全部选中
+				$("#gamePlat  ,  #Plattype").multipleSelect('checkAll');					
+				$("#reportrange")
+					.daterangepicker({
+							ranges: {
+								'最近7天': [timezong().add( {days: -6} ),timezong()],
+								'最近14天': [timezong().add( {days: -13} ),timezong()],
+								'最近30天': [timezong().add( {days: -29} ),timezong()],
+								'最近60天': [timezong().add( {days: -59} ),timezong()]
+							},
+							startDate:  timezong().add( {days: -6} ),
+							endDate: timezong(),
+							maxDate:timezong()
+						}, function(startDate, endDate) {
+							var range = startDate.toString("yyyy-MM-dd") + "/" + endDate.toString("yyyy-MM-dd");
+							$("#reportrange #reportrange-inner").html(range);
+							$("#reportrange #reportrange-input").val(range);
+						}
+					);
+				var stoday = timezong().toString("yyyy-MM-dd");
+				var syeaterday = timezong().add( {days: -6}).toString("yyyy-MM-dd");
+				$("#reportrange #reportrange-inner").html(syeaterday+"/"+ stoday);
+				$("#reportrange #reportrange-input").val(syeaterday+"/"+ stoday);
+				$(".btn-refresh").click(search);
+				search();
+			});
+		</script>
+	<!-- page specific plugin scripts -->
+		
+		<script src="layer/layer.js"></script>
+		<!-- inline scripts related to this page -->
+		
+		
+		
+      
+		
+	<!--html 2 pdf png 导出报表-->
+	<!-- <script src="export/tableExport.js"></script>
+	<script src="export/jquery.base64.js"></script>
+	<script src="export/html2canvas.js"></script>
+	<script src="export/jspdf/libs/sprintf.js"></script>
+	<script src="export/jspdf/jspdf.js"></script>
+	<script src="export/jspdf/libs/base64.js"></script> -->
+	<script type="text/javascript" src="export/libs/js-xlsx/xlsx.core.min.js"></script>
+		<script type="text/javascript" src="export/libs/FileSaver/FileSaver.min.js"></script>
+		<script src="export/libs/tableExport.js"></script>
+	
+	<script src="js/highcharts/highcharts.js"></script>
+	
+</body>
+</html>

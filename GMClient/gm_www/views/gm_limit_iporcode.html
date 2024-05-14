@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script> 
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">		
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">限制ip/机器码</h3>
+        </div>
+        <div class="box-inner jm-userInfoModify">
+            <div class="jmform-vertical">
+                <form action="">
+                    
+                    <div class="jmform-vgroup">
+                        <label class="control-label">限制类型：</label>
+                        <div class="jqtransform fleft">
+                            <select id="optype" name="select" style="width: 120px;">
+                                <option value="6">ip</option>
+                                <option value="7">机器码</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label">ip/机器码：</label>
+                        <div class="fillform">
+                            <input id="code" type="text" class="jminput jminput-size05" name="charid" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup" style="display: none;">
+                        <label class="control-label">限制操作：</label>
+                        <div class="jqtransform fleft">
+                            <select id="limittype" name="select" style="width: 120px;">
+                                <option value="1" selected>登录</option>
+                                <option value="2">注册</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label">开始时间：</label>
+                        <div class="fillform">
+                            <input id="starttime" type="text" class="jminput jminput-sm jminput-size05 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy/MM/dd HH:mm:ss'})" value="" autocomplete="off">
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="jmform-vgroup">
+                        <label class="control-label">结束时间：</label>
+                        <div class="fillform">
+                            <input id="endtime" type="text" class="jminput jminput-sm jminput-size05 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy/MM/dd HH:mm:ss'})" value="" autocomplete="off">
+                        </div>
+                    </div>
+                    
+                    <div class="jmform-vgroup">
+                        <label class="control-label">限制原因：</label>
+                        <div class="fillform">
+                            <textarea id="content" class="textarea01 textarea03 txt-default"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn-lgLm jmbtn-default" href="javascript:void(0)" id="gm_limit_iporcode">提交</a>  
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>            
+            
+        </div>        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    function gm_limit_iporcode(e) {
+        var gameid = Number($.cookie("gameid"))
+        var zoneid = Number($.cookie("zoneid"))
+        
+       
+        var optype = Number($("#optype option:selected").val());
+        var code = $("#code").val();
+        // var limittype = Number($("#limittype option:selected").val());
+        var content = $("#content").val();
+        var starttime = Date.parse($("#starttime").val())/1000;
+        var endtime = Date.parse($("#endtime").val())/1000;
+
+
+        if (!(gameid && zoneid && code && optype && starttime && endtime && content )){
+            alert("请输入正确完整的数据!");
+            return;
+        }
+        if(starttime > endtime){
+            alert("请输入正确的时间区间!");
+            return;
+        }
+        $("#content").val("");
+        $.post("/gm/http", {cmd:"gm_punish_user",pointnum:code,optype:optype,content:content,gameid:gameid,zoneid:zoneid,starttime:starttime,endtime:endtime,typeid:1,charid:0}, function(data){
+       
+                if (!data) {
+                    alert("timeout");
+                } else if (data.retcode != 0){
+                    alert(data.retdesc);
+                } else {
+                    alert("execute success");
+                    $("#content").val("");
+                }
+            }, "json");
+    }
+    $(document).ready(function(){
+        $("#gm_limit_iporcode").click(gm_limit_iporcode);
+    });
+
+</script>
+</body>
+</html>

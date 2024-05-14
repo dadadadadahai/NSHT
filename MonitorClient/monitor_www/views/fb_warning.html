@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- basic styles -->
+
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link rel="stylesheet" href="css/datepicker.css" />
+		<link rel="stylesheet" href="css/bootstrap-datetimepicker.css" />
+		<link rel="stylesheet" href="css/daterangepicker.css" />
+		<link rel="stylesheet" href="css/chosen.css">
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<link rel="stylesheet" href="css/ace.min.css" />
+		<link rel="stylesheet" href="css/gm.css" />
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+		<!-- <style>
+			table tbody { display:block; overflow-y:scroll;}
+			table thead, tbody tr {display:table;width:100%;table-layout:fixed;}
+			table thead {width: calc(100% - 1.3em)}
+			table tbody td{word-wrap:break-word; word-break:break-all;}
+			.table thead>tr>th, .table tbody>tr>th, .table tfoot>tr>th, .table thead>tr>td, .table tbody>tr>td, .table tfoot>tr>td {
+				padding: 8px 1px;
+				line-height: 1.3;
+			}
+		</style> -->
+
+		<script src="js/ace-extra.min.js"></script>
+		<script src="js/jquery-1.10.2.min.js"></script>
+		<script src="js/jquery.cookie.js"></script> 
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+<body class="bg-layout">
+
+	<div class="page-content">
+		<div class="row">
+			<div class="table-search">
+				
+                
+			</div>
+			<div class="table-header">
+				渠道信息列表
+			</div>
+			<div class="table-responsive content-details">
+				<table  id="sample-table-3" class="gameTable table table-hover">
+					<thead>
+						<tr>
+							<th>应用名</th>
+                            <th>比例</th>
+                            <th>阀值时间（分钟）</th>
+							<th>状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+				
+				
+			</div>
+		</div>	
+	</div><!-- /.page-content -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+					<h4 class="modal-title" id="myModalLabel">操作</h4>
+				</div>
+				<div class="modal-body">
+
+					<div class="form-group">
+						<label for="appname">应用名</label>
+                        <input type="text" name="appid" class="form-control" id="appid" style="width:260px;display: none;" >
+                        <input type="text" name="appname" class="form-control" id="appname" style="width:260px;" readonly>
+						
+					</div>
+					<div class="form-group">
+						<label for="rate">比例</label>
+						<input type="text" name="rate" class="form-control" id="rate" style="width:260px;">
+					</div>
+                    <div class="form-group">
+						<label for="minute">阀值时间（分钟）</label>
+						<input type="text" name="minute" class="form-control" id="minute" style="width:260px;">
+					</div>
+
+                    <div class="form-group">
+						<label for="status">状态:</label>
+						<input type="radio" name="status" value="1" />开启
+                        <input type="radio" name="status" value="0" />关闭
+					</div>
+                </div>
+
+				<div class="modal-footer" style="background-color: #fff;border-top:#fff;text-align: left;">
+					<button type="button" id="btn_gamemodify" class="btn btn-primary" onclick="update_status()">提交</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+		
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/typeahead-bs2.min.js"></script>
+		<script src="js/chosen.jquery.min.js"></script>
+		<script src="js/date-time/boostrap-daterangepicker-zh_CN.js"></script>
+        <script src="js/date-time/date.js"></script>
+		<!-- page specific plugin scripts -->
+
+		<script src="js/jquery.dataTables.min.js"></script>
+		<script src="js/jquery.dataTables.bootstrap.js"></script>
+
+		<!-- ace scripts -->
+
+		<script src="js/ace-elements.min.js"></script>
+		<script src="js/ace.min.js"></script>
+		<script src="pageJs/platlist.js"></script>
+		<script src="layer/layer.js"></script>
+		<!-- inline scripts related to this page -->
+		<script>
+			
+			var gameid = Number($.cookie("gameid")) || 0;
+            
+
+			jQuery(function($) {
+				$('#sample-table-3').dataTable();
+			});
+            
+			$(document).ready(function (){
+				
+				searchallgameinfo();
+                // modfily_gamemessage("heppp 12313");
+			})
+            function modfily_gamemessage(id , appname , minute , rate , status){
+
+                $("#appid").val(id)
+                $("#appname").val(appname)
+                $("#minute").val(minute)
+                $("#rate").val(rate)
+                $("input[value="+status+"]").attr("checked",true); 
+               
+                $('#myModal').modal();
+               
+           }
+			function searchallgameinfo(){//查询所有投放渠道信息
+
+				$.post("/monitor/http", {cmd: "app_number_list" , gameid : gameid , type :2},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								if(data.data==null){
+									return
+								}
+								$('#sample-table-3').DataTable( {
+									"data":data.data,
+									"aoColumns": [
+										{ "data": "appname" },
+                                        { "data": "rate" },
+                                        { "data": "minute" },
+										{ "data": null,"render":function(data1,type,row,meat){
+												if(row.status == 1){
+                                                    return "开启";
+                                                }else{
+                                                    return "关闭";
+                                                }
+											} },
+
+										{ "data": null,"render":function(data1,type,row,meat){
+
+                                                
+                                                var html =`<a href="#" onclick="modfily_gamemessage(`+row.id+`,'`+row.appname+`',`+row.minute+`,`+row.rate+`,`+row.status+`)">修改</a>`;
+                                               
+												return html;
+											} },
+									]
+								});
+
+							}
+						}, "json");
+			}
+            function update_status(id , status){
+                
+				var status = $('input[type=radio]:checked').val();
+                var id = $("#appid").val()
+                var minute = $("#minute").val()
+                var rate = $("#rate").val()
+               
+                $.post("/monitor/http", {
+                    cmd: "update_status_app",
+                    id:id,
+					status:status,
+                    minute:minute,
+					rate:rate,
+					gameid:gameid
+                },
+                function(data){
+                    // if (data.retcode == 1) {
+                        alert(data.retdesc);
+                        searchallgameinfo();
+                    // } else {
+                        
+                    // }
+                }, "json");
+            }
+		</script>
+		
+	
+</body>
+</html>
+

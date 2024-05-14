@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- basic styles -->
+
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="css/font-awesome-ie7.min.css" />
+		<![endif]-->
+		<link rel="stylesheet" href="css/chosen.css">
+		<link rel="stylesheet" href="css/ace.min.css" />
+		<link rel="stylesheet" href="css/gm.css" />
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+<body class="bg-layout">
+	
+	<div class="page-content">
+		
+		<div class="games-inner">
+			<h4 class="blue borderLine lineheigt2">添加游戏</h4>
+			<div class="widget-gamesFrom clearfix">
+				<div class="form-group">
+					<label for="gameNameinput" class="col-sm-2 control-label">游戏名称</label>
+					<div class="col-sm-8">
+						<input class="form-control1" id="gameNameinput" placeholder="游戏名称" type="text">
+					</div>
+					<div class="col-sm-2"> </div>
+				</div>
+				<div class="form-group">
+					<label for="gameIdinput" class="col-sm-2 control-label">游戏ID</label>
+					<div class="col-sm-8">
+						<input class="form-control1" id="gameIdinput" placeholder="游戏ID" type="text">
+					</div>
+					<div class="col-sm-2"> </div>
+				</div>
+				<div class="form-group">
+					<label for="gameKeyinput" class="col-sm-2 control-label">游戏密匙</label>
+					<div class="col-sm-8">
+						<input class="form-control1" id="gameKeyinput" placeholder="游戏密匙" type="text">
+					</div>
+					<div class="col-sm-2"> </div>
+				</div>
+
+				<div class="form-group">
+					<label for="bzinput" class="col-sm-2 control-label">备注信息</label>
+					<div class="col-sm-8">
+						<input class="form-control1" id="bzinput" placeholder="备注信息" type="text">
+					</div>
+					<div class="col-sm-2"> </div>
+				</div>
+
+				<div class="form-group">
+					<label for="gametype" class="col-sm-2 control-label">游戏类型</label>
+					<div class="col-sm-8">
+						<select id="gametype">
+							<option value="1">手游</option>
+							<option value="2">端游</option>
+							<option value="3">页游</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="conntype" class="col-sm-2 control-label">连接类型</label>
+					<div class="col-sm-8">
+						<select id="conntype">
+							<option value="2">HTTP</option>
+							<option value="1">TCP</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="state" class="col-sm-2 control-label">游戏状态</label>
+					<div class="col-sm-8">
+						<select id="state">
+							<option value="0">在线</option>
+							<option value="1">离线</option>
+						</select>
+					</div>
+					<div class="col-sm-2"> </div>
+				</div>
+
+				<div class="form-group">
+					<label for="file" class="col-sm-2 control-label">上传图片</label>
+					<div class="col-sm-8">
+						<input class="form-control1 form-controlfile" id="file"  type="file" name="file" accept=".jpg,.png,.jpeg,.gif">
+						<span class="red controlfiletips " id="size">预览图片尺寸为：150*80</span>
+						<img alt="图片浏览" class="hidden"  width="150px" height="80px" id="demo1" src="">
+					</div>
+					<div class="col-sm-2"> </div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"> </label>
+					<div class="col-sm-8">
+						<a class="btns-blue" id="add_game">确认添加</a>
+					</div>
+					<div class="col-sm-2"> </div>
+				</div>
+			</div>
+		</div>
+	</div><!-- /.page-content -->
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+		
+
+		<script src="js/bootstrap.min.js"></script>
+		
+		<script src="layer/layer.js"></script>
+		<!-- inline scripts related to this page -->
+
+<script>
+	$(document).ready(function(){
+		$("#add_game").click(add_game);
+	});
+	var pictures = "";
+	var pictures_name = "";
+	// 图片预览功能s
+	$("#file").change(function(){
+		$("#demo1").addClass("hidden");
+		//判断图片大小
+		verificationPicFile(this);
+		pictures = ""
+	}) ;
+	function verificationPicFile(file){
+		var filepath = file.value;
+		if(filepath){
+			//判断图片尺寸
+			var filepic = file.files[0];
+
+			var reader = new FileReader();
+			reader.onload = function(e){
+				var data = e.target.result;
+				var image  = new Image();
+				image.onload = function(){
+					var width = image.width;
+					var height = image.height;
+					if(width > 150 | height > 80){
+						alert("图片宽最大150px，高80px，请按照要求上传！");
+						$("#demo1").addClass("hidden");
+						pictures = "";
+						return false;
+					}else{
+						pictures = data;
+						pictures_name = filepic.name;
+						$("#demo1").attr('src',data);
+						$("#demo1").removeClass("hidden");
+						return true;
+					}
+				}
+				image.src = data;
+			}
+			reader.readAsDataURL(filepic)
+		}else{
+			return false;
+		}
+	}
+
+	function add_game(){
+		//alert("add")
+		var gamename  = $("#gameNameinput").val();
+		var gameid  = $("#gameIdinput").val();
+		var gamekey	= $("#gameKeyinput").val();
+		var remarks  = $("#bzinput").val();
+
+		var state = $("#state option:selected").val();
+		var gametype  = $("#gametype option:selected").val();
+		var conntype  = $("#conntype option:selected").val();
+		if(gamename==""||gameid==""||isNaN(Number(gameid))){
+			alert("请输入正确参数！");
+			return
+		}
+		if(!pictures){
+			alert("请选择图片！");
+			return
+		}
+		$.post("/monitor/http", {
+			cmd: "game_add",
+					gamename:gamename,
+					gameid:gameid,
+					remarks:remarks,
+					gamekey:gamekey,
+					gtype:gametype,
+					conntype:conntype,
+					state:state,
+					pictures:pictures,
+					pictures_name:pictures_name,
+				},
+				function(data){
+					if (data.retcode == 1) {
+						alert(data.retdesc);
+					} else {
+						alert(data.retdesc)
+					}
+				}, "json");
+		// for(var i = 0;i < 50;i++){
+		// 	$.post("/monitor/http", {
+		// 				cmd: "game_add",
+		// 				gamename:gamename+[i],
+		// 				gameid:gameid+[i],
+		// 				remarks:remarks+[i],
+		// 				gamekey:gamekey+[i],
+		// 				gtype:gametype,
+		// 				conntype:conntype,
+		// 				state:state,
+		// 				pictures:pictures,
+		// 				pictures_name:pictures_name,
+		// 			},
+		// 			function(data){
+		// 				// if (data.retcode == 1) {
+		// 				// 	alert(data.retdesc);
+		// 				// } else {
+		// 				// 	alert(data.retdesc)
+		// 				// }
+		// 			}, "json");
+		// }
+
+	}
+</script>
+</body>
+</html>
+

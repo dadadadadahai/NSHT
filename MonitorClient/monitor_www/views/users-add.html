@@ -1,0 +1,226 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- basic styles -->
+
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="css/font-awesome-ie7.min.css" />
+		<![endif]-->
+	
+		<link rel="stylesheet" href="css/ace.min.css" />
+		<link rel="stylesheet" href="css/gm.css" />
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+<body class="bg-layout">
+	
+	<div class="page-content">
+		
+		<div class="games-inner">
+			<h4 class="blue borderLine lineheigt2">添加用户</h4>
+			<div class="widget-gamesFrom clearfix">
+				<div class="form-group">
+					<label for="userNameinput" class="col-sm-2 control-label">账号</label>
+					<div class="col-sm-8">
+						<input class="form-control1" id="userNameinput" placeholder="账号" type="text"  autocomplete="off">
+					</div>
+					<div class="col-sm-2"> </div>
+				</div>
+				<div class="form-group">
+					<label for="accountinput" class="col-sm-2 control-label">电话</label>
+					<div class="col-sm-8">
+						<input class="form-control1" id="accountinput" placeholder="电话" type="text"  autocomplete="off">
+					</div>
+					<div class="col-sm-2"> </div>
+				</div>
+				<div class="form-group">
+					<label for="userPasswordinput" class="col-sm-2 control-label">密码</label>
+					<div class="col-sm-8">
+						<input class="form-control1" id="userPasswordinput" placeholder="密码不得小于6位数" type="password"  autocomplete="off">
+					</div>
+					<div class="col-sm-2"> </div>
+				</div>
+<!--				<div class="form-group">-->
+<!--					<label for="perinput" class="col-sm-2 control-label">权限</label>-->
+<!--					<div class="col-sm-8">-->
+<!--						<input class="form-control1" id="perinput" placeholder="2运营总况 4用户分析 8留存分析 16充值分析 32消费分析 64玩法分析 128游戏管理 256用户管理 数值相加之和获取使用功能" type="text">-->
+<!--					</div>-->
+<!--					<div class="col-sm-2"> </div>-->
+<!--				</div>-->
+
+				<div class="form-group">
+					<label for="checkboxlist" class="col-sm-2 control-label">权限</label>
+					<div class="col-sm-8" id="checkboxlist">
+						<input type="checkbox" id="per_1" >运营总况
+						<input type="checkbox" id="per_2" value="4">用户分析
+						<input type="checkbox" id="per_3" >留存分析
+						<input type="checkbox" id="per_4" >充值分析
+						<p/>
+						<input type="checkbox" id="per_5" >货币分析
+						<input type="checkbox" id="per_6" >投放分析
+						<input type="checkbox" id="per_7" >游戏管理
+						<input type="checkbox" id="per_8" >用户管理
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="checkboxlist1" class="col-sm-2 control-label"></label>
+					<div class="col-sm-8" id="checkboxlist1">
+						<input type="checkbox" id="per_all"  ><text style="color:blue">全选</text>
+						<input type="checkbox" id="per_default"  ><text style="color:blue">默认</text>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="remarks" class="col-sm-2 control-label">备注</label>
+					<div class="col-sm-8">
+						<input class="form-control1" id="remarks" placeholder="备注" type="text">
+					</div>
+					<div class="col-sm-2"> </div>
+				</div>
+
+				<div class="form-group">
+					<label for="game_list" class="col-sm-2 control-label">游戏</label>
+					<div class="col-sm-8" >
+						<select id="game_list">
+
+						</select>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="add_user" class="col-sm-2 control-label"> </label>
+					<div class="col-sm-8">
+						<a class="btns-blue" id="add_user">确认添加</a>
+					</div>
+					<div class="col-sm-2"> </div>
+				</div>
+			</div>
+		</div>
+		
+	</div><!-- /.page-content -->
+					
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+		
+
+		<script src="js/bootstrap.min.js"></script>
+		
+		<script src="layer/layer.js"></script>
+		<!-- inline scripts related to this page -->
+		<script>
+			$(document).ready(function(){
+				$("#add_user").click(add_user);
+				$.post("/monitor/http", {
+							cmd: "game_list1",
+						},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								for(var i=0;i<data.data.length;i++){
+									$("#game_list").append("<option value='"+data.data[i].gameid+"'>"+data.data[i].gamename+"</option>");
+								}
+							}
+						}, "json");
+			});
+			function add_user(){
+				//alert("add")
+				var account  = $("#userNameinput").val();
+				var username = $("#accountinput").val();
+				var passwd = $("#userPasswordinput").val();
+				var remarks  = $("#remarks").val();
+				var game_list  = $("#game_list option:selected").val();
+				// if(username==""){
+				// 	alert("请输入昵称！");
+				// 	return
+				// }
+				if(account==""){
+					alert("请输入账号！");
+					return
+				}
+				if(passwd==""){
+					alert("请输入密码！");
+					return
+				}
+				if(passwd.length < 6){
+					alert("用户密码不得小于6位！");
+					return
+				}
+
+				var per_list  = 0;
+				for(var i=1; i<9; i++) {
+					if($("#per_"+i).prop('checked')){
+						per_list += (1<<i);
+					}
+				}
+				if(per_list == 0){
+					alert("请勾选权限")
+					return
+				}
+				$.post("/monitor/http", {
+							cmd: "user_add",
+							username:username,
+							account:account,
+							passwd:passwd,
+							per_list:per_list,
+							remarks:remarks,
+							game_list:game_list,
+						},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								alert(data.retdesc)
+							}
+						}, "json");
+			}
+
+			$('#per_all').click(function(){
+				if($(this).is(':checked')) {
+					$("#checkboxlist :checkbox").prop('checked', true);
+				}else{
+					$("#checkboxlist :checkbox").prop('checked',false);
+				}
+					});
+			$('#per_default').click(function(){
+				for(var i=0;i<7;i++){
+					if($(this).is(':checked')) {
+						$("#per_"+i).prop('checked', true);
+					}else{
+						$("#per_"+i).prop('checked', false);
+					}
+				}
+
+			});
+		</script>
+
+		
+       
+</body>
+</html>
+

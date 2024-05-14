@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script> 
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">		
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">解散房间</h3>
+        </div>
+        <div class="box-inner jm-userInfoModify">
+            <div class="jmform-vertical">
+                <form action="">
+                    <div class="jmform-vgroup">
+                        <label class="control-label">房间ID：</label>
+                        <div class="fillform">
+                            <input id="roomid" type="text" class="jminput jminput-size05" name="charid" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn-lg jmbtn-default" href="javascript:void(0)" id="room_dissolve">解散</a>                       	
+                            <a class="jmbtn jmbtn-lg jmbtn-info" href="javascript:void(0)" id="cancle">取消</a>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>            
+            
+        </div>        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    function room_dissolve(e) {
+        var gameid = Number($.cookie("gameid") || 0);
+        var zoneid = Number($.cookie("zoneid") || 0);
+        if (!(gameid && zoneid)) {
+            alert("Please select game and zone id first");
+            return
+        }
+        var roomid = Number($("#roomid").val() || 0);
+        if (roomid <= 0) {
+            alert("房间信息输入错误");
+            return;
+        }
+        $.post("/gm/http", {cmd:"RoomDissolveGmUserPmd_CS",roomid:roomid, gameid:gameid,zoneid:zoneid}, function(data){
+                if (!data) {
+                    alert("执行超时");
+                } else if (data.retcode != 0){
+                    alert(data.retdesc);
+                } else {
+                    alert("解散成功");
+                    $("#roomid").val("");
+                }
+            }, "json");
+    }
+    function cancle(){
+        $("#roomid").val("");
+    }
+    $(document).ready(function(){
+        $("#room_dissolve").click(room_dissolve);
+        $("#cancle").click(cancle);
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<link rel="stylesheet" type="text/css" href="css/chosen.css">
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script> 
+<script type="text/javascript" src="js/layer/layer.js"></script> 
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/chosen.jquery.min.js"></script>  
+</head>
+
+<body>
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">		
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">发送邮件</h3>
+        </div>
+        <div class="box-inner jm-userInfoModify">
+			
+			
+            <div class="jmform-vertical">
+                <form action="" id="emailAction"> 
+                    <div class="jmform-vgroup">
+                        <label class="control-label control-label-sm">邮件类型：</label>
+                        <div class="jqtransform fleft jqtransformEmailType">
+                            <select id="emailType" name="type" style="width:180px;">
+                                <option value="0">个人邮件</option>
+                                <option value="1">全服邮件</option>
+                            </select>
+                        </div>
+
+                    </div>
+					<div class="charids">
+						<div class="jmform-vgroup " >
+							<label class="control-label control-label-sm">角色ID:</label>
+							<div class="fillform">
+								<textarea id="charid" name="content" class="textarea01 textarea08 txt-default input-empty" placeholder="例如:12525,18520,19542"></textarea>
+							</div>
+						</div>
+						<div class="jmform-vgroup">
+							<label class="control-label control-label-sm">金币：</label>
+							<div class="fillform">
+								<input id="email-atta-coin" type="text" class="jminput jminput-sm jminput-size04 input-empty" name="" />
+							</div>
+						</div>
+					</div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label control-label-sm">邮件内容：</label>
+                        <div class="fillform">
+                            <textarea id="content" name="content" class="textarea01 textarea08 txt-default input-empty" placeholder="请输入邮件内容"></textarea>
+                        </div>
+                    </div>  
+                    
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label control-label2 clearfix"> 
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn-lgLm jmbtn-info" href="javascript:gm_mail_submit();" id="gm_broadcast_add">确认发送</a>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>            
+            
+        </div>        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+   
+    function gm_mail_submit() {
+		
+        var pid = $("#charid").val();
+		var content= ($("#content").val());
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+		var _type = Number($("#emailType option:selected").val()) || 0;
+		
+		if( _type==0 && pid == ''){
+			dialogTip('请填写用户角色ID！');
+			return;			
+		}
+		
+		var gold = $("#email-atta-coin").val() *100||0;//金币
+		
+		layer.confirm('是否确认发送此邮件', function(index){
+			layer.close(layer.index);
+			
+			$.ajax({
+				type: "post",
+				//url:"/gm/http?cmd=RequestSendMailGmUserPmd_CS",
+				url:"/gm/http",
+				data:{cmd: "gm_mail_send",gameid:gameid,zoneid:zoneid,type:_type,pid:pid,content:content,gold:gold,},
+				//data:JSON.stringify(dataInfo),
+				dataType:"json",
+				beforeSend: function(){
+					//加载中...提示
+					onLoadTip = layer.load(1);
+					},
+				success: function(data){
+					//有返回值,则关闭加载
+					layer.close(onLoadTip);
+					if (!data) {
+						dialogTip('邮件发送失败！');
+					} else {
+						if(data.retcode == 0){	
+							dialogTip('邮件已成功发送！');
+							initEmail();
+						}else{	
+							if(data.retdesc){
+								dialogTip(data.retdesc);
+								}else{
+									dialogTip('邮件发送失败！');
+									}		
+							return;		
+							}						
+					}
+				}
+			});
+		});
+			
+		
+			
+		
+    }
+	$('#emailType').change(function(){		
+		
+		var _typetid = $(this).val();
+		
+		if(_typetid == 0){
+			$(".charids").show()
+		}else{
+			$(".charids").hide()
+		}
+	});	
+	function dialogTip(args){
+		parent.layer.open({
+			type: 0,
+			title :'提示信息',
+			area: ['300px', ''],
+			shadeClose: true, //点击遮罩关闭
+			content: args
+		});
+		}
+
+  
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+--[[
+--解析客户端http发来的参数，构造proto协议转发给GMServer
+--
+--]]
+
+GmHttp = GmHttp or {}
+
+GmHttp.ParseRequestRobotListGmUserPmd_CS = function(gmid, taskid, body)
+	--解析http请求的参数form格式的，如果是json格式的，则使用unilight.getreq(tostring(body));格式需自行跟客户端商量
+	local params = go.parseMultipartForm(taskid, body)
+	local data = {
+		gameid = params.gameid or 0,
+		zoneid = params.zoneid or 0,
+		subgameid = params.subgameid or 0,
+		clientid = taskid,
+		gmid = gmid,
+	}
+	local resStr = json.encode(encode_repair(data)) 
+	--根据传入的协议名称和内容构建proto协议包
+    local resProto = go.buildProto("*Pmd.RequestRobotListGmUserPmd_CS", resStr)
+    --转发协议到GMServer
+    go.forwardCmd2GmClient(taskid, data.gameid, data.zoneid, resProto)
+end
+

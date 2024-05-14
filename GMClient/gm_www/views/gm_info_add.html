@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/template-native.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">
+    	<div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">创建账号</h3>
+        </div>        	
+    </div>
+    <div class="box-inner jm-userInfoModify">
+        <div class="jmform-vertical">
+            <form action="">
+                <div class="jmform-vgroup">
+                    <label class="control-label">账号：</label>
+                    <div class="fillform">
+                        <input id="account" type="text" class="jminput jminput-size05" name="account" />
+                    </div>
+                </div>
+                <div class="jmform-vgroup">
+                    <label class="control-label">密码：</label>
+                    <div class="fillform">
+                        <input id="passwd" type="password" class="jminput jminput-size05" name="passwd" />
+                    </div>
+                </div>
+                <div class="jmform-vgroup">
+                    <label class="control-label">权限：</label>
+                    <div class="fillform">
+                        <label><input type="radio" id="pri_0" name="pri" />超级管理员 </label>
+                        <label><input type="radio" id="pri_1" name="pri" />普通管理员 </label>
+                        <label><input type="radio" id="pri_2" name="pri" />客服人员</label>
+                        
+                    </div>
+                </div>
+                <div class="jmform-vgroup">
+                    <label class="control-label">地址：</label>
+                    <div class="fillform">
+                        <input id="ip" type="text" class="jminput jminput-size05" placeholder="限定登陆的IP地址" />
+                    </div>
+                </div>
+                <div class="jmform-vgroup">
+
+                    <label class="control-label">游戏：</label>
+<!--                    <div class="jqtransform fleft">-->
+<!--                        <select id="gameid" name="select" style="width: 112px;">-->
+<!--                            {{ range .GameList }}-->
+<!--                            <option value="{{.GameId}}">{{.GameName}}</option>-->
+<!--                            {{end}}-->
+<!--                        </select>-->
+<!--                    </div>-->
+                    <div class="">
+
+                        <select id="gamelisthtml"  style="width: 112px;" class="jminput jminput-sm jminput-sizetp">
+                            <script id="gamelistData" type="text/html"  >
+                                <%for(i = 0; i < data.length; i++) {%>
+                                <option value="<%=data[i].Gameid%>"><%=data[i].Gamename%></option>
+                                <%}%>
+                            </script>
+                        </select>
+
+                    </div>
+
+                   
+                </div>
+<!--                <div class="jmform-vgroup">-->
+<!--                    &lt;!&ndash;                    <span class="fleft mlr5">大区:</span>&ndash;&gt;-->
+<!--                    <label class="control-label">大区：</label>-->
+<!--                    <div class="">-->
+<!--                        <select id="zonelisthtml"  style="width: 112px;">-->
+<!--                            <script id="ZoneListData" type="text/html">-->
+<!--                                <%for(i = 0; i < data.length; i++) {%>-->
+<!--                                <option value="<%=data[i].Zoneid%>"><%=data[i].Zonename%></option>-->
+<!--                                <%}%>-->
+<!--                            </script>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div class="jmform-vgroup jm-ptb20">
+                    <div class="control-label clearfix">                                                  
+                    </div>
+                    <div class="fillform"> 
+                        <a class="jmbtn jmbtn-lg jmbtn-default" href="javascript:void(0)" id="addgmuser">创建</a>                       	
+                        <a class="jmbtn jmbtn-lg jmbtn-info" href="javascript:void(0)" id="canclechg">取消</a>
+                    </div>
+                </div>                
+            </form>
+        </div>   
+    </div>    
+</div>
+<!--jm-maincon warp end-->
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    function checkIP(value){
+        //ip地址
+        var exp=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+        var reg = value.match(exp);
+        if(reg==null){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    function addgmuser() {
+        var pri = 0;
+        for(var i=1; i<13; i++) {
+            if($("#pri_"+i).prop('checked')){
+                pri += (1<<i);
+            }
+        }
+
+        var account = $("#account").val();
+        var passwd = $("#passwd").val();
+        var ip = $("#ip").val();
+        // var gameid = $("#gameid option:selected").val();
+        // var zoneid = $("#zoneid option:selected").val();;
+        var gameid=$("#gamelisthtml").val();
+        //var zoneid=$("#zonelisthtml").val();
+        // var gameid = Number($.cookie("gameid")) || 0;
+        // var zoneid = Number($.cookie("zoneid")) || 0;
+        //alert(zoneid);
+        if (account=="" || passwd == ""){
+            alert("账号或密码错误！");
+            return;
+        }
+        if (passwd.length < 6){
+            alert("密码不得小于6位！");
+            return;
+        }
+        if(pri==0){
+            alert("请勾选权限！")
+            return;
+        }
+        if(!checkIP(ip)&&ip!=""){
+            alert("IP地址不合法！");
+            return;
+        }
+        $.post("/gm/http", {cmd:"gm_info_add",
+            name: account,
+            passwd: passwd,
+            pri: pri,
+            bindip: ip,
+            gameid: gameid,
+        }, function(data){
+            if(data.retcode != 0){
+                alert(data.retdesc);
+            } else {
+                alert("创建成功");
+                $("#passwd").val("");
+            }
+        }, "json");
+
+        // for(var i=0;i<100;i++){
+        //     $.post("/gm/http", {cmd:"gm_info_add",
+        //         name: account+i,
+        //         passwd: passwd,
+        //         pri: pri,
+        //         bindip: ip,
+        //         gameid: gameid,
+        //     }, function(data){
+        //         if(data.retcode != 0){
+        //             alert(data.retdesc);
+        //         } else {
+        //             // alert("创建成功");
+        //             // $("#passwd").val("");
+        //         }
+        //     }, "json");
+        // }
+    }
+    function canclechg(){
+        $("#account").val("");
+        $("#passwd").val("");
+        $("#pri").val("");
+        for(var i=1; i<9; i++) {
+            $("#pri_"+i).prop('checked',false);
+        }
+        $("#pri_checkall").prop('checked',false);
+        $("#pri_checkdefault").prop('checked',false);
+    }
+    $(document).ready(function(){
+        $("#addgmuser").click(addgmuser);
+        $("#canclechg").click(canclechg);
+        $("#pri").click()
+        //alert(12);
+        var type = 1;
+        //页面初始化select所有游戏选项
+        $.post("/gm/http", {
+                cmd:"gm_get_gamelist",type:type,
+            },
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                }else {
+                    if (data.data&&data.data.length>0) {
+                        var html = template("gamelistData", data);
+                        //alert(html +"----"+data.data[0].Gameid);
+                        $("#gamelisthtml").html(html);
+                        //Searchzonelist(data.data[0].Gameid);
+                    }
+                }
+            }, "json");
+    });
+    $('#pri_checkall').click(function(){
+        for(var i=0;i<13;i++){
+            if($("#pri_checkall").is(":checked")) {
+                $("#pri_"+i).prop('checked', true);
+            }else{
+                $("#pri_"+i).prop('checked', false);
+            }
+        }
+    });
+    $('#pri_checkdefault').click(function(){
+        for(var i=0;i<7;i++){
+            if($("#pri_checkdefault").is(":checked")) {
+                $("#pri_"+i).prop('checked', true);
+            }else{
+                $("#pri_"+i).prop('checked', false);
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

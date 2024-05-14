@@ -1,0 +1,7 @@
+GMClient提供GM工具的web页面
+
+1.登录页面:http://localhost:7008/signin
+2.索引页面:http://localhost:7008/index
+
+未登录的操作都会重定向到登陆页面，没有重定向的话说明有BUG
+

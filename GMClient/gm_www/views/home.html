@@ -1,0 +1,453 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 5R5 GmTools管理后台</title>
+    <link href="/assets/css/nifty.min.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/assets/css/layer.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="css/home_style.css">
+        </head>
+           
+    <body>
+
+<div id="container" class="effect footer-fixed mainnav-lg mainnav-fixed navbar-fixed page-header-fixed page-sidebar-fixed" >
+    <input type="hidden" name="_token" id="token" value="DLp0IHTIbo1itpU3TAaTvwWEUGb6VAyoaFjPWMDt" />   
+   
+    <header id="navbar" >
+        <div id="navbar-container" class="boxed">
+
+            <!--Brand logo & name-->
+            <!--================================-->
+            <div class="navbar-header">
+                <a href="" class="navbar-brand">
+                    
+                    <div class="brand-title jm-logo">
+                        <span class="brand-text">GmTools管理后台</span>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="navbar-content clearfix" style="background:#32404e ;">
+                
+                <ul class="nav navbar-top-links pull-left">
+                  
+                    <li class="tgl-menu-btn" style="float: left;display: block;">
+                        <div class="jm-nav">
+                            <ul class="jm-navlist">
+                                <li class="jm-navdrop">
+                                    <a href="#" class="jm-open n3 jm-gameList" id="" >平台列表</a>
+                                    <div class="jm-ndropbox" id="game-list">
+                                    {{ range .GameList }}
+                                        <a href="#" id="{{.GameId}}" title="{{.GameName}}">{{.GameName}}</a>
+                                    {{end}}
+                                    </div>
+                                </li>
+                                
+                                <li class="jm-navdrop">
+                                    <a href="#" class="jm-open n4 jm-zoneList" id="">游戏服</a>
+                                    <div class="jm-ndropbox" id="zone-list">
+                                       
+                                        {{ range .GameList }}
+                                        {{$gameid := .GameId}}
+                                            {{ range .ZoneList}}
+                                                <a href="#" id="{{.ZoneId}}" class="game{{$gameid}}" title="{{.ZoneName}}" >{{.ZoneName}}</a>
+                                            {{end}}
+                                        {{end}}
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="nav navbar-top-links pull-right">
+                    
+                    <li id="dropdown-user" class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
+
+                            <span class="pull-right">
+                                <img class="img-circle img-user media-object" src="./assets/img/av1.png" alt="Profile Picture">
+                            </span>
+                            <div class="username hidden-xs">{{.Username |html}}</div>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right with-arrow panel-default">
+                            <div class="pad-all text-right">
+                               
+                               <a href="javascript:;" onClick="logout()">退出</a>
+                                <form id="logout-form" action="/logout" method="POST"><input type="hidden" name="_token"></form>
+                                <!-- <button id="demo-set-btn" class="btn btn-sm"><i class="fa fa-cog fa-2x"></i></button> -->
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+        </div>
+    </header>
+
+    <div class="boxed">
+        <div id="content-container">
+            <div id="page-content">
+                
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="contain">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="container" class="effect footer-fixed mainnav-lg mainnav-fixed navbar-fixed" :class="{'aside-in':comments}">
+    
+
+    <div class="boxed">
+
+        <div id="content-container">
+            <router-view></router-view>
+        </div>
+        <nav id="mainnav-container" style="z-index: 100;">
+            
+            <div id="mainnav">
+                <div id="mainnav-menu-wrap">
+                    <div class="nano">
+                        <div class="nano-content">
+                            <ul id="mainnav-menu" class="list-group">
+                                
+                            <div id="gm_1"  style="display: none;">
+
+                                <li class="list-header"></li>
+                                <li class="active">
+                                    <a href="#" class="jm-first cur">
+                                        <i class="fa fa-user-secret"></i>
+                                        <span class="menu-title" >
+                                            <strong>账号管理</strong>
+                                        </span>
+                                        <i class="arrow"></i>
+                                    </a>
+                    
+                                    <ul class="collapse jm-dropmenu ">
+                                        
+                                        <a onClick="newIframes('user_info_search.html',this);" id="user_info_search" href="javascript:;"><span>玩家查找</span></a>
+                                        <a onClick="newIframes('user_info_list.html',this);" id="user_info_list" href="javascript:;"><span>玩家列表</span></a>
+                                        <a onClick="newIframes('user_inline_list.html',this);" id="user_inline_list" href="javascript:;"><span>在线玩家列表</span></a>
+                                        <a onClick="newIframes('user_controll_list.html',this);" id="user_controll_list" href="javascript:;"><span>点控玩家列表</span></a>
+                                        <a onClick="newIframes('user_info_modify.html',this);" id="user_info_modify" href="javascript:;"><span>信息修改</span></a>
+                                        <a onClick="newIframes('user_vip_list.html',this);" id="user_vip_list" href="javascript:;"><span>VIP玩家列表</span></a>
+                                        <a onClick="newIframes('cash_out_audit.html',this);" id="cash_out_audit" href="javascript:;"><span>兑换审核</span></a>
+                                        <a onClick="newIframes('cash_out_audit_ignore.html',this);" id="cash_out_audit" href="javascript:;"><span>兑换审核已忽略</span></a>
+                                        <a onClick="newIframes('cash_out_auditing.html',this);" id="cash_out_audit" href="javascript:;"><span>审核中</span></a>
+                                    </ul> 
+                                </li>
+                                <li >
+                                    <a href="javascript:;" class="jm-first jm-darrow">
+                                        <i class="fa fa-binoculars"></i>
+                                        <span class="menu-title">
+                                            <strong>邀请日志管理</strong>
+                                        </span>
+                                        <i class="arrow"></i>
+                                    </a>
+                    
+                                    <ul class="collapse jm-dropmenu ">
+                                        <a id="user_spread_turntable" onClick="newIframes('user_spread_turntable.html',this);"  href="javascript:;"><span>邀请转盘</span></a>
+                                        <a id="user_spread_rank" onClick="newIframes('user_spread_rank.html',this);"  href="javascript:;"><span>邀请返利日志</span></a>
+                                        <a id="user_spread_info" onClick="newIframes('user_spread_info.html',this);" href="javascript:;"><span>下级查询</span></a>
+                                        <a id="gm_log_spread_cash" onClick="newIframes('gm_log_spread_cash.html',this);" href="javascript:;"><span>推广现金日志</span></a>
+                                        
+                                        
+                                    </ul>
+                                </li>
+                                <li >
+                                    <a href="javascript:;" class="jm-first jm-darrow">
+                                        <i class="fa fa-bank"></i>
+                                        <span class="menu-title">
+                                            <strong>大厅功能管理</strong>
+                                        </span>
+                                        <i class="arrow"></i>
+                                    </a>
+                    
+                                    <ul class="collapse jm-dropmenu ">
+                                        <a id="red_envelope_rain_grant" onClick="newIframes('red_envelope_rain_grant.html',this);"  href="javascript:;"><span>红包雨发放日志</span></a>
+                                        <a id="red_envelope_rain_receive" onClick="newIframes('red_envelope_rain_receive.html',this);" href="javascript:;"><span>红包雨领取日志</span></a>
+                                        <a id="gm_user_turntable_log" onClick="newIframes('gm_user_turntable_log.html',this);"  href="javascript:;"><span>转盘功能日志</span></a>
+                                        <a id="gm_betting_level_log" onClick="newIframes('gm_betting_level_log.html',this);"  href="javascript:;"><span>等级功能日志</span></a>
+                                        <a id="gm_loss_rebate_log" onClick="newIframes('gm_loss_rebate_log.html',this);" href="javascript:;"><span>损失返利日志</span></a>
+                                        <a id="user_vip_reward_log" onClick="newIframes('user_vip_reward_log.html',this);"  href="javascript:;"><span>vip奖励领取日志</span></a>
+                                        <a id="gm_reward_activities_log" onClick="newIframes('gm_reward_activities_log.html',this);"  href="javascript:;"><span>奖励活动日志</span></a>
+                                        <a id="gm_lucky_user" onClick="newIframes('gm_lucky_user.html',this);"  href="javascript:;"><span>幸运玩家配置</span></a>
+                                        <a id="gm_lucky_user_log" onClick="newIframes('gm_lucky_user_log.html',this);"  href="javascript:;"><span>幸运玩家领取日志</span></a>
+                                        <a id="gm_general_activities_log" onClick="newIframes('gm_general_activities_log.html',this);"  href="javascript:;"><span>活动日志</span></a>
+                                        <a id="gm_general_activities_detail_log" onClick="newIframes('gm_general_activities_detail_log.html',this);"  href="javascript:;"><span>活动日志明细</span></a>
+                                    </ul>
+                                </li>
+                                <li >
+                                    <a href="javascript:;" class="jm-first jm-darrow">
+                                        <i class="fa fa-server"></i>
+                                        <span class="menu-title">
+                                            <strong>奖惩管理</strong>
+                                        </span>
+                                        <i class="arrow"></i>
+                                    </a>
+                    
+                                    <ul class="collapse jm-dropmenu ">
+                                        <a id="gm_punish_user" onClick="newIframes('gm_punish_user.html',this);"  href="javascript:;"><span>处罚玩家</span></a>
+                                        <a id="gm_punish_record" onClick="newIframes('gm_punish_record.html',this);" href="javascript:;"><span>奖惩信息</span></a>
+                                        <a id="gm_limit_iporcode" onClick="newIframes('gm_limit_iporcode.html',this);"  href="javascript:;"><span>限制ip、机器码</span></a>
+                                        <a id="gm_limit_iporcode_record" onClick="newIframes('gm_limit_iporcode_record.html',this);"  href="javascript:;"><span>ip、机器码限制列表</span></a>
+                                        <a id="early_warning" onClick="newIframes('early_warning.html',this);"  href="javascript:;"><span>自动点控预警</span></a>
+                                    </ul>
+                                </li>
+                               
+                                <li>
+                                    <a href="javascript:;" class="jm-first jm-darrow">
+                                        <i class="fa fa-cog"></i>
+                                        <span class="menu-title">
+                                            <strong>系统管理</strong>
+                                        </span>
+                                        <i class="arrow"></i>
+                                    </a>
+                    
+                                    <ul class="collapse jm-dropmenu">
+                                        
+                                        <a onClick="newIframes('gm_slots_stock_list.html',this);" id="gm_slots_stock_list" href="javascript:;"><span>slots配置信息</span></a>
+                                        <a onClick="newIframes('gm_notslots_stock_list.html',this);" id="gm_notslots_stock_list" href="javascript:;"><span>非slots配置信息</span></a>
+                                        <a onClick="newIframes('gm_stand_alone_list.html',this);" id="gm_stand_alone_list" href="javascript:;"><span>单机游戏配置信息</span></a>
+                                        <a onClick="newIframes('gm_inventory_controll.html',this);" id="gm_inventory_controll" href="javascript:;"><span>自动点控充值管理-库存</span></a>
+                                        <a onClick="newIframes('gm_inventory_level_controll.html',this);" id="gm_inventory_level_controll" href="javascript:;"><span>自动点控充值档次配置-库存</span></a>
+                                        <a onClick="newIframes('gm_inventory.html',this);" id="gm_inventory" href="javascript:;"><span>Slots库存管理</span></a>
+                                        <a onClick="newIframes('gm_order_manger.html',this);" id="gm_order_manger" href="javascript:;"><span>支付管理</span></a>
+                                        <a onClick="newIframes('gm_cashout_manger.html',this);" id="gm_cashout_manger" href="javascript:;"><span>提现管理</span></a>
+                                        <a onClick="newIframes('gm_controll_order_level.html',this);" id="gm_controll_order_level" href="javascript:;"><span>自动点控充值档次配置</span></a>
+                                        <a onClick="newIframes('gmcommand.html',this);" id="gmcommand" href="javascript:;"><span>GM指令</span></a>
+                                        <a onClick="newIframes('customer_service.html',this);" id="customer_service" href="javascript:;"><span>客服地址</span></a>
+                                        <a onClick="newIframes('gm_false_gold.html',this);" id="gm_false_gold" href="javascript:;"><span>上限点杀配置</span></a>
+                                        <a onClick="newIframes('gm_cashout_control.html',this);" id="gm_cashout_control" href="javascript:;"><span>可提现金额控制</span></a>
+                                        <a onClick="newIframes('gm_phonenum_upload.html',this);" id="gm_phonenum_upload" href="javascript:;"><span>电话号码上传</span></a>
+                                      
+
+                                    </ul>
+                                </li>
+                                <li >
+                                    <a href="javascript:;" class="jm-first jm-darrow">
+                                        <i class="fa fa-recycle"></i>
+                                        <span class="menu-title">
+                                            <strong>兑换码管理</strong>
+                                        </span>
+                                        <i class="arrow"></i>
+                                    </a>
+                    
+                                    <ul class="collapse jm-dropmenu">
+                                        <a onClick="newIframes('redemption_code.html',this);" id="redemption_code" href="javascript:;"><span>兑换码生成</span></a>
+                                        <a onClick="newIframes('redemption_code_search.html',this);" id="redemption_code_search" href="javascript:;"><span>兑换码查询</span></a>
+                                        <a onClick="newIframes('redemption_code_use_log.html',this);" id="redemption_code_use_log" href="javascript:;"><span>兑换码使用日志</span></a>
+                                        
+                                    </ul>
+                                </li>
+                                <li >
+                                    <a href="javascript:;" class="jm-first jm-darrow">
+                                        <i class="fa fa-envelope"></i>
+                                        <span class="menu-title">
+                                            <strong>邮件管理</strong>
+                                        </span>
+                                        <i class="arrow"></i>
+                                    </a>
+                    
+                                    <ul class="collapse jm-dropmenu">
+                                        <a onClick="newIframes('gm_email_single.html',this);" id="gm_email_single" href="javascript:;"><span>发送邮件</span></a>
+                                        <!-- <a onClick="newIframes('gm_email_batched.html',this);" id="gm_email_batched" href="javascript:;"><span>批量邮件</span></a> -->
+                                        <a onClick="newIframes('gm_log_email_send.html',this);" id="gm_log_email_send" href="javascript:;"><span>邮件发送日志</span></a>
+                                        
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" class="jm-first jm-darrow">
+                                        <i class="fa fa-bookmark"></i>
+                                        <span class="menu-title">
+                                            <strong>日志管理</strong>
+                                        </span>
+                                        <i class="arrow"></i>
+                                    </a>
+                    
+                                    <ul class="collapse jm-dropmenu">
+                                        <a onClick="newIframes('gm_order_list.html',this);" id="gm_order_list" href="javascript:;"><span>订单日志</span></a>
+                                        <a onClick="newIframes('gm_order_cash_list.html',this);" id="gm_order_cash_list" href="javascript:;"><span>提现率</span></a>
+                                        <a onClick="newIframes('gm_order_cashout_rank.html',this);" id="gm_order_cashout_rank" href="javascript:;"><span>充值兑换排行</span></a>
+                                        <a onClick="newIframes('gm_order_cashout_log.html',this);" id="gm_order_cashout_log" href="javascript:;"><span>充值兑换日志</span></a>
+                                        <a onClick="newIframes('gm_log_email.html',this);" id="gm_log_email" href="javascript:;"><span>邮件日志</span></a>
+                                        <a onClick="newIframes('gm_log_winlose.html' , this);" id="gm_log_winlose" href="javascript:;"><span>输赢统计</span></a>
+                                        <a onClick="newIframes('gm_log_flowing_water.html' , this);" id="gm_log_flowing_water" href="javascript:;"><span>总流水日志</span></a>
+                                        <a onClick="newIframes('gm_log_inout.html' , this);" id="gm_log_inout" href="javascript:;"><span>游戏进出日志</span></a>
+                                        <a onClick="newIframes('gm_log_matchmaking.html' , this);" id="gm_log_matchmaking" href="javascript:;"><span>游戏对局日志</span></a>
+                                        <a onClick="newIframes('gm_log_currency.html' , this);" id="gm_log_currency" href="javascript:;"><span>货币日志</span></a>
+                                        <a onClick="newIframes('gm_log_currency_chart.html' , this);" id="gm_log_currency_chart" href="javascript:;"><span>货币日志图表</span></a>
+                                        <a onClick="newIframes('gm_inventory_change_log.html' , this);" id="gm_inventory_change_log" href="javascript:;"><span>库存变化日志</span></a>
+                                        <a onClick="newIframes('gm_pump_log.html' , this);" id="gm_pump_log" href="javascript:;"><span>玩家抽水日志</span></a>
+                                        <a onClick="newIframes('gm_log_retained.html' , this);" id="gm_log_retained" href="javascript:;"><span>充值活跃玩家留存日志</span></a>
+                                        <a onClick="newIframes('gm_log_gold.html' , this);" id="gm_log_gold" href="javascript:;"><span>游戏金币日志</span></a>
+                                        <a onClick="newIframes('gm_order_again.html' , this);" id="gm_order_again" href="javascript:;"><span>复充日志</span></a>
+                                        
+                                    </ul>
+                                </li>
+                                <li id="gm_0" style="display: none;">
+                                    <a href="javascript:;" class="jm-first jm-darrow">
+                                        <i class="fa fa-users"></i>
+                                        <span class="menu-title">
+                                            <strong>管理员中心</strong>
+                                        </span>
+                                        <i class="arrow"></i>
+                                    </a>
+                    
+                                    <ul class="collapse jm-dropmenu">
+                                        <a onClick="newIframes('gm_admin_list.html',this);" id="gm_admin_list" href="javascript:;" ><span>管理员列表</span></a>
+                                        <!-- <a onClick="newIframes('gm_pri_list.html',this);" id="gm_pri_list" href="javascript:;" ><span>权限列表</span></a> -->
+                                        <a onClick="newIframes('gm_info_add.html',this);" id="gm_info_add" href="javascript:;"><span>账号创建</span></a>
+                                        <a onClick="newIframes('gm_log_action.html',this);" id="gm_log_action" href="javascript:;"><span>管理员操作日志</span></a>
+                                        
+                                    </ul>
+                                </li>
+                               
+                            </div>
+                            <div id="gm_2"  style="display: none;">
+
+                                <li class="list-header"></li>
+                                <li class="active">
+                                    <a href="#" class="jm-first cur">
+                                        <i class="fa fa-user-secret"></i>
+                                        <span class="menu-title" >
+                                            <strong>账号管理</strong>
+                                        </span>
+                                        <i class="arrow"></i>
+                                    </a>
+                    
+                                    <ul class="collapse jm-dropmenu ">
+                                        
+                                        <a onClick="newIframes('user_info_search_kf.html',this);" id="user_info_search_kf" href="javascript:;"><span>玩家查找</span></a>
+                                        <a onClick="newIframes('user_info_list_kf.html',this);" id="user_info_list_kf" href="javascript:;"><span>玩家列表</span></a>
+                                        <a onClick="newIframes('user_inline_list_kf.html',this);" id="user_inline_list_kf" href="javascript:;"><span>在线玩家列表</span></a>
+                                        <a onClick="newIframes('cash_out_audit_kf.html',this);" id="cash_out_audit_kf" href="javascript:;"><span>兑换审核</span></a>
+                                    </ul>
+                                </li>
+                               
+                               
+                                <li >
+                                    <a href="javascript:;" class="jm-first jm-darrow">
+                                        <i class="fa fa-recycle"></i>
+                                        <span class="menu-title">
+                                            <strong>邮件管理</strong>
+                                        </span>
+                                        <i class="arrow"></i>
+                                    </a>
+                    
+                                    <ul class="collapse jm-dropmenu">
+                                        <a onClick="newIframes('gm_email_single.html',this);" id="gm_email_single" href="javascript:;"><span>发送邮件</span></a>
+                                        <a onClick="newIframes('gm_log_email_send.html',this);" id="gm_log_email_send" href="javascript:;"><span>邮件发送日志</span></a>
+                                        
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" class="jm-first jm-darrow">
+                                        <i class="fa fa-bookmark"></i>
+                                        <span class="menu-title">
+                                            <strong>日志管理</strong>
+                                        </span>
+                                        <i class="arrow"></i>
+                                    </a>
+                    
+                                    <ul class="collapse jm-dropmenu">
+                                        <a onClick="newIframes('gm_order_list_kf.html',this);" id="gm_order_list_kf" href="javascript:;"><span>订单日志</span></a>
+                                        <a onClick="newIframes('gm_log_email_sec.html',this);" id="gm_log_email_sec" href="javascript:;"><span>邮件日志</span></a>
+                                        <a onClick="newIframes('gm_log_inout.html' , this);" id="gm_log_inout" href="javascript:;"><span>游戏进出日志</span></a>
+                                        <a onClick="newIframes('gm_log_matchmaking.html' , this);" id="gm_log_matchmaking" href="javascript:;"><span>游戏对局日志</span></a>
+                                        <a onClick="newIframes('gm_log_currency.html' , this);" id="gm_log_currency" href="javascript:;"><span>货币日志</span></a>
+                                    </ul>
+                                </li>
+                                
+                            </div>
+                               
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+    </div>
+    <button id="scroll-top" class="btn"><i class="fa fa-chevron-up"></i></button>
+    <div class="jm-menubar">	
+        <ul id="jmMenulist"></ul>
+        <div class="slideIconBox" id="slideIconBox" style="z-index:1000">
+            <div class="slideIconBox_a"></div>
+            <div class="sIBox-info" id="sIBox-info">
+               
+                <div class="nuiMenuSplit"></div>
+                <div class="menuListc menuListcScroll" id="menuListc">
+                    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <script src="/assets/js/jquery-2.1.1.min.js"></script>
+    <script src="js/jquery.cookie.js"></script> 
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/nifty.min.js"></script>
+    <!-- <script src="/assets/js/bootstrap-datetimepicker.min.js"></script> -->
+    <script src="/assets/js/layer.js"></script>
+    <script type="text/javascript" src="js/effect.js"></script>
+    <script type="text/javascript" src="js/jquery.tinyscrollbar.min.js"></script>
+<script>
+    function priviliege() {
+        $.post("/gm/http", {cmd: "gm_game_priviliege"},
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                } else {
+
+                    //console.log(data)
+                    var priviliege = data["data"];
+					var id = 0;
+
+                    if(priviliege == 0){
+                        $("#gm_0 , #gm_1").show();
+                        $('#gm_1 .jm-dropmenu a').first('a')[0].click();
+                    }else{
+                        for(var i=1; i<13; i++) {
+                            if (((1<<i)&priviliege) || priviliege==0) {
+                                // alert(i)
+                                $("#gm_"+i).show();
+                                $('#gm_'+i+ ' .jm-dropmenu a').first('a')[0].click();
+                            }
+                        }
+                    }
+                   
+                   
+                    
+                }
+            }, "json");
+    }
+   
+    $(document).ready(function(){
+	
+        priviliege();
+		
+    });
+	
+</script>
+    <script src="js/home.js"></script>
+    <script src="js/login.js"></script>
+   
+
+</body>
+</html>
+

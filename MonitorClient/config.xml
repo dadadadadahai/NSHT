@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--所有各种服务器参数,这里只放每个区都不同的配置-->
+<GXTime>
+    <global>
+        <redis>tcp://127.0.0.1:6379/0?timeout=10s&amp;maxidle=10</redis>
+        <!--<mysql_zone encode="no">mysql://root:123@tcp(127.0.0.1:3306)/ZoneInfo</mysql_zone>-->
+
+        <mysql_zone encode="no">mysql://lxcy:123456@tcp(175.178.18.69:3306)/engine_fu_development</mysql_zone>
+        <mysql encode="no">mysql://lxcy:123456@tcp(175.178.18.69:3306)/engine_fu_development</mysql>
+        <!--<mysql encode="no">mysql://root:@tcp(127.0.0.1:3306)/LoginServer</mysql>-->
+        <online>false</online>
+        <debug>true</debug>
+    </global>
+    <MonitorServer>
+        <mysql encode="no">mysql://root:root@tcp(127.0.0.1:3306)/monitorserver</mysql>
+        <!-- <mysql encode="no">mysql://root:root@tcp(127.0.0.1:3306)/monitorserver</mysql> -->
+        <clientloglevel>debug</clientloglevel>
+        <clientlogfilename>tmp/client.log</clientlogfilename>
+        <logfilename>tmp/monitorserver.log</logfilename>
+        <realtimedata>true</realtimedata>
+        <!--端口/-->
+        <port>7002</port>
+        <port_bw_monitor>7010</port_bw_monitor>
+        <port_bw_zone>7011</port_bw_zone>
+    </MonitorServer>
+    <MonitorClient>
+        <mysql encode="no">mysql://root:root@tcp(127.0.0.1:3306)/monitorserver</mysql>
+        <!-- <mysql encode="no">mysql://root:root@tcp(127.0.0.1:3306)/monitorserver</mysql> -->
+        <clientloglevel>debug</clientloglevel>
+        <port>7009</port>
+        <logfilename>log/monitorclient.log</logfilename>
+        <monitor_server_url>ws://15.197.195.55:7002/monitor/user</monitor_server_url>
+        <monitor_server_origin>http://127.0.0.1</monitor_server_origin>
+        <static>./monitor_www/static</static>
+        <views>./monitor_www/views</views>
+        <secret_key>spLzM6stBEHAfkMonitor</secret_key>
+    </MonitorClient>
+    <GMServer>
+        <mysql encode="no">mysql://root:123456@tcp(127.0.0.1:3306)/gmserver</mysql>
+        <logfilename>tmp/gmserver.log</logfilename>
+        <!--端口/-->
+        <port>7005</port>
+        <port_bw_zone>7006</port_bw_zone>
+        <port_bw_user>7007</port_bw_user>
+    </GMServer>
+    <GMClient>
+        <ip>0.0.0.0</ip>
+        <port>7008</port>
+        <gm_server_url>ws://127.0.0.1:7005/gm/user</gm_server_url>
+        <gm_server_origin>http://127.0.0.1</gm_server_origin>
+        <static>./gm_www/static</static>
+        <views>./gm_www/views</views>
+        <secret_key>spLzM6stBEHAfkGM</secret_key>
+        <logfilename>tmp/gmclient.log</logfilename>
+    </GMClient>
+</GXTime>

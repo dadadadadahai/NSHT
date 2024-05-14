@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>GMTools管理系统</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="js/template-native.js"></script>
+    <script type="text/javascript">
+
+        $(function() {
+            $(".jqtransform").jqTransform();
+        });
+    </script>
+
+</head>
+
+<body>
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                <form action="">
+                    <!--                    <div class="jmform-group">-->
+                    <!--                        <input id="charid" type="text" placeholder="管理员ID" class="jminput jminput-sm jminput-size04" name="">-->
+                    <!--                    </div>-->
+                    <div class="jmform-group">
+                        <input id="username" type="text" placeholder="请输入管理员名/模糊查找" class="jminput jminput-sm jminput-size04" name="username">
+                    </div>
+                    <div class="jmform-group">
+                        <a  class="jmbtn jmbtn-succeed" href="javascript:gm_user_feedback(2);"><span class="ico-search-w16" ></span>查询</a>
+                    </div>
+                    <!-- <div class="jmform-group">
+                        <a id="empty" class="jmbtn jmbtn-succeed" href="javascript:username_empty();"><span class="ico-setup"></span>清空</a>
+                    </div> -->
+<!--                    <div class="jmform-group">-->
+<!--                        <a id="prisetting" class="jmbtn jmbtn-info" href="#"><span class="ico-add-w16"></span>管理员设置</a>-->
+<!--                    </div>-->
+                </form>
+            </div>
+        </div>
+        <!-- jm-navbar end-->
+
+
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">管理员信息</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section" id="gm_admin_list">
+            <table class="jmtable-type01 admin_list_table" id="admin_list_table">
+                <thead>
+                <tr>
+<!--                    <th class="allcheck_box"><label><input type="checkbox" class="selectAll" />全选</label></th>-->
+                    <th align="center">管理员ID</th>
+                    <th>管理员昵称</th>
+                    <th>绑定的IP地址</th>
+                    <th>游戏名称</th>
+                    <th>大区名称</th>
+                    <th>管理员权限</th>
+                    <th>qmaxnum</th>
+                    <th>autorecv</th>
+                    <th>workstate</th>
+                    <th>winnum</th>
+                    <th>config</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="gm_UserListHtml">
+                <script id="gm_UserListData" type="text/html">
+                    <%for(i = 0; i < data.length; i++) {%>
+                    <tr class="tm_01" >
+<!--                        <td><input type='checkbox' value='<%=data[i].Id%>' class='check_box'> </td>-->
+                        <td><%=data[i].Id%></td>
+                        <td><%=data[i].Username%></td>
+                        <td><%=data[i].Bindip%></td>
+                        <td><%=data[i].Gamename%></td>
+                        <td><%=data[i].Zonename%></td>
+                        <td><%=data[i].Priviliege%></td>
+                        <td><%=data[i].Qmaxnum%></td>
+                        <td><%=data[i].Autorecv%></td>
+                        <td><%=data[i].Workstate%></td>
+                        <td><%=data[i].Winnum%></td>
+                        <td><%=data[i].Config%></td>
+
+                        <td><a href="javascript:modify_user('<%=data[i].Id%>')">修改</a><a href="javascript:delete_user('<%=data[i].Id%>')">删除</a></td>
+                    </tr>
+                    <%}%>
+                </script>
+                </tbody>
+            </table>
+        </div>
+        <!-- jm-section end-->
+
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+            <div class="jm-epages" id="pageHtml">
+                <script type="text/html" id="pageData">
+                    <%if(isenptydata(data)){%>
+                    <div style="color:#ff6600" class="fleft">暂无查询记录！</div>
+                    <%} else{%>
+                    <div class = "fright">
+                        <%if(Curpage != 1) {%>
+                        <a href="javascript:listToPage(1);">首页</a>
+                        <a href="javascript:listToPage('<%=curpage - 1%>');">上一页</a>
+                        <%}%>
+                        <%if(Curpage == 1 && Maxpage != 0 && Maxpage != 1) {%>
+                        <a>首页</a>
+                        <a>上一页</a>
+                        <%}%>
+                        <%if(Maxpage <= 8){%>
+                            <%if(Maxpage > 1 ){%>
+                                <%for(i = 1; i <= Maxpage; i++) {%>
+                                    <%if(Curpage == i) {%>
+                                        <a href="#" class="on"><%=i%></a>
+                                    <%}else {%>
+                                        <a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+                                    <%}%>
+                                <%}%>   
+                            
+                            <%}%>
+                        <%}else {%>
+                        <%if(Curpage == 1) {%>
+                        <a href="#" class="on">1</a>
+                        <a href="javascript:listToPage(2);">2</a>
+                        <a href="javascript:listToPage(3);">3</a>
+                        ...
+                        <a href="javascript:listToPage('<%=Maxpage - 1%>');"><%=Maxpage - 1%></a>
+                        <a href="javascript:listToPage('<%=Maxpage%>');"><%=Maxpage%></a>
+                        <%}else if(Curpage < 6) {%>
+                        <%for(i = 1; i <= Curpage - 1; i++ ) {%>
+                        <a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+                        <%}%>
+                        <span class="current"><%=Curpage%></span>
+                        <a href="javascript:listToPage('<%=Curpage + 1%>');"><%=Curpage + 1%></a>
+                        ...
+                        <a href="javascript:listToPage('<%=Maxpage - 1%>');"><%=Maxpage - 1%></a>
+                        <a href="javascript:listToPage('<%=Maxpage%>');"><%=Maxpage%></a>
+                        <%}else if(Curpage >= 6 && Curpage < Maxpage - 4) {%>
+                        <a href="javascript:listToPage(1);">1</a>
+                        <a href="javascript:listToPage(2);">2</a>
+                        ...
+                        <a href="javascript:listToPage('<%=Curpage - 1%>');"><%=Curpage - 1%></a>
+                        <span><%=curpage%></span>
+                        <a href="javascript:listToPage('<%=Curpage + 1%>');"><%=Curpage + 1%></a>
+                        ...
+                        <a href="javascript:listToPage('<%=Maxpage-1%>');"><%=Maxpage - 1%></a>
+                        <a href="javascript:listToPage('<%=Maxpage%>');"><%=Maxpage%></a>
+                        <%}else {%>
+                        <a href="javascript:listToPage(1);">1</a>
+                        <a href="javascript:listToPage(2);">2</a>
+                        ...
+                        <%for(i = Maxpage - 4; i <= Maxpage; i++) {%>
+                        <%if(Curpage == i) {%>
+                        <span class="on"><%=i%></span>
+                        <%}else {%>
+                        <a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+                        <%}%>
+                        <%}%>
+                        <%}%>
+                        <%}%>
+                        <%if(curpage < maxpage) {%>
+                        <a href="javascript:listToPage('<%=Curpage + 1%>');">下一页</a>
+                        <a href="javascript:listToPage('<%=Maxpage%>');">尾页</a>
+                        <%}%>
+                        <%}%>
+                    </div>
+                </script>
+            </div>
+            <!-- epages -->
+        </div>
+
+
+    </div>
+</div>
+
+<!-- 弹窗信息 start -->
+<div id="itemInfo" style="overflow-y: auto;" class="popupCon " >
+    <h2 class="f16 newTitle" >管理员设置</h2>
+    <a href="javascript:closeCont('itemInfo');"   class="btnClose">×</a>
+    <!--popupBox start-->
+    <div class="popupBox" >
+        <div class="blockbox" >
+            <div class="box-inner clearfix" style="min-height:300px">
+                <div class="jmform-vertical add-itemInfo">
+                    <div class="jmform-group isempty">
+                        <label class="control-label-poptp">修改密码:</label>
+                        <input id="modify_userpasswd" type="text"  class="jminput jminput-sm jminput-sizetp" name="" value=""/>
+                    </div>
+
+                    <div class="jmform-group isempty">
+                        <label class="control-label-poptp">修改IP:</label>
+                        <input id="modify_bindip" type="text" class="jminput jminput-sm jminput-sizetp" name="" />
+                    </div>
+                    <div class="jmform-group isempty" style="width: 100%;">
+                        <label class="control-label-poptp">修改游戏列表:</label>
+                        <label class="control-label-poptp">
+                            <input type="checkbox" id="game_checkall" />全选
+                        </label>
+                    </div>
+                    <div class="jmform-group isempty" style="width: 100%;">
+                        
+                        <label class="control-label-poptp" style="margin-left:20px;width: 100%;float: left;text-align: left;">
+                            <div class="setting_tit" id="checkgamelist">
+                                
+                            </div>
+                        </label>
+                    </div>
+                    <p></p>
+
+                    <div class="jmform-group isempty" style="width: 100%;">
+                        <label class="control-label-poptp">修改权限:</label>
+                        <!-- <label class="control-label-poptp" style="margin-left:20px;">
+                            <input type="checkbox" id="pri_checkall" />全选
+                            <input type="checkbox" id="pri_checkdefault"/>默认
+                        </label> -->
+                    </div>
+                    <p></p>
+                    <div>
+                        <ul>
+                            <li class="setting_tit_warp jmform-group isempty" style="margin-left:20px;">
+                                <div class="setting_tit" >
+                                    <label><input type="radio" id="pri_0" name="pri"/>超级管理员 </label>
+                                    <label><input type="radio" id="pri_1" name="pri"/>普通管理员 </label>
+                                    <label ><input type="radio" id="pri_2" name="pri"/>客服人员</label>
+                                </div>
+                            </li>
+
+                            <p></p>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt15 clearfix">
+            <div class="jmbtn-group tcenter">
+                <a class="jmbtn jmbtn-lg jmbtn-info" id="priSbmBtns" style="display:none" href="javascript:update_priviliegeg(4);">确定</a>
+                <a class="jmbtn jmbtn-lg jmbtn-default" href="javascript:closeCont('itemInfo');">取消</a>
+            </div>
+        </div>
+
+    </div>
+    <!--popupBox end-->
+</div>
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    function delete_user(id){//删除GM账号
+        if(id==1001){
+            parent.layer.open({
+                type: 0,
+                title :'提示信息',
+                area: ['300px', '150px'],
+                shadeClose: true, //点击遮罩关闭
+                content: '不允许修改此数据！'
+            });
+            return;
+        }
+        var mymessage=confirm("确认删除此账号?");
+        if(mymessage!=true){
+            return;
+        }
+        $.post("/gm/http", {cmd: "gm_info_del",
+                accid:id,
+            },
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                }if(data.Retcode == 1){
+                    alert(data.Retdesc);
+                } else {
+                    alert("删除成功！");
+                    requestuserlist();
+                }
+            }, "json");
+    }
+    function checkIP(value){
+        //ip地址
+        var exp=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+        var reg = value.match(exp);
+        if(reg==null){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    var choose_id;
+    var old_bindip;
+    var old_Priviliege;
+    function update_priviliegeg(curtype){//修改管理员信息
+        var modify_userpasswd = $("#modify_userpasswd").val();
+        var modify_bindip = $("#modify_bindip").val();
+        var modify_Priviliege  = 0;
+        for(var i=1; i<13; i++) {
+            if($("#pri_"+i).prop('checked')){
+                modify_Priviliege += (1<<i);
+            }
+        }
+
+        // alert("modify_Priviliege:"+modify_Priviliege+"..."+"old_Priviliege:"+old_Priviliege+"\n"
+        // +"modify_bindip:"+modify_bindip+"..."+"old_bindip:"+old_bindip+"\n"
+        // )
+        var Bbool = "123";
+        var Pbool = "123";
+
+        if(modify_Priviliege == old_Priviliege){//修改权限不
+            Pbool = "";
+        }
+        if(old_bindip==modify_bindip){//修改bindip
+            Bbool = "";
+        }
+        // if(modify_Priviliege == 0){
+        //     alert("请勾选权限！")
+        //     return;
+        // }
+        if(!checkIP(modify_bindip)&&Bbool!=""){
+            alert("IP地址不合法！");
+            return;
+        }
+        if(modify_userpasswd!=""&&modify_userpasswd.length<6){
+            alert("密码不得少于6位！");
+            return;
+        }
+        var str="";
+        $('input[name="gameid"]:checked').each(function()
+        {
+            str+=$(this).val()+",";  
+        })
+
+        // alert(str)
+        if(Pbool==""&&Bbool==""&&modify_userpasswd==""&&str==""){
+            alert("请输入修改项，如不修改请点击取消！");
+            return;
+        }
+
+       
+        $.post("/gm/http", {cmd: "gm_userlist",
+                id:choose_id,
+                curtype: curtype,
+                priviliege: modify_Priviliege,
+                bindip: modify_bindip,
+                Bbool: Bbool,
+                Pbool:Pbool,
+                Password:modify_userpasswd,
+                gamestr:str
+            },
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                } else {
+                    if(data.Retcode == 1){
+                        parent.layer.open({
+                            type: 0,
+                            title :'提示信息',
+                            area: ['300px', '150px'],
+                            shadeClose: true, //点击遮罩关闭
+                            content: data.Retdesc
+                        });
+                    } else {
+                        parent.layer.open({
+                            type: 0,
+                            title :'提示信息',
+                            area: ['300px', '150px'],
+                            shadeClose: true, //点击遮罩关闭
+                            content: data.Retdesc
+                        });
+                        closeCont('itemInfo');
+                        requestuserlist();
+                    }
+                }
+            }, "json");
+    }
+    function search_pri(id){//查找选中管理员的权限
+       
+        choose_id = id;
+        var toCurType = 3;
+        $.post("/gm/http", {cmd: "gm_userlist",
+                id:id,
+                curtype:toCurType,
+            },
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                }if(data.Retcode == 1){
+                    alert(data.Retdesc);
+                } else {
+                    old_Priviliege = data.data[0].Priviliege;
+                    old_bindip = data.data[0].Bindip;
+                    $("#modify_bindip").val(old_bindip);
+                    if(old_Priviliege == 0){
+                        $("#pri_0").attr('checked',true);
+                    }else{
+                        for(var i=1; i<13; i++) {
+                            if (((1<<i)&old_Priviliege)) {
+                                $("#pri_"+i).attr('checked',true);
+                            }
+                        }
+                    }
+                }
+            }, "json");
+    }
+    function search_game(id){//查找选中管理员分配游戏
+        
+        choose_id = id;
+        $.post("/gm/http", {
+                cmd:"gm_get_gamelist",
+                type:1,
+            },
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                }if(data.Retcode == 1){
+                    alert(data.Retdesc);
+                } else {
+                    if (data.data&&data.data.length>0) {
+                        var html = "";
+                        
+                        for(var i=0;i<data.data.length;i++){
+                            html += "<label><input type='checkbox' id='game_"+data.data[i].Gameid+"' name='gameid' value='"+data.data[i].Gameid+"'>"+data.data[i].Gamename; 
+                        }
+                        $("#checkgamelist").html(html);
+
+                    }
+                   
+                }
+            }, "json");
+    }
+    function listToPage(id){
+        var ids = id;
+        requestuserlist(ids);
+    };
+    function username_empty(){
+        $("#username").val("");
+        requestuserlist()
+    }
+    //判断是否有数据，记录为空
+    template.helper('isenptydata', function (data) {
+        if($.isEmptyObject(data)){
+            return true;
+        }else{
+            return false;
+        }
+    })
+    function requestuserlist(page){//查询所有管理员
+        var stId =  Number(page);
+        var toCurPage = stId ||1;
+        var toPerpage = 10;
+
+        var toCurType = 1;
+        $.post("/gm/http", {
+                cmd:"gm_userlist",
+                curtype: toCurType,
+                Curpage:toCurPage,//当前页
+                Perpage:toPerpage,//每页最大条数
+            },
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                }else if(data.Retcode == 1){
+                    alert(data.Retdesc);
+                }else {
+                    if (data.data&&data.data.length>0) {
+                        var html = template("gm_UserListData", data);
+                        $("#gm_UserListHtml").html(html);
+                    }
+                    var pageHtml = template("pageData", data);
+                    $("#pageHtml").html(pageHtml);
+                }
+            }, "json");
+    }
+
+    //查询
+    function gm_user_feedback(id){
+        var username = $("#username").val() || "";
+        var stId =  Number(id);
+        var toCurType = stId ||1;
+        if(2 == toCurType){
+            if(username == ""){
+                alert("请输入管理员名查询！");
+                return
+            }
+        }
+        $.post("/gm/http", {
+                cmd:"gm_userlist",
+                curtype: toCurType,
+                username: username,
+            },
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                }else if(data.Retcode == 1){
+                    alert(data.Retdesc);
+                }else {
+                    if (data.data&&data.data.length>0) {
+                        var html = template("gm_UserListData", data);
+                        $("#gm_UserListHtml").html(html);
+                    }
+                }
+            }, "json");
+    }
+    $('#game_checkall').click(function(){
+        
+		if(this.checked){    
+			$("#checkgamelist :checkbox").attr("checked", true);
+			// $('.check_box').parent().parent('tr').addClass('selected');     
+		}else{    
+			$("#checkgamelist :checkbox").attr("checked", false); 
+			// $('.check_box').parent().parent('tr').removeClass('selected');
+		}    
+
+    });
+    $('#pri_checkall').click(function(){
+        for(var i=0;i<13;i++){
+            if($("#pri_checkall").is(":checked")) {
+                $("#pri_"+i).prop('checked', true);
+            }else{
+                $("#pri_"+i).prop('checked', false);
+            }
+        }
+    });
+    $('#pri_checkdefault').click(function(){
+        for(var i=0;i<7;i++){
+            if($("#pri_checkdefault").is(":checked")) {
+                $("#pri_"+i).prop('checked', true);
+            }else{
+                $("#pri_"+i).prop('checked', false);
+            }
+        }
+    });
+    function modify_user(id){
+        if(id==1001){
+            parent.layer.open({
+                type: 0,
+                title :'提示信息',
+                area: ['300px', '150px'],
+                shadeClose: true, //点击遮罩关闭
+                content: '不允许修改此数据！'
+            });
+            return;
+        }
+        showCont('itemInfo');
+        $('.newTitle').text('管理员设置');
+        $('.add-itemInfo input').removeAttr('disabled').val('');
+        $('#priSbmBtns').show();
+
+        //alert(id)
+        search_pri(id);
+        search_game(id);
+    }
+    //修改 弹窗显示
+    $('#prisetting').live('click',function(){
+        
+        var _objcheckBox = $('.check_box:checked')
+        var checkLengtht = _objcheckBox.length;
+        //alert(checkLengtht);
+        if(checkLengtht>0 && checkLengtht==1){
+            //只选一个
+            var id = _objcheckBox.eq(0).val();
+            if(id==1001){
+                parent.layer.open({
+                    type: 0,
+                    title :'提示信息',
+                    area: ['300px', '150px'],
+                    shadeClose: true, //点击遮罩关闭
+                    content: '不允许修改此数据！'
+                });
+                return;
+            }
+            showCont('itemInfo');
+            $('.newTitle').text('管理员设置');
+            //$(".jqtransform").jqTransform();
+
+            $('.add-itemInfo input').removeAttr('disabled').val('');
+            //$('#add-charid').attr("disabled","disabled").val(id);
+            //$('#addSbmBtns').hide();
+            $('#priSbmBtns').show();
+
+            //查询当前ID
+            //alert(id)
+            search_pri(id);
+            
+
+        }else if(checkLengtht>0 && checkLengtht!=1){
+            //选择多个
+            parent.layer.open({
+                type: 0,
+                title :'提示信息',
+                area: ['300px', '150px'],
+                shadeClose: true, //点击遮罩关闭
+                content: '每次只能选择一位管理员进行需设置！'
+            });
+            return;
+        }else{
+            parent.layer.open({
+                type: 0,
+                title :'提示信息',
+                area: ['300px', '150px'],
+                shadeClose: true, //点击遮罩关闭
+                content: '请选择需要设置权限的管理员！'
+            });
+            return;
+        }
+    });
+    $(document).ready(function(){
+        requestuserlist()
+    });
+</script>
+</body>
+</html>

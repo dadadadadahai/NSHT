@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="js/template-native.js"></script>
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+				<form action="">                 	               
+					<div class="top" style="width: 100%;float: left;">
+						<!-- <div class="jmform-group">
+							 <div class=" fleft">
+								<select id="platid" name="select" style="width:150px;" class="select_new">
+								   
+									
+								</select>
+							</div> 
+						</div> -->
+						<div class="jmform-group">
+							<input id="accid" type="text" placeholder="ID" class="jminput jminput-sm jminput-size04" name="">
+						</div>
+						<div class="jmform-group">
+							<input id="account" type="text" placeholder="账号" class="jminput jminput-sm jminput-size04" name="">
+						</div>
+						
+						
+						<div class="jmform-group">
+							<input id="regip" type="text" placeholder="注册IP" class="jminput jminput-sm jminput-size04" name="">
+						</div>
+						<div class="jmform-group">
+							<input id="mobile" type="text" placeholder="电话号码" class="jminput jminput-sm jminput-size04" name="">
+						</div>
+						<div class="jmform-group">
+							<input id="cpf" type="text" placeholder="cpf" class="jminput jminput-sm jminput-size04" name="">
+                   		</div>
+						
+						
+
+					</div>
+					<div class="buttom">
+						<div class="jmform-group">
+							<div class="jqtransform fleft">
+								<select id="online_flag" name="select" style="width:150px;">
+									<option value="0" selected>在线状态</option>
+									<option value="1">在线</option>
+									<option value="2">离线</option>
+								</select>
+							</div>
+						</div>
+						<div class="jmform-group">
+							<div class="jqtransform fleft">
+								<select id="usertype" name="select" style="width:150px;">
+									<option value="0" selected>玩家类型</option>
+									<option value="1">游客 </option>
+									<option value="2">绑定账户</option>
+									<option value="3">推广玩家</option>
+									<option value="4">充值玩家</option>
+									<option value="5">非充值玩家</option>
+								</select>
+							</div>
+						</div>
+						<div class="jmform-group">
+							<div class="jqtransform fleft">
+								<select id="regflag" name="select" style="width:150px;">
+									<option value="0" selected>注册来源</option>
+									<option value="1">投放</option>
+									<option value="2">非投放</option>
+								</select>
+							</div>
+						</div>
+						<div class="jmform-group">
+							<div class="jqtransform fleft">
+								<select id="ranktype" name="select" style="width:150px;">
+									<option value="0" selected>排序（注册时间）</option>
+									<option value="1">金币 </option>
+									<option value="2">累计充值</option>
+									<option value="3">充值次数</option>
+									<option value="4">推广提现 </option>
+									<option value="5">金币兑换</option>
+									<option value="6">推广提现次数</option>
+									<option value="7">金币兑换次数</option>
+								</select>
+							</div>
+						</div>
+						<div class="jmform-group">
+							<input id="starttime" type="text" placeholder="开始时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" autocomplete="off">
+						</div>
+						<div class="jmform-group">
+							<input id="endtime" type="text" placeholder="结束时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" autocomplete="off">
+						</div>
+						<div class="jmform-group">
+							<a id="user_info_search" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>查询</a>
+							
+							
+						</div>
+						
+                    </div>
+                    
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">用户信息</h3>
+			<span id="totalHtml">
+				<script id="totalinfo" type="text/html">
+					<h4 class="h3type txt-white">
+						<span id="all">总注册人数：<%= registernum%> , 下载apk玩家总数:<%=isDownApkNum%> </span>
+
+					</h4>
+				</script>
+					
+			</span>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="user_list_table">
+                <thead>
+                    <tr>
+						
+                    	<th>玩家ID</th>
+                        <th>昵称</th>
+						<th>玩家账号</th>
+						<!-- <th>包名</th> -->
+                        <th>VIP</th>
+                        <th>金币</th>
+						<th>电话号码</th>
+						<th>在线状态</th>
+                        <th>点控</th>
+
+						<th>累计充值</th>
+
+						<th>充值次数</th>
+						<th>金币兑换累计</th>
+						<th>金币提现次数</th>
+						<th>推广提现累计</th>
+						<th>推广提现次数</th>
+						<th>上级ID</th>
+						<th>下级总人数</th>
+						<th>推广收入余额</th>
+                        <th>注册时间</th>
+                        <th>注册IP</th>
+						<th>最近登录时间</th>
+                        <th>账号状态</th>
+						<th>注册来源</th>
+						<th>是否下载apk</th>
+
+                    </tr>
+                </thead>
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">
+						<%for(i = 0; i < data.length; i++) {%>    
+						<tr>
+							<td><a href="javascript:jumpToPage('user_info_search' , 'charid=<%=data[i].charid%>')"><%=data[i].charid%></a></td>
+							<!-- <td><%=data[i].charid%></td> -->
+							<td><%=data[i].charname%></td>
+							<td><%=data[i].plataccount%></td>
+							<!-- <td><%=platname(data[i].subplatid)%></td> -->
+							<td><%=data[i].viplevel%></td>
+							<td><%=changechips(data[i].glodnum)%></td>
+							<td><%=data[i].phonenum%></td>
+							<td><%if(data[i].isonline == 1) {%> <%='是'%> <%}else if(data[i].isonline == 0) {%> <%='否'%><%}%></td>
+							<td><%= control(data[i].controlvalue)%></td>
+							<td><%=changechips(data[i].totalrechargechips)%></td>
+							<td><%=data[i].rechargenum%></td>
+							<td><%=changechips(data[i].totalcovertchips)%></td>
+							<td><%=data[i].chipwithdrawnum%></td>
+							<td><%=changechips(data[i].promotionwithdrawchips)%></td>
+							<td><%=data[i].promotewithdrawnum%></td>
+							<td><%=data[i].parentinviter%></td>
+							<td><%=data[i].inviternum%></td>
+							<td><%=changechips(data[i].promotionchips)%></td>
+							<td><%=data[i].createtime%></td>
+							<td><%=data[i].registip%></td>
+
+							<td><%=data[i].lastofftime%></td>
+							
+							
+							<td><%if(data[i].banstatus == 0) {%> <%='正常'%> <%}else if(data[i].banstatus == 1) {%> <%='冻结'%><%}%></td>
+							<td><%if(data[i].regflag == 1) {%> <%='投放'%> <%}else {%> <%='非投放'%><%}%></td>
+							<td><%if(data[i].isdownapk == 1) {%> <%='是'%> <%}else {%> <%='否'%><%}%></td>
+							
+							
+							
+
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+           <div class="jm-epages" id="pageHtml">
+            	<script type="text/html" id="pageData">
+				<%if(isenptydata(data)){%>
+					<div style="color:#ff6600" class="fleft">暂无查询记录！</div>
+					<%} else{%>
+						<div class = "fright">
+						<%if(curpage != 1) {%>   
+							<a href="javascript:listToPage(1);">首页</a>
+							<a href="javascript:listToPage(<%=curpage - 1%>);">上一页</a>
+						<%}%>
+						<%if(curpage == 1 && maxpage != 0 && maxpage != 1) {%>  
+							<a>首页</a>
+							<a>上一页</a>
+						<%}%>				
+						<%if(maxpage <= 8){%> 
+							<%for(i = 1; i <= maxpage; i++) {%>  
+							<%if(curpage == i) {%>  
+								<a href="#" class="on"><%=i%></a>  
+							<%}else {%>  
+								<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+							<%}%>  
+						<%}%>  
+						<%}else {%>  
+							<%if(curpage == 1) {%>  
+								<a href="#" class="on">1</a>  
+								<a href="javascript:listToPage(2);">2</a>  
+								<a href="javascript:listToPage(3);">3</a>  
+								...  
+								<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+								<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+							<%}else if(curpage < 6) {%>  
+								<%for(i = 1; i <= curpage - 1; i++ ) {%>  
+									<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+								<%}%>  
+								<span class="on"><%=curpage%></span>  
+								<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+								...  
+								<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+								<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+							<%}else if(curpage >= 6 && curpage < maxpage - 4) {%>  
+								<a href="javascript:listToPage(1);">1</a>  
+								<a href="javascript:listToPage(2);">2</a>  
+								...  
+								<a href="javascript:listToPage(<%=curpage - 1%>);"><%=curpage - 1%></a>  
+								<span class="on"><%=curpage%></span>  
+								<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+								...  
+								<a href="javascript:listToPage(<%=maxpage-1%>);"><%=maxpage - 1%></a>  
+								<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+							<%}else {%>  
+								<a href="javascript:listToPage(1);">1</a>  
+								<a href="javascript:listToPage(2);">2</a>  
+								...  
+								<%for(i = maxpage - 4; i <= maxpage; i++) {%>  
+									<%if(curpage == i) {%>  
+										<span class="on"><%=i%></span>  
+									<%}else {%>  
+										<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+									<%}%>  
+								<%}%>  
+							<%}%>  
+						<%}%>  
+						<%if(curpage < maxpage) {%>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);">下一页</a>  
+							<a href="javascript:listToPage(<%=maxpage%>);">尾页</a>  
+						<%}%> 
+						<span>第<input type="text" id="choise_page" style="width: 30px;">页 <button type="button" onclick="choise()">跳转</button></span>  
+						<div>
+					<%}%>
+				</script>
+            </div>
+            <!-- epages -->
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+   template.helper('isenptydata', function (data) {    
+   		if($.isEmptyObject(data)){
+			return true;
+		}else{
+			return false;
+		}
+   	})	
+	template.helper('platname' ,  function (data){
+
+		if(data == 0){
+			return "";
+		}
+
+		
+	})
+	template.helper('control', function (data) {    
+		switch(data){
+			case 5000:return "大亏";break;
+			case 9000:return "大亏";break;
+			case 7000:return "中亏";break;
+			case 9500:return "小亏";break;
+			case 10000:return "默认";break;
+			case 11000:return "小赚";break;
+			case 15000:return "中赚";break;
+			case 19000:return "大赚";break;
+		}
+	})	
+	template.helper("changechips" , function (data) {
+
+		if(data > 0){
+			return (data / 100).toFixed(2)
+		}
+		return 0;
+		
+
+	})
+	   
+	template.helper('gamename', function (data) {    
+		switch(data)
+		{
+			case 1:
+				return "禁言";
+				break
+			case 2:
+				return "踢下线";
+				break
+			case 3:
+				return "封号";
+				break
+			case 4:
+				return "点控";
+				break
+			case 5:
+				return "追踪";
+				break
+		}
+	})	
+    function rolesearch(id) {
+
+		var isonline = Number($("#online_flag option:selected").val()) || 0;
+        var accid = Number($("#accid").val()) || 0;
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+		
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+		var starttime =$("#starttime").val();
+        var endtime = $("#endtime").val();
+		var account = $("#account").val();
+        var regip = $("#regip").val() || "" ;
+		var usertype= Number($("#usertype option:selected").val()) || 0;
+		var ranktype = Number($("#ranktype option:selected").val()) || 0;
+		var regflag = Number($("#regflag option:selected").val()) || 0;
+		var platid = Number($("#platid option:selected").val()) || 0;
+		var mobile  = $("#mobile").val();
+		var cpf = $("#cpf").val();
+
+        var perpage = 50;
+		var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "user_list_search", charid: accid, gameid:gameid, regip:regip, zoneid:zoneid,isonline:isonline,curpage:toCurPage,perpage:perpage,starttime:starttime,endtime:endtime,usertype:usertype, ranktype:ranktype , regflag:regflag,mobile:mobile,platid:platid,account:account,cpf:cpf},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.data&&data.data.length>0) {
+						// for(var i=0;i<data.data.length;i++){
+						// 	data.data[i].lastofftime = format_time(data.data[i].lastofftime);
+						// }
+	                    var html = template("gm_cc_RecordData", data); 
+	                    $("#gm_cc_RecordHtml").html(html);              
+	                }else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+					var pageHtml = template("pageData", data);  
+					$("#pageHtml").html(pageHtml);			
+					var totalHtml = template("totalinfo", data);  
+					$("#totalHtml").html(totalHtml);					
+				}
+			}
+		});	
+    }
+   function format_time(ts) {
+	   if (!ts) {
+		   return ""
+	   }
+	   var d = new Date(ts * 1000);
+	   return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":"+d.getSeconds()
+   }
+	
+	function listToPage(id){
+		var ids = id
+		rolesearch(ids);
+		};
+    $(document).ready(function(){
+		listToPage(1);
+        $("#user_info_search").click(rolesearch);
+    });
+	
+</script>
+</body>
+</html>

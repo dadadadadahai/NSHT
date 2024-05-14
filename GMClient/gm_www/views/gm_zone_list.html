@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>GMTools管理系统</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+    <script type="text/javascript" src="js/template-native.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $(".jqtransform").jqTransform();
+        });
+    </script>
+
+</head>
+
+<body>
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                <form action="">
+                    <div class="jmform-group">
+                        <input id="serachid" type="text" placeholder="请输入大区ID" class="jminput jminput-sm jminput-size04" name="gamename">
+                    </div>
+                    <div class="jmform-group">
+                        <a id="gm_user_feedback" class="jmbtn jmbtn-succeed" href="javascript:gm_game_feedback();"><span class="ico-search-w16" ></span>查询</a>
+                    </div>
+                    <div class="jmform-group">
+                        <a id="refresh" class="jmbtn jmbtn-succeed" href="javascript:refresh();"><span class="ico-setup"></span>刷新</a>
+                    </div>
+<!--                    <div class="jmform-group">-->
+<!--                        <a id="gamesetting" class="jmbtn jmbtn-info" href="#"><span class="ico-add-w16"></span>大区设置</a>-->
+<!--                    </div>-->
+                </form>
+            </div>
+        </div>
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">大区列表</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section" id="gm_admin_list">
+            <table class="jmtable-type01 admin_list_table" id="admin_list_table" >
+                <thead style="overflow-y: auto;">
+                <tr>
+<!--                    <th class="allcheck_box"><label><input type="checkbox" class="selectAll" />全选</label></th>-->
+                    <th align="center">游戏ID</th>
+                    <th>游戏名称</th>
+                    <th>大区ID</th>
+                    <th>大区名称</th>
+                    <th>gmlink</th>
+                    <th>大区状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="gamelisthtml">
+                <script id="gamelistdata" type="text/html">
+                    <%for(i = 0; i < data.length; i++) {%>
+                    <tr class="tm_01" >
+<!--                        <td><input type='checkbox' value='<%=data[i].zoneid%>' class='check_box'> </td>-->
+                        <td><%=data[i].gameid%></td>
+                        <td><%=data[i].gamename%></td>
+                        <td><%=data[i].zoneid%></td>
+                        <td><%=data[i].zonename%></td>
+                        <td><%=data[i].gmlink%></td>
+                        <td><%=data[i].status%></td>
+                        <td><a href="javascript:modify_game('<%=data[i].zoneid%>')">修改</a><a href="javascript:delete_game('<%=data[i].zoneid%>')">删除</a></td>
+                    </tr>
+                    <%}%>
+                </script>
+                </tbody>
+            </table>
+        </div>
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+            <div class="jm-epages" id="pageHtml">
+                <script type="text/html" id="pageData">
+                    <%if(isenptydata(data)){%>
+                    <div style="color:#ff6600" class="fleft">暂无查询记录！</div>
+                    <%} else{%>
+                    <div class = "fright">
+                        <%if(Curpage != 1) {%>
+                        <a href="javascript:listToPage(1);">首页</a>
+                        <a href="javascript:listToPage('<%=curpage - 1%>');">上一页</a>
+                        <%}%>
+                        <%if(Curpage == 1 && Maxpage != 0 && Maxpage != 1) {%>
+                        <a>首页</a>
+                        <a>上一页</a>
+                        <%}%>
+                        <%if(Maxpage <= 8){%>
+                            <%if(Maxpage > 1 ){%>
+                                <%for(i = 1; i <= Maxpage; i++) {%>
+                                    <%if(Curpage == i) {%>
+                                        <a href="#" class="on"><%=i%></a>
+                                    <%}else {%>
+                                        <a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+                                    <%}%>
+                                <%}%>   
+                            
+                            <%}%>
+                        <%}else {%>
+                        <%if(Curpage == 1) {%>
+                        <a href="#" class="on">1</a>
+                        <a href="javascript:listToPage(2);">2</a>
+                        <a href="javascript:listToPage(3);">3</a>
+                        ...
+                        <a href="javascript:listToPage('<%=Maxpage - 1%>');"><%=Maxpage - 1%></a>
+                        <a href="javascript:listToPage('<%=Maxpage%>');"><%=Maxpage%></a>
+                        <%}else if(Curpage < 6) {%>
+                        <%for(i = 1; i <= Curpage - 1; i++ ) {%>
+                        <a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+                        <%}%>
+                        <span class="current"><%=Curpage%></span>
+                        <a href="javascript:listToPage('<%=Curpage + 1%>');"><%=Curpage + 1%></a>
+                        ...
+                        <a href="javascript:listToPage('<%=Maxpage - 1%>');"><%=Maxpage - 1%></a>
+                        <a href="javascript:listToPage('<%=Maxpage%>');"><%=Maxpage%></a>
+                        <%}else if(Curpage >= 6 && Curpage < Maxpage - 4) {%>
+                        <a href="javascript:listToPage(1);">1</a>
+                        <a href="javascript:listToPage(2);">2</a>
+                        ...
+                        <a href="javascript:listToPage('<%=Curpage - 1%>');"><%=Curpage - 1%></a>
+                        <span><%=curpage%></span>
+                        <a href="javascript:listToPage('<%=Curpage + 1%>');"><%=Curpage + 1%></a>
+                        ...
+                        <a href="javascript:listToPage('<%=Maxpage-1%>');"><%=Maxpage - 1%></a>
+                        <a href="javascript:listToPage('<%=Maxpage%>');"><%=Maxpage%></a>
+                        <%}else {%>
+                        <a href="javascript:listToPage(1);">1</a>
+                        <a href="javascript:listToPage(2);">2</a>
+                        ...
+                        <%for(i = Maxpage - 4; i <= Maxpage; i++) {%>
+                        <%if(Curpage == i) {%>
+                        <span class="on"><%=i%></span>
+                        <%}else {%>
+                        <a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+                        <%}%>
+                        <%}%>
+                        <%}%>
+                        <%}%>
+                        <%if(curpage < maxpage) {%>
+                        <a href="javascript:listToPage('<%=Curpage + 1%>');">下一页</a>
+                        <a href="javascript:listToPage('<%=Maxpage%>');">尾页</a>
+                        <%}%>
+                        <%}%>
+                    </div>
+                </script>
+            </div>
+            <!-- epages -->
+        </div>
+
+    </div>
+</div>
+<!--jm-maincon warp end-->
+<div id="itemInfo" style="overflow-y: auto;" class="popupCon " >
+    <h2 class="f16 newTitle" >大区设置</h2>
+    <a href="javascript:closeCont('itemInfo');"   class="btnClose">×</a>
+    <!--popupBox start-->
+    <div class="popupBox">
+        <div class="blockbox">
+            <div class="box-inner clearfix">
+                <div class="jmform-vertical add-itemInfo">
+                    <!--                    <form action="testAction" id="testAction">-->
+
+                    <div class="jmform-group isempty">
+                        <label class="control-label-poptp">大区ID:</label>
+                        <input id="modify_zoneid" type="text" readonly="readonly" class="jminput jminput-sm jminput-sizetp" name="" />
+                    </div>
+                    <div class="jmform-group isempty">
+                        <label class="control-label-poptp">大区名称:</label>
+                        <input id="modify_zonename" type="text" class="jminput jminput-sm jminput-sizetp" name="" />
+                    </div>
+                    <div class="jmform-group isempty">
+                        <label class="control-label-poptp">gmlink:</label>
+                        <input type="text" id="modify_gmlink" class="jminput jminput-sm jminput-sizetp" name="" />
+                    </div>
+                    <div class="jmform-group isempty">
+                        <label class="control-label-poptp">大区状态:</label>
+                        <select id="modify_status" name="select" class="jminput jminput-sm jminput-sizetp" name="" />
+                        <option value="0">离线</option>
+                        <option value="1">在线</option>
+                        </select>
+                    </div>
+
+                    <!--                    </form>-->
+                    <input type="hidden" id="add-recordid" name="add-recordid" value=""/>
+                </div>
+            </div>
+        </div>
+        <div class="mt15 clearfix">
+            <div class="jmbtn-group tcenter">
+                <a class="jmbtn jmbtn-lg jmbtn-info" id="addSbmBtns" href="javascript:modify_button();">修改</a>
+                <a class="jmbtn jmbtn-lg jmbtn-default" href="javascript:closeCont('itemInfo');">取消</a>
+            </div>
+        </div>
+
+    </div>
+    <!--popupBox end-->
+</div>
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    function listToPage(id){
+        var ids = id;
+        requestgamelist(ids);
+    };
+    function requestgamelist(page){
+        var stId =  Number(page);
+        var toCurPage = stId ||1;
+        var toPerpage = 10;
+        var gameid = $.cookie("gameid");
+        var Curtype = 1;
+        //console.log(Curtype);
+        $.post("/gm/http", {
+                cmd:"gm_zoneoperation",Gameid:gameid,Curtype:Curtype,
+                Curpage:toCurPage,//当前页
+                Perpage:toPerpage,//每页最大条数
+            },
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                }if(data.Retcode == 1){
+                    alert(data.Retdesc);
+                } else {
+                    //console.log(data)
+                    if (data.data&&data.data.length>0) {
+                        for(var i=0;i<data.data.length;i++){
+                            switch (data.data[i].status){
+                                case 0:data.data[i].status = "离线";break;
+                                case 1:data.data[i].status = "在线";break;
+                            }
+                        }
+                        var html = template("gamelistdata", data);
+                        $("#gamelisthtml").html(html);
+                    }
+                    var pageHtml = template("pageData", data);
+                    $("#pageHtml").html(pageHtml);
+                }
+            }, "json");
+    }
+    function delete_game(id){
+        if(id==1001){
+            parent.layer.open({
+                type: 0,
+                title :'提示信息',
+                area: ['300px', '150px'],
+                shadeClose: true, //点击遮罩关闭
+                content: '不允许删除此数据！'
+            });
+            return;
+        }
+        var mymessage=confirm("确认删除此数据?");
+        if(mymessage!=true){
+            return;
+        }
+        var Curtype = 4;
+        var gameid = $.cookie("gameid");
+        $.post("/gm/http", {cmd: "gm_zoneoperation",
+                Gameid:gameid,
+                Zoneid:id,
+                Curtype:Curtype,
+            },
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                }if(data.Retcode == 1){
+                    alert(data.Retdesc);
+                } else {
+                    alert("删除成功！");
+                    requestgamelist();
+                }
+            }, "json");
+    }
+    function modify_game(id){
+        if(id==1001){
+            parent.layer.open({
+                type: 0,
+                title :'提示信息',
+                area: ['300px', '150px'],
+                shadeClose: true, //点击遮罩关闭
+                content: '不允许修改此数据！'
+            });
+            return;
+        }
+        showCont('itemInfo');
+        $('.newTitle').text('游戏设置');
+        $('.add-itemInfo input').removeAttr('disabled').val('');
+        $('#priSbmBtns').show();
+        //查询当前ID
+        show_gameinfo_popup(id);
+    }
+    //修改 弹窗显示
+    $('#gamesetting').live('click',function(){
+        var _objcheckBox = $('.check_box:checked')
+        var checkLengtht = _objcheckBox.length;
+        //console.log(_objcheckBox);
+        if(checkLengtht>0 && checkLengtht==1){
+            //只选一个
+            var id = _objcheckBox.eq(0).val();
+            if(id==1001){
+                parent.layer.open({
+                    type: 0,
+                    title :'提示信息',
+                    area: ['300px', '150px'],
+                    shadeClose: true, //点击遮罩关闭
+                    content: '不允许修改此数据！'
+                });
+                return;
+            }
+            showCont('itemInfo');
+            $('.newTitle').text('游戏设置');
+            //$(".jqtransform").jqTransform();
+
+            $('.add-itemInfo input').removeAttr('disabled').val('');
+            //$('#add-charid').attr("disabled","disabled").val(id);
+            //$('#addSbmBtns').hide();
+            $('#priSbmBtns').show();
+
+            //查询当前ID
+            show_gameinfo_popup(id);
+
+        }else if(checkLengtht>0 && checkLengtht!=1){
+            //选择多个
+            parent.layer.open({
+                type: 0,
+                title :'提示信息',
+                area: ['300px', '150px'],
+                shadeClose: true, //点击遮罩关闭
+                content: '每次只能选择一位用户进行需设置！'
+            });
+            return;
+        } else {
+            parent.layer.open({
+                type: 0,
+                title :'提示信息',
+                area: ['300px', '150px'],
+                shadeClose: true, //点击遮罩关闭
+                content: '请选择需要设置权限的用户！'
+            });
+            return;
+        }
+    });
+    var old_modifygzonename = "";
+    var old_modifygmlink = "";
+    var old_modifystatus = "";
+
+    function show_gameinfo_popup(id){//显示设置游戏信息弹窗
+        var Curtype = 3;//通过大区id获取大区数据
+        $("#modify_zoneid").val(id);
+        var gameid = $.cookie("gameid");
+        $.post("/gm/http", {
+                cmd:"gm_zoneoperation",Curtype:Curtype,Zoneid:id,Gameid:gameid,
+            },
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                }if(data.Retcode == 1){
+                    alert(data.Retdesc);
+                } else  {
+                    old_modifygzonename = data.data[0].zonename;
+                    old_modifygmlink = data.data[0].gmlink;
+                    old_modifystatus = data.data[0].status;
+                    $("#modify_zonename").val(data.data[0].zonename);
+                    $("#modify_gmlink").val(data.data[0].gmlink);
+                    $("#modify_status").val(data.data[0].status);
+                }
+            }, "json");
+
+    }
+    function modify_button(){//修改按钮
+        var Curtype = 2;
+        var gameid = $.cookie("gameid");
+        var zoneid = $("#modify_zoneid").val();
+        var modifygzonename = $("#modify_zonename").val();
+        var modifygmlink = $("#modify_gmlink").val();
+        var modifystatus = $("#modify_status").val();
+        if(old_modifygzonename == modifygzonename && old_modifygmlink==modifygmlink && old_modifystatus==modifystatus){
+            parent.layer.open({
+                type: 0,
+                title :'提示信息',
+                area: ['300px', '150px'],
+                shadeClose: true, //点击遮罩关闭
+                content: '请填写需要修改的信息，如不修改请点击取消！'
+            });
+            return;
+        }
+        //console.log(modifygzonename)
+        $.post("/gm/http", {
+                cmd:"gm_zoneoperation",
+                Curtype : Curtype,
+                Gameid: gameid,
+                Zoneid:zoneid,
+                Modifygzonename: modifygzonename,
+                Modifygmlink : modifygmlink,
+                Modifystatus : modifystatus,
+            },
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                }if(data.Retcode == 1){
+                    alert(data.Retdesc);
+                } else  {
+                    parent.layer.open({
+                        type: 0,
+                        title :'提示信息',
+                        area: ['300px', '150px'],
+                        shadeClose: true, //点击遮罩关闭
+                        content: '修改成功！'
+                    });
+                    requestgamelist();
+                    closeCont('itemInfo');
+                }
+            }, "json");
+    }
+
+    $(document).ready(function(){//初始化返回所有游戏信息
+        requestgamelist();
+    });
+
+    function gm_game_feedback(){//查询按钮
+        var Curtype = 3;
+        var temp = $("#serachid").val();
+        var Zoneid = Number(temp);
+        var Gameid = $.cookie("gameid");
+        if(Gameid==""){
+            parent.layer.open({
+                type: 0,
+                title :'提示信息',
+                area: ['300px', '150px'],
+                shadeClose: true, //点击遮罩关闭
+                content: '请输入大区ID！'
+            });
+            return;
+        }
+        $.post("/gm/http", {
+                cmd:"gm_zoneoperation",Curtype:Curtype,Gameid:Gameid,Zoneid:Zoneid,
+            },
+            function(data){
+                if (!data){
+                    alert("command timeout");
+                }else if(data.Retcode == 1){
+                    alert(data.Retdesc);
+                }else {
+                    //console.log(data)
+                    if (data.data&&data.data.length>0) {
+                        for(var i=0;i<data.data.length;i++){
+                            switch (data.data[i].status){
+                                case 0:data.data[i].status = "离线";break;
+                                case 1:data.data[i].status = "在线";break;
+                            }
+                        }
+                        var html = template("gamelistdata", data);
+                        $("#gamelisthtml").html(html);
+                    } else{
+                        parent.layer.open({
+                            type: 0,
+                            title :'提示信息',
+                            area: ['300px', '150px'],
+                            shadeClose: true, //点击遮罩关闭
+                            content: '查询失败！'
+                        });
+                        return;
+                    }
+                }
+            }, "json");
+    }
+    function refresh(){
+        requestgamelist();
+        $("#serachid").val("");
+    }
+    //判断是否有数据，记录为空
+    template.helper('isenptydata', function (data) {
+        if($.isEmptyObject(data)){
+            return true;
+        }else{
+            return false;
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{"data":[
+        
+    {"subgameid":"101","subgamename":"黄金独角兽","gametype":"1"},
+    {"subgameid":"102","subgamename":"卡车","gametype":"1"},
+    {"subgameid":"103","subgamename":"快乐南瓜","gametype":"1"},
+    {"subgameid":"104","subgamename":"玛雅奇迹","gametype":"1"},
+    {"subgameid":"105","subgamename":"美女迪斯科","gametype":"1"},
+    {"subgameid":"106","subgamename":"墨西哥流浪乐队","gametype":"1"},
+    {"subgameid":"107","subgamename":"热血足球","gametype":"1"},
+    {"subgameid":"108","subgamename":"水果天堂","gametype":"1"},
+    {"subgameid":"109","subgamename":"终极现金","gametype":"1"},
+    {"subgameid":"110","subgamename":"埃及艳后","gametype":"1"},
+    {"subgameid":"111","subgamename":"水果狂欢","gametype":"1"},
+    {"subgameid":"112","subgamename":"九线传奇","gametype":"1"},
+    {"subgameid":"113","subgamename":"五龙","gametype":"1"},
+    {"subgameid":"114","subgamename":"水果机器","gametype":"1"},
+    {"subgameid":"124","subgamename":"冒险精神","gametype":"1"},
+    {"subgameid":"125","subgamename":"宝石","gametype":"1"},
+    {"subgameid":"126","subgamename":"渔夫","gametype":"1"},
+    {"subgameid":"201","subgamename":"点球大战","gametype":"3"},
+    {"subgameid":"202","subgamename":"火箭(百人)","gametype":"2"},
+    {"subgameid":"203","subgamename":"cacheta","gametype":"2"},
+    {"subgameid":"204","subgamename":"CACA-NIQUELS","gametype":"3"},
+    {"subgameid":"205","subgamename":"龙虎斗","gametype":"2"},
+    {"subgameid":"206","subgamename":"世界杯","gametype":"2"},
+    {"subgameid":"207","subgamename":"炸弹","gametype":"2"},
+    {"subgameid":"208","subgamename":"truco","gametype":"2"},
+    {"subgameid":"209","subgamename":"德州","gametype":"2"}       
+]
+}

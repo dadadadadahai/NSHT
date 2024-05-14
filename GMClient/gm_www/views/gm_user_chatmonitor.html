@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="js/template-native.js"></script>
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                 <form action=""> 
+                 	<div class="jmform-group">
+                        <div class="jqtransform fleft">
+                            <select id="chatType" name="select" style="width:150px;">
+                            	<option value="0" selected>所有频道</option>
+                            	<option value="1">普通聊天</option>                                
+                            	<option value="2">世界聊天</option>
+                                <option value="3">帮会聊天</option>
+                                <option value="4">队伍聊天</option>
+                                <option value="5">好友聊天</option>
+                                <option value="6">喇叭聊天</option>                                         
+                                <option value="7">私聊聊天</option>                                         
+                            </select>
+                        </div>
+                    </div>                  
+                    <div class="jmform-group">
+                        <input id="chatdate" type="text" placeholder="结束时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyyMMdd'})" value="">
+                    </div>
+                    <div class="jmform-group">
+                        <input id="charid" type="text" placeholder="角色ID" class="jminput jminput-sm jminput-size04" name="">
+                    </div>
+                    <div class="jmform-group">
+                        <a id="gm_user_searchBtn" class="jmbtn jmbtn-succeed" href="javascript:;"><span class="ico-search-w16"></span>查询</a>
+                    </div>
+                    <div class="jmform-group">
+                        <a class="jmbtn jmbtn-warn" id="gm_export_btn" href="javascript:;">导出EXCEL</a>
+                    </div>
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">聊天监控</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="sample-table-2">
+                <thead>
+                    <tr>
+                    	<th>序号</th>
+                        <th>时间</th> 
+                        <th>区服</th>                        
+                        <th>昵称</th>
+                        <th>ID</th>
+                        <th>频道</th>
+                        <th width="60%">聊天内容</th>
+                    </tr>
+                </thead>               
+                
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">						
+						<%for(i = 0; i < data.length; i++) {%>    
+						<tr>
+							<td><%=i+1%></td>							
+							<td><%=dateFormat(data[i].createdat,'yyyy-MM-dd hh:mm:ss')%></td>
+							<td><%=zoneid%></td>
+							<td><%=data[i].charname%></td>
+							<td><%=data[i].charid%></td>
+							<td><%=chatMonitorType(data[i].type)%></td>
+							<td><%="["+data[i].othername+"-"+data[i].otherid+"]"+data[i].content%></td>
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+                
+            </table>
+        </div>
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+           <div class="jm-epages" id="pageHtml">
+            	<script type="text/html" id="pageData">
+				<%if(isenptydata(data)){%>
+					<div style="color:#ff6600" class="fleft">暂无查询记录！</div>
+				<%} else{%>
+					<div class = "fright">
+					<%if(curpage != 1) {%>   
+						<a href="javascript:listToPage(1);">首页</a>
+						<a href="javascript:listToPage(<%=curpage - 1%>);">上一页</a>
+					<%}%>
+					<%if(curpage == 1 && maxpage != 0 && maxpage != 1) {%>  
+						<a>首页</a>
+						<a>上一页</a>
+					<%}%>				
+					<%if(maxpage <= 8){%> 
+						<%for(i = 1; i <= maxpage; i++) {%>  
+						<%if(curpage == i) {%>  
+							<a href="#" class="on"><%=i%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+						<%}%>  
+					<%}%>  
+					<%}else {%>  
+						<%if(curpage == 1) {%>  
+							<a href="#" class="on">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							<a href="javascript:listToPage(3);">3</a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage < 6) {%>  
+							<%for(i = 1; i <= curpage - 1; i++ ) {%>  
+								<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+							<%}%>  
+							<span class="on"><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage >= 6 && curpage < maxpage - 4) {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<a href="javascript:listToPage(<%=curpage - 1%>);"><%=curpage - 1%></a>  
+							<span class="on"><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage-1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<%for(i = maxpage - 4; i <= maxpage; i++) {%>  
+								<%if(curpage == i) {%>  
+									<span class="on"><%=i%></span>  
+								<%}else {%>  
+									<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+								<%}%>  
+							<%}%>  
+						<%}%>  
+					<%}%>  
+					<%if(curpage < maxpage) {%>  
+						<a href="javascript:listToPage(<%=curpage + 1%>);">下一页</a>  
+						<a href="javascript:listToPage(<%=maxpage%>);">尾页</a>  
+					<%}%> 
+					<div>
+				<%}%>
+				</script>
+            </div>
+            <!-- epages -->
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    template.helper('dateFormat',function(date,format){
+		date = new Date(date * 1000);  
+       var map = {  
+           "M": date.getMonth() + 1, //月份   
+           "d": date.getDate(), //日   
+           "h": date.getHours(), //小时   
+           "m": date.getMinutes(), //分   
+           "s": date.getSeconds(), //秒   
+           "q": Math.floor((date.getMonth() + 3) / 3), //季度   
+           "S": date.getMilliseconds() //毫秒   
+       };  
+       format = format.replace(/([yMdhmsqS])+/g, function(all, t){  
+           var v = map[t];  
+           if(v !== undefined){  
+               if(all.length > 1){  
+                   v = '0' + v;  
+                   v = v.substr(v.length-2);  
+               }  
+               return v;  
+           }  
+           else if(t === 'y'){  
+               return (date.getFullYear() + '').substr(4 - all.length);  
+           }  
+           return all;  
+       });  
+       return format;  
+	});  
+	template.helper('isenptydata', function (data) {    
+   		if($.isEmptyObject(data)){
+			return true;
+		}else{
+			return false;
+		}
+   	})
+
+   	//聊天记录名称
+	template.helper('chatMonitorType', function (data) { 		
+   		switch(data)
+		   {
+		   case 0:
+			 return "所有频道";
+			 break;
+		   case 1:
+			 return "普通聊天";
+			 break;
+		   case 2:
+			 return "世界聊天";
+			 break;
+		   case 3:
+			 return "帮会聊天";
+			 break;	
+		   case 4:
+			 return "队伍聊天";
+			 break;
+		   case 5:
+			 return "好友聊天";
+			 break;
+		   case 6:
+			 return "喇叭聊天";
+			 break;
+		   case 7:
+			 return "私聊聊天";
+			 break;
+		   }
+   	});	
+
+	function listToPage(id){
+		var ids = id
+		gm_user_chatmonitor(ids);
+		};	
+    function gm_user_chatmonitor(id) {
+        var gameid = Number($.cookie("gameid") || 0);
+        var zoneid = Number($.cookie("zoneid") || 0);
+        var chatType  = Number($('#chatType option:selected').val())||0;
+		var charid = $("#charid").val()|| "";
+		var chatdate =$("#chatdate").val()||0;
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+        if (!(gameid && zoneid)) {
+            alert("Please select game and zone first");
+            return;
+        }
+        //var ts = Date.parse($("#ts").val());
+        
+		var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "RequestChatMessageGmUserPmd_CS", gameid: gameid, zoneid: zoneid, charid:charid, type:chatType, chatdate: chatdate,curpage:toCurPage},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if(data.data){
+						if (data.data&&data.data.length>0) {
+	                      var html = template("gm_cc_RecordData", data); 
+	                      $("#gm_cc_RecordHtml").html(html);              
+	                    } 
+						var pageHtml = template("pageData", data);  
+						$("#pageHtml").html(pageHtml);	
+					}else{
+						dialogTip('暂无查询记录！请填写正确的查询条件！');
+					}
+										
+				}
+			}
+		});	
+    }
+    $(document).ready(function(){
+		$("#gm_user_searchBtn").click(gm_user_chatmonitor);        
+		//gm_user_chatmonitor();
+    });
+
+    function myrefresh()          
+    {                             
+                $("#gm_user_searchBtn").click(gm_user_chatmonitor);    
+                        gm_user_chatmonitor();
+    }                             
+    setInterval('myrefresh()',50000); //指定4秒刷新一次  
+                              
+
+</script>
+<!--html 2 excel 导出报表-->
+<script src="js/export/tableExport.js"></script>
+<script src="js/export/jquery.base64.js"></script>
+<script>
+    $("#gm_export_btn").click(function(){			
+        $("#sample-table-2").tableExport({
+            type:'excel',
+            separator:';',
+            escape:'false'
+            });
+    });
+</script>
+</body>
+</html>

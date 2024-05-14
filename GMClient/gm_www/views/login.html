@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<title> 5R5 GmTools管理后台</title>
+
+<link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+<link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/login.css">
+
+<script src="/assets/js/jquery-2.1.1.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="js/layer/layer.js"></script>
+<script src="js/login.js"></script>
+<script src="js/jquery.cookie.js"></script>
+
+</head>
+
+<body>
+    <div id="container" style="text-align: center;margin-top: 15%; width: 20%;margin-left: 40%;">
+       
+        <div class="panel" >
+            <div class="panel-heading">
+                <h2 class="panel-title"> 5R5 GmTools管理后台</h2>
+            </div>
+            <div class="panel-body">
+                <div class="fill-form">
+                    <input id="_xsrf" type="hidden" class="_xsrf" name="_xsrf" value={{._xsrf}}>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                            <input type="text" class="form-control" name="account" id="fusername" placeholder="账号">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="fa fa-asterisk"></i></div>
+                            <input type="password" name="password" class="form-control" id="fpassword" placeholder="密码">
+                        </div>
+                    </div>
+                    <div class="row">
+                        
+                        <div class="col-xs-12">
+                            <div class="form-group text-right">
+                            <button class="btn btn-success text-uppercase"id="flogin"  type="button">登录</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <li id="ferror" class="danger hd" style="text-align:center; color:red;display: none;" ></li>
+            </div>
+        </div>  
+    </div>
+</body>
+</html>

@@ -1,0 +1,346 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- basic styles -->
+
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link rel="stylesheet" href="css/datepicker.css" />
+		<link rel="stylesheet" href="css/bootstrap-datetimepicker.css" />
+		<link rel="stylesheet" href="css/daterangepicker.css" />
+		<link rel="stylesheet" href="css/chosen.css">
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<link rel="stylesheet" href="css/ace.min.css" />
+		<link rel="stylesheet" href="css/gm.css" />
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+		<!-- <style>
+			table tbody { display:block; overflow-y:scroll;}
+			table thead, tbody tr {display:table;width:100%;table-layout:fixed;}
+			table thead {width: calc(100% - 1.3em)}
+			table tbody td{word-wrap:break-word; word-break:break-all;}
+			.table thead>tr>th, .table tbody>tr>th, .table tfoot>tr>th, .table thead>tr>td, .table tbody>tr>td, .table tfoot>tr>td {
+				padding: 8px 1px;
+				line-height: 1.3;
+			}
+		</style> -->
+
+		<script src="js/ace-extra.min.js"></script>
+		<script src="js/jquery-1.10.2.min.js"></script>
+		<script src="js/jquery.cookie.js"></script> 
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+<body class="bg-layout">
+
+	<div class="page-content">
+		<div class="row">
+			<div class="table-search">
+				
+				<a class="btn btns-green btn-refresh btns-tables" href="javascript:add_gamemessage();" >添加</a>
+
+                <form>
+                   
+                    <div class="platform-warps">
+						<select name="gamePlatform" data-placeholder="所有系统" style="width:180px;" id="gamePlatform" class="dept_select" tabIndex="1"> 
+							<option value="0"></option>
+						</select>
+					</div>
+					<div class="bootstrap-select dropdown">
+						<select class="input-sm tInput" id="Plattype" name="Plattype">
+							<option value="0" selected>所有</option>
+													<option value="1" >正式包</option>
+													<option value="2" >分享包</option>
+						</select>										
+					</div>	
+					<div class="bootstrap-select dropdown">
+						<select class="input-sm tInput" id="lacunch" name="lacunch">
+						
+							<option value="all" selected>所有投放渠道</option>
+							<option value="Organic" >自然用户</option>
+							<option value="Share" >分享用户</option>
+							<option value="unattributed" >FaceBook推广</option>
+							<option value="Google Ads ACI" >Google推广</option>
+							<option value="Kwai for Business" >Kwai推广</option>
+						</select>										
+					</div>	
+					<div class="bootstrap-select dropdown ">
+						<div id="reportrange" class="btn dropdown-toggle btn-default"  >
+							<i class="icon-calendar"> </i>
+							<span id="reportrange-inner"> </span>
+							<input type="hidden" name="reportrange" id="reportrange-input" />
+							<b class="caret"> </b>	                                            
+						</div>
+					</div>
+                    <a class="btn btns-green btn-refresh btns-tables" href="javascript:download();" ><i class="icon-search bigger-110"> </i>下载</a>
+                </form>
+                
+			</div>
+			<div class="table-header">
+				渠道信息列表
+			</div>
+			<div class="table-responsive content-details">
+				<table  id="sample-table-3" class="gameTable table table-hover">
+					<thead>
+						<tr>
+							<th>应用名</th>
+							<th>应用编号</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+				
+				
+			</div>
+		</div>	
+	</div><!-- /.page-content -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+					<h4 class="modal-title" id="myModalLabel">操作</h4>
+				</div>
+				<div class="modal-body">
+
+					<div class="form-group">
+						<label for="modify_gamename">应用名</label>
+                        <div>
+                            <select name="channel" style="width:180px;" id="channel" class="dept_select" tabIndex="1" class="form-control"> 
+                                
+                            </select>
+                        </div>
+						
+					</div>
+					<div class="form-group">
+						<label for="modify_gamekey">应用编号</label>
+						<input type="text" name="appid" class="form-control" id="appid" style="width:260px;">
+					</div>
+                </div>
+
+				<div class="modal-footer" style="background-color: #fff;border-top:#fff;text-align: left;">
+					<button type="button" id="btn_gamemodify" class="btn btn-primary" onclick="btn_gamemodify()">提交</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+		
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/typeahead-bs2.min.js"></script>
+		<script src="js/chosen.jquery.min.js"></script>
+		<script src="js/date-time/boostrap-daterangepicker-zh_CN.js"></script>
+        <script src="js/date-time/date.js"></script>
+		<!-- page specific plugin scripts -->
+
+		<script src="js/jquery.dataTables.min.js"></script>
+		<script src="js/jquery.dataTables.bootstrap.js"></script>
+
+		<!-- ace scripts -->
+
+		<script src="js/ace-elements.min.js"></script>
+		<script src="js/ace.min.js"></script>
+		<script src="pageJs/platlist.js"></script>
+		<script src="layer/layer.js"></script>
+		<!-- inline scripts related to this page -->
+		<script>
+			var appid  = "";
+            var ids = 0;
+			
+			var gameid = Number($.cookie("gameid")) || 0;
+            var jsonPlat;
+
+			function modfily_gamemessage(id,appid){
+               
+				$("#appid").val(appid);
+                $("#channel").find("option[value="+id+"]").attr("selected",true);
+				
+				$('#myModal').modal();
+
+				ids     = id;
+				appid   = channel;
+				
+			}
+			function add_gamemessage(){   
+
+				$("#appid").val('');
+				$('#myModal').modal();
+			}
+			jQuery(function($) {
+				$('#sample-table-3').dataTable();
+			});
+            
+			$(document).ready(function (){
+				$.getJSON("json/plat.json", function(allplat){	
+					plathtml = '';
+					var jsonPlat = eval(allplat.data);
+					for(var i=0; i<jsonPlat.length; i++){
+					
+						plathtml += '<option value="'+jsonPlat[i].platid+'">'+jsonPlat[i].platname+'</option>';
+						
+							
+					}
+					$('#channel').html(plathtml);
+				});	
+                
+				$("#reportrange")
+					.daterangepicker({
+							ranges: {
+								'最近7天': [timezong().add( {days: -6} ),timezong()],
+								'最近14天': [timezong().add( {days: -13} ),timezong()],
+								'最近30天': [timezong().add( {days: -29} ),timezong()],
+								'最近60天': [timezong().add( {days: -59} ),timezong()]
+							},
+							startDate:  timezong().add( {days: -6} ),
+							endDate: timezong()
+						}, function(startDate, endDate) {
+							var range = startDate.toString("yyyy/MM/dd") + "-" + endDate.toString("yyyy/MM/dd");
+							$("#reportrange #reportrange-inner").html(range);
+							$("#reportrange #reportrange-input").val(range);
+						}
+					);
+				var stoday = timezong().toString("yyyy/MM/dd");
+				var syeaterday = timezong().add( {days: -6}).toString("yyyy/MM/dd");
+				$("#reportrange #reportrange-inner").html(syeaterday+"-"+ stoday);
+				$("#reportrange #reportrange-input").val(syeaterday+"-"+ stoday);
+
+
+				searchallgameinfo();
+			})
+
+			function btn_gamemodify(){//修改信息
+				var appid = $("#appid").val();
+				var id = $("#channel").val();
+				
+				if(appid== '' &&channel1== ''){
+					alert("请输入正确的参数！");
+					return
+				}
+
+                appname = $("#channel").find("option[value="+id+"]").text();
+
+				$.post("/monitor/http", {
+                    cmd: "app_num_action",
+                    id:id,
+                    appid:appid,
+                    appname:appname,
+					
+					gameid:gameid
+                },
+                function(data){
+                    if (data.retcode == 1) {
+                        alert(data.retdesc);
+                    } else {
+                        alert(data.retdesc);
+                        $("#cancel").click()
+                        searchallgameinfo();
+                    }
+                }, "json");
+			}
+			
+			function searchallgameinfo(){//查询所有投放渠道信息
+
+				$.post("/monitor/http", {cmd: "app_number_list" , gameid : gameid},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								if(data.data==null){
+									// alert("加载失败！")
+									return
+								}
+								$('#sample-table-3').DataTable( {
+									"data":data.data,
+									"aoColumns": [
+										{ "data": "appname" },
+										{ "data": "appid" },
+										{ "data": null,"render":function(data1,type,row,meat){
+												var html ="<a href=javascript:modfily_gamemessage(" + row.id +",'" + row.appid +"');>修改</a>";
+												return html;
+											} },
+									]
+								});
+
+							}
+						}, "json");
+			}
+            function download(){
+                var id = $("#gamePlatform").val();
+				var Plattype = Number($("#Plattype option:selected").val())||0;
+
+				if(Plattype == 1){
+					id += 100;
+				}
+
+				var tmpdata = $("#reportrange #reportrange-input").val();
+				var stime = Date.parse(tmpdata.substring(0, tmpdata.indexOf('-')))/1000 || 0;
+				var etime = Date.parse(tmpdata.substring(tmpdata.indexOf('-')+1, tmpdata.length))/1000 || 0;
+
+				var gameSystem =$("#lacunch option:selected").val();
+				
+                $.post("/monitor/http", {
+                    cmd: "download_export",
+                    id:id,
+					stime:stime,
+					etime:etime,
+					gameSystem:gameSystem,
+					gameid:gameid
+                },
+                function(data){
+                    if (data.retcode == 1) {
+                        alert(data.retdesc);
+                    } else {
+                        var a = document.createElement('a')
+                        a.href = '/json/gps_adid.txt';
+                        a.download = 'gps_adid.txt'
+                        a.click()
+                    }
+                }, "json");
+            }
+		</script>
+		
+	
+</body>
+</html>
+

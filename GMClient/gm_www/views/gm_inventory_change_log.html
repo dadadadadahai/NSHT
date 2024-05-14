@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                 <form action=""> 
+                    <div class="jmform-group">
+                       
+                        <div class=" fleft">
+                            <select id="sub_game" name="select" class="select_new">
+                                <option value="0">公用</option>
+                                <option value="127">生肖slots</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="jmform-group">
+                     
+                        <div class=" fleft">
+                            <select id="sessions" name="select" class="select_new">
+                                <option value="1">初级场</option>
+                                <option value="2">中级场</option>
+                                <option value="3">高级场</option>
+                               
+                                <!-- <option value="100">非充值玩家</option> -->
+                            </select>
+                        </div>
+                    </div>                	               
+                  
+                    <div class="jmform-group">
+                        <input id="starttime" type="text" placeholder="开始时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" autocomplete="off">
+                    </div>
+                    <div class="jmform-group">
+                        <input id="endtime" type="text" placeholder="结束时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" autocomplete="off">
+                    </div>
+                    <div class="jmform-group">
+                        <a id="user_online_search" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>查询</a>
+                    </div>
+                </form>
+            </div>           
+        </div>
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">库存变化日志</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <div id="inventory" style="height:600px"></div>
+        </div>
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+           
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+    <!--popupBox end-->
+</div>
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<!--报表导出 js -->
+<script src="js/export/tableExport.js"></script>
+<script src="js/export/jquery.base64.js"></script>
+<script src="js/highcharts.js"></script>
+<style>
+.select_new{
+  width:150px;height:36px; border:1px solid #ddd;border-radius: 5px;color: #555555
+}
+</style>
+<script type="text/javascript">
+    var jsonPlat;
+	template.helper('gamename', function (data) {    
+        for(var i=0; i<jsonPlat.length; i++) {
+            if(jsonPlat[i].subgameid == data){
+               return jsonPlat[i].subgamename;
+               break;
+            }
+        }
+   	})
+    function research(id) {
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+        var subgametype =  $("#sessions").val();
+        var subgameid =  $("#sub_game").val();
+
+        // var subgameid = 0;
+        var starttime =  $("#starttime").val();
+        var endtime =  $("#endtime").val();
+
+        
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+        var perpage = 9999999;
+        
+
+        if((starttime == "" && endtime != "") ||(starttime != "" && endtime == "" )){
+            alert("请选择需要查询的时间区间")
+            return 
+        }
+        
+        var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "inventory_controll_log_list", gameid: gameid,zoneid:zoneid, curpage: toCurPage , perpage :perpage , starttime:starttime,endtime:endtime,subgametype:subgametype,subgameid:subgameid},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.data&&data.data.length>0) {
+
+                        initchart(data.data ,(data.initstock / 100).toFixed(0))
+                    }else{
+                        
+                    } 
+					
+				}
+			}
+		});
+    }
+    $(document).ready(function(){
+        // 
+        $("#user_online_search").click(research);
+        // let gameid = $.cookie("gameid");
+
+        // $.getJSON("js/json/game/1002.json", function(allplat){
+        //     jsonPlat = eval(allplat.data);
+        //     var html = "";
+        //     for(var i=0; i<jsonPlat.length; i++) {
+        //         if(jsonPlat[i].gametype == 1){
+        //             html += "<option value='"+jsonPlat[i].subgameid+"'>"+jsonPlat[i].subgamename+"</option>";
+        //         }
+                
+        //     }
+            
+        //     $("#sub_game").html(html)
+        // });
+         research(1)
+		
+    });
+    function initchart(data , value){
+        var arrayTime = new Array();
+		var arrayItems = new Array();
+        for(var i=0; i<data.length; i++) {
+            arrayTime.push(data[i].datetime);
+            arrayItems.push(parseFloat((data[i].stocknum / 100).toFixed(2)) );//根据传进来的ID变量，取不同的值
+        }
+
+        var chart = new Highcharts.Chart({
+             chart: {
+                 type: 'spline',
+                 renderTo:"inventory"
+                 },
+            title: {
+                text: '库存变化日志'
+            },
+           
+            xAxis: {
+                categories: arrayTime,
+                labels: {enabled:false}
+            },
+            yAxis: {
+                title: {
+                    text: '库存 (元)'
+                },
+                plotLines: [{
+                    color: 'red',
+                    value: value,
+                    width:3,
+                    label: {
+                        text: value,
+                        align: 'left'
+                    }
+                }]
+                
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        // 开启数据标签
+                        enabled: true          
+                    },
+                    // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+                    enableMouseTracking: false
+                }
+                
+            },
+            series: [{
+                name: '库存',
+                data:arrayItems
+            }]
+	    });
+    }
+ 
+
+    
+</script>
+</body>
+</html>

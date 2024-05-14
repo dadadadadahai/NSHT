@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<link rel="stylesheet" type="text/css" href="css/chosen.css">
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script> 
+<script type="text/javascript" src="js/layer/layer.js"></script> 
+<script type="text/javascript" src="js/template-native.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>  
+<script type="text/javascript" src="js/chosen.jquery.min.js"></script>  
+
+</head>
+
+<body>
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">		
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">批量邮件</h3>
+        </div>
+        <div class="box-inner jm-userInfoModify">
+            <div class="jmform-vertical">
+                <form action="" id="emailAction"> 
+                    <!-- <div class="jmform-vgroup">
+                        <label class="control-label control-label-sm">选择发行商：</label>
+                        <div class="jqtransform fleft jqtransformEmailType">
+                            <select id="issuerType" name="type" style="width:180px;">
+                                <option value="0" selected>畅游研发</option>                                
+                            </select>
+                        </div> 
+                    </div>     -->
+                                     
+                    
+                    <div class="choose_tab choose_ml">
+			        	<a class="tab active" href="javascript:;">游戏条件式</a>
+			            <a class="tab" href="javascript:;">指定玩家式</a>            
+			        </div>
+			        <!-- choose_warp_1-->
+			        <div id="choose_warp_1" class="choose_warp">			           
+			            <!-- <table class="jmform-vgroup choose_zoom">
+			            	<tr>
+			            		<td>
+									<label class="control-label control-label-sm">选择服务器：</label>
+								<td>
+								<td>
+									<div class="fright setting_zooms_warp">
+										<p class="setting_zooms" id="setting_zooms">
+					                		
+					                    </p>
+									</div>
+								</td>	
+			            	</tr>
+			            </table> -->
+			            <!-- <div class="jmform-vgroup">
+	                        <label class="control-label control-label-sm">角色等级：</label>
+	                        <div class="fleft">
+	                            <input id="email-minlevel" type="text" class="jminput jminput-sm inyshort input-empty" value="" name=""  onkeyup="this.value=this.value.replace(/\D+/g,'')"/>
+	                            <span>-</span>
+	                            <input id="email-maxlevel" type="text" class="jminput jminput-sm inyshort input-empty" value="" name=""  onkeyup="this.value=this.value.replace(/\D+/g,'')"/>
+	                        </div>                        
+	                    </div> -->
+
+	                    <div class="jmform-vgroup">
+	                        <label class="control-label control-label-sm">VIP等级：</label>
+	                        <div class="fleft">
+	                            <input id="email-minvip" type="text" class="jminput jminput-sm inyshort input-empty" value="" name=""  onkeyup="this.value=this.value.replace(/\D+/g,'')"/>
+	                            <span>-</span>
+	                            <input id="email-maxvip" type="text" class="jminput jminput-sm inyshort input-empty" value="" name=""  onkeyup="this.value=this.value.replace(/\D+/g,'')"/>
+	                        </div>                        
+	                    </div>
+
+	                    <div class="jmform-vgroup">
+	                        <label class="control-label control-label-sm">登录时间：</label>
+	                        <div class="fleft">
+	                            <input id="email-minlogin" type="text" placeholder="开始时间" class="jminput jminput-sm jminput-size04 Wdate input-empty" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy/MM/dd HH:mm:ss'})" value="">
+	                            <span>-</span>
+	                            <input id="email-maxlogin" type="text" placeholder="结束时间" class="jminput jminput-sm jminput-size04 Wdate input-empty" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy/MM/dd HH:mm:ss'})" value="">
+	                        </div>                        
+	                    </div>
+
+	                    <div class="jmform-vgroup">
+	                    	<label class="control-label control-label-sm">在线状态：</label>
+	                        <div class="fleft controlBoxs online_controlBoxs">
+	                            <label><input id="onlineAttr1" type="radio" name="onlinestatus" checked value="0"/>所有</label>
+	                            <label><input id="onlineAttr2" type="radio" name="onlinestatus" value="1"/>在线</label>
+	                            <label><input id="onlineAttr3" type="radio" name="onlinestatus" value="2"/>离线</label>
+	                        </div>                        
+	                    </div>
+		            </div>
+                    <!--choose_warp_1-->
+
+                    <!--choose_warp_2-->
+                    <div id="choose_warp_2" class="choose_warp hide">                    	
+                    	<div class="jmform-vgroup email-zoom-box">
+                    		<label class="control-label control-label-sm">玩家ID：</label>   
+	                        <div class="fillform">
+	                            <textarea id="charid_zoneid_content" name="content" class="textarea01 textarea08 txt-default input-empty" placeholder="例如：12525,18520,19542"></textarea>
+	                        </div>
+	                    </div>
+	                    <!-- <div class="email-tips-box">
+                    		<P class="control-tips">每个角色ID与其区服对应，之间通过“_”进行连接，如下：角色1的ID_对应的区服ID,以英文,结束</P>
+                    	</div> -->
+                    </div>
+                    <!--choose_warp_2-->
+
+                   
+
+                    <!--<div class="jmform-vgroup">
+                        <label class="control-label control-label-sm">绑定绿钻：</label>
+                        <div class="fillform">
+                            <input id="email-atta-bindyb" type="text" class="jminput jminput-sm jminput-size04 input-empty" name="" />
+                        </div>
+                    </div> -->
+
+                    <div class="jmform-vgroup">
+                        <label class="control-label control-label-sm">金币：</label>
+                        <div class="fillform">
+                            <input id="email-atta-coin" type="text" class="jminput jminput-sm jminput-size04 input-empty" name="" />
+                        </div>
+                    </div>
+					<!-- <div class="jmform-vgroup">
+                        <label class="control-label control-label-sm">银币：</label>
+                        <div class="fillform">
+                            <input id="email-atta-yb" type="text" class="jminput jminput-sm jminput-size04 input-empty" name="" />
+                        </div>
+                    </div> -->
+					
+					<!--邮件标题 正文-->
+					<div class="jmform-vgroup">
+                        <label class="control-label control-label-sm">邮件标题：</label>
+                        <div class="fillform">
+                            <input id="subject" type="text" placeholder="邮件标题" class="jminput jminput-sm jminput-size08 input-empty" name="subject" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label control-label-sm">邮件内容：</label>
+                        <div class="fillform">
+                            <textarea id="content" name="content" class="textarea01 textarea08 txt-default input-empty" placeholder="请输入邮件内容"></textarea>
+                        </div>
+                    </div>   
+					<!--邮件标题 正文-->
+
+                    <!--附件 start-->
+					<!-- <div class="jmform-vgroup">
+                        <p class="lineTile">附件</p>                        
+                    </div>   
+                    <div class="jmform-vgroup">
+                        <label class="control-label control-label-sm">类型：</label>
+                        <div class="jqtransform fleft attachmentBox">
+                            <select id="attachmenttype" name="attachmenttype" style="width:180px;">
+                               
+                            </select>
+                        </div>
+                        
+                        <label class="control-label control-label-sm">物品ID：</label>
+                        <div class="jqtransform fleft attrresidBox">
+                            <select id="attrresid" name="attrresid" style="width:173px;">
+                            	<option value='0'>请选择物品ID</option>
+                               
+                            </select>
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label control-label-sm">物品名称：</label>
+                        <div class="fleft">
+                            <input id="attaName" type="text" placeholder="物品名称" class="jminput jminput-sm wtshort" value="物品名称" name="" disabled />
+                        </div>
+                        
+                        <label class="control-label control-label-sm">数量：</label>
+                        <div class="fillform w100">
+                             <div class="amount-box">
+                                <a data-btnminus="customer" class="g-minus" href="javascript:;">－</a>
+                                <input type="text" id="emailAtta_num" class="ipt_customer_num" value="1" onkeyup="this.value=this.value.replace(/\D+/g,'')">
+                                <a data-btnplus="customer" class="g-plus" href="javascript:;">+</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="jmform-vgroup">
+                    	<label class="control-label control-label-sm">绑定道具：</label>
+                        <div class="fleft controlBoxs">
+                            <label><input id="attaBind1" type="radio" name="binding" checked value="0"/>否</label>
+                            <label><input id="attaBind2" type="radio" name="binding" value="1"/>是</label>
+                        </div>
+                        <label class="control-label control-label-sm">操作：</label>                        
+                        <a id="emailAtta_add" class="jmbtn jmbtn-succeed" href="javascript:;"><span class="ico-add-w16"></span>添加</a>
+                    </div>
+                    
+                    <div class="jmform-vgroup">
+                    	<div class="email-atta-box">
+                        	<div class="ea-title"><span class="s1">类型</span><span class="s1">物品ID</span><span class="s2">物品名称</span><span class="s4">数量</span><span class="s4">绑定</span></div>
+                        	<div class="ea-content">
+                            	<ul class="ea-content-ul" id="ea-content-ul">
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    
+                    </div> -->
+					<!--附件 end-->
+
+
+                    
+                    
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label control-label2 clearfix"> 
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn-lgLm jmbtn-info" href="javascript:gm_mail_submit();" id="gm_broadcast_add">确认发送</a>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>            
+            
+        </div>        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+   
+    function gm_mail_submit() {
+
+    	//获取发行商
+    	//var issuer = Number($("#issuerType option:selected").val()) || 0;
+    	var selectZoneIds = $('input[name="itemsname"]:checked');
+    	var _values = '';
+    	var ext = '';
+    	var extType = 1;//标记区服条件式 1 指定玩家式为2
+
+    	var minlevel =0;
+    	var maxlevel =0;
+    	var minvip =0;
+    	var maxvip =0;
+    	var minlogin =0;
+    	var maxlogin =0;
+    	var online = 0;
+    	
+    	//获取指定玩家id_区服id
+    	
+
+    	//判断条件
+    	if($("#choose_warp_1").is(":hidden")){
+		       extType=2;   //如果choose_warp_1为隐藏,则指定玩家式为2
+		}else{
+			extType=1;
+		}
+		if(extType==1){
+			$(selectZoneIds).each(function(){
+	    		
+	    			_values += $(this).attr('value')+',';
+	    		
+	    	})
+			ext = _values;//区服选择
+			
+			minlevel = $("#email-minlevel").val()||0;//开始玩家等级
+			maxlevel = $("#email-maxlevel").val()||0;//结束玩家等级
+			minvip = $("#email-minvip").val()||0;//开始玩家VIP
+			maxvip = $("#email-maxvip").val()||0;//结束玩家VIP
+			minlogin = Date.parse($("#email-minlogin").val())/1000;//起始时间
+			maxlogin = Date.parse($("#email-maxlogin").val())/1000;//结束时间
+			online = $('.controlBoxs input[name="onlinestatus"]:checked ').val()||0;//是否在线
+		}
+		if(extType==2){
+			ext = $('#charid_zoneid_content').val();
+		}
+
+		var gold = $("#email-atta-yb").val() * 100 ||0;//银币
+		var goldbind = $("#email-atta-bindyb").val()||0;//绑定元宝
+		var money = $("#email-atta-coin").val() * 100||0;//金币
+
+        var charid = Number($("#charid").val()) || 0;
+        var subject= ($("#subject").val());
+		var content= ($("#content").val());
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+        var attaLi = $('#ea-content-ul li');
+		var _strHtml = "";
+		if(attaLi.length>0){
+			$(attaLi).each(function(i) {				
+				if((attaLi.length-1) == i){
+					_strHtml += $(attaLi).eq(i).children('.t1').attr('data-id')+'*'+$(attaLi).eq(i).children('.t2').text()+'*'+$(attaLi).eq(i).children('.t4').text()+'*'+$(attaLi).eq(i).children('.t5').attr('data-bind');
+					}else{
+					_strHtml += $(attaLi).eq(i).children('.t1').attr('data-id')+'*'+$(attaLi).eq(i).children('.t2').text()+'*'+$(attaLi).eq(i).children('.t4').text()+'*'+$(attaLi).eq(i).children('.t5').attr('data-bind')+",";
+					}
+            });
+		}
+		
+		
+		var attachments = _strHtml;
+		//alert(attachments);		
+		
+        // if(subject==''||subject==null||subject=="undefined"){
+		// 	dialogTip('请填写邮件标题！');
+		// 	return;	
+		// 	}
+		if(content==''||content==null||content=="undefined"){
+			dialogTip('请填写邮件内容！');
+			return;	
+			}
+			
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "gm_mails_send",gameid:gameid,zoneid:zoneid,subject:subject,content:content,attachments:attachments,gold:gold,goldbind:goldbind,money:money,minlevel:minlevel,maxlevel:maxlevel,minvip:minvip,maxvip:maxvip,minlogin:minlogin,maxlogin:maxlogin,online:online,ext:ext},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					dialogTip('邮件发送失败！');
+				} else {
+					if(data.retcode == 0){	
+						dialogTip('邮件已成功发送！');
+						initEmail();
+					}else{	
+						if(data.retdesc){
+							dialogTip(data.retdesc);
+							}else{
+								dialogTip('邮件发送失败！');
+								}		
+						return;		
+						}						
+				}
+			}
+		});	
+		
+		
+    }
+	
+	function searchAttaProp(){
+		var gameid = Number($.cookie("gameid"));
+        var zoneid = Number($.cookie("zoneid"));
+		//alert(111);
+		$.post("/gm/http", {cmd: "gm_itemtype_search", gameid:gameid, zoneid:zoneid}, 
+            function(data){
+                if (!data) {
+                    alert("Execute timeout");
+					//alert(111);
+                }else {
+                     if (data && data.data && data.data.length > 0) {
+						//类型
+						
+						var text = "<option value='0'>请选择物品类型</option>"
+						for(var i=0; i<data.data.length; i++) {
+							curdata = data.data[i]							
+							text += '<option value="'+ curdata.itemtype + '" ata-id="'+ curdata.itemtype + '">' + curdata.typename + '</option>';
+						}						
+						sdata = data;						
+						$("#attachmenttype").html(text);
+						
+						
+					}
+                }
+            }, "json");
+		
+				
+		}
+	//根据类型选择物品ID
+	$('#attachmenttype').change(function(){		
+		//console.log(sdata);
+		var t;
+		var _sval = $(this).children('option:selected').val();
+		var textID ="<option value='0'>请选择物品ID</option>" ;
+		 for(var i=0; i<sdata.data.length; i++) {
+			if(sdata.data[i].itemtype == _sval){		
+				
+				for(var k=0; k<sdata.data[i].data.length; k++) {
+					talldata = sdata.data[i].data[k]							
+					textID += '<option value="'+ talldata.itemid + '" ata-id="'+ talldata.itemid + '" ata-name="' +talldata.itemname+'">' + talldata.itemid +"(" + talldata.itemname +")" + '</option>';
+				}
+				$("#attrresid").html(textID);
+                $("#attrresid").trigger("chosen:updated");   
+                $("#attrresid").chosen();
+				}
+		   };
+		
+		});
+		
+	$('#attrresid').change(function(){		
+		var _stid = $(this).children('option:selected').val();		
+		var _stname = $('option[ata-id='+_stid+']').attr('ata-name');
+		$('#attaName').val(_stname);
+	});	
+	
+	
+	function initEmail(){
+		$('.input-empty').val('');
+		$('#ea-content-ul').empty();
+		$("#attaBind1").prop("disabled", false);
+		$('#online_controlBoxs input[name="onlinestatus"]').prop("checked",false);
+		$('#onlineAttr1').prop("checked",true);
+		$('.itemscheck').prop("checked",false);
+
+		}
+	
+	function dialogTip(args){
+		parent.layer.open({
+			type: 0,
+			title :'提示信息',
+			area: ['300px', ''],
+			shadeClose: true, //点击遮罩关闭
+			content: args
+		});
+		}
+	//emailType
+	$('#emailType').change(function(){		
+		var _typetid = $(this).children('option:selected').val();
+		var gameid = Number($.cookie("gameid"));
+		if(_typetid==1&&gameid==3002){			
+			$("#attaBind1").prop("disabled", true);
+			$("#attaBind2").prop("checked", true);
+			}
+	});	
+		
+    $(document).ready(function(){
+        //$("#gameid option").click(ongamechange);
+        //searchAttaProp();
+        getgamezone();
+		//$(".jqtransformEmailType").jqTransform();
+		var sdata ;
+    });
+
+
+
+    //选中区服
+	
+	$(".checkbox_all input").live('click',function(){	
+		if($(this).attr("checked")== "checked"){
+			 $('.itemscheck').attr("checked", true);
+		}else{			
+			$('.itemscheck').attr("checked", false);
+			}		
+	})
+
+
+
+	//选择模式
+	$('.choose_tab a').click(function(){
+		$(this).siblings('a').removeClass('active');
+		$(this).addClass('active');
+		var neiTab = $(this).index();
+		$(".choose_warp").hide();
+		$(".choose_warp").eq(neiTab).show();		
+	});
+
+	//获取区服
+	function getgamezone(){		
+		//console.log(sdata);
+		var gameid = Number($.cookie("gameid"));
+		var cpid  = $('#issuerType option:selected').val()||0;
+        $.ajax({
+			    url:"/gm/http",
+				type : "POST",
+				data: {cmd: "gm_zone_list", gameid:gameid,cpid:cpid},
+				dataType : "json",
+				success:function(data) {							
+					if (data && data.data && data.data.length > 0) {
+						//类型						
+						var text = "<label class='checkbox_all'><input type='checkbox' />全选</label>"
+						for(var i=0; i<data.data.length; i++) {
+							curdata = data.data[i];							
+							text += '<label><input type="checkbox" class="itemscheck" name="itemsname" value="'+curdata.ZoneId+'" />'+curdata.ZoneName+'</label>';
+						}						
+						sdata = data;						
+						$("#setting_zooms").html(text);
+					}
+                    searchAttaProp();					
+				}
+			})
+		}
+</script>
+</body>
+</html>

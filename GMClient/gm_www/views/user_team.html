@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="js/template-native.js"></script>
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon" >
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div id="team">
+            <div class="jm-navbar">
+                <div class="jmform-search clearfix">
+                     <form action="">
+                        <div class="jmform-group">
+                            <input id="teamid" type="text" placeholder="团队ID" class="jminput jminput-sm jminput-size04" name="">
+                        </div>
+                        <div class="jmform-group">
+                            <input id="teamname" type="text" placeholder="团队名称" class="jminput jminput-sm jminput-size04" name="">
+                        </div>
+                         <div class="jmform-group">
+                            <input id="competition" type="text" placeholder="赛季" class="jminput jminput-sm jminput-size04" name="">
+                        </div>
+                        <div class="jmform-group">
+                            <input id="level" type="text" placeholder="团队等级" class="jminput jminput-sm jminput-size04" name="">
+                        </div>
+                        <div class="jmform-group">
+                            <input id="rank" type="text" placeholder="团队小组名次" class="jminput jminput-sm jminput-size04" name="">
+                        </div>
+                        <div class="jmform-group">
+                            <input id="memberid" type="text" placeholder="成员ID" class="jminput jminput-sm jminput-size04" name="">
+                        </div>
+                        <div class="jmform-group">
+                            <input id="membername" type="text" placeholder="成员昵称" class="jminput jminput-sm jminput-size04" name="">
+                        </div>
+                                         
+                        
+                        
+                        <div class="jmform-group">
+                            <a id="user_info_search" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>查询</a>
+                        </div>
+                       
+                    </form>
+                </div>           
+            </div>
+            <!-- jm-navbar end-->
+            <div class="jm-TabTitle mt10">
+                <h3 class="h3type txt-white">团队信息
+                    
+                </h3>
+            </div>
+            <div class="jm-section">
+                <table class="jmtable-type01" id="user_list_table">
+    
+                    <thead>
+                        <tr>
+                            <th>团队ID</th>
+                            <th>团队昵称</th>
+                            <th>团队赛季数</th>
+                            <th>当前赛季结束时间</th>
+                            <th>团队等级</th>
+                            <th>团队小组名次</th>
+                            <th>团队等级奖励</th>
+                            <th>团队成员</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gm_cc_RecordHtml">
+                        <script id="gm_cc_RecordData" type="text/html">
+                            <%for(i = 0; i < data.length; i++) {%>    
+                            <tr>
+                                <td><%=data[i].accid%></td>
+                                <td><%=data[i].account%></td>
+                                <td><%=data[i].charid%></td>
+                                <td><%=data[i].charname%></td>
+                                <td><%=data[i].profession%></td>
+                                <td><%=data[i].level%></td>
+                                <td><%=data[i].viplevel%></td>
+                                <td><a href="javascript:member(<%=data[i].id%>);">成员信息</a></td>
+                                
+                            </tr>
+                            <%}%>
+                        </script>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="team_member" style="display: none;">
+            <div class="jm-navbar">
+                <!-- <div class="jmform-search clearfix">
+                     <form action="">
+                        <div class="jmform-group">
+                            <input id="team_member_id" type="text" placeholder="团队ID" class="jminput jminput-sm jminput-size04" name="">
+                        </div>
+                        
+                        <div class="jmform-group">
+                            <a id="team_user_info_search" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>查询</a>
+                        </div>
+                       
+                    </form>
+                </div>            -->
+            </div>
+            <!-- jm-navbar end-->
+            <div class="jm-TabTitle mt10">
+                <h3 class="h3type txt-white">成员信息
+                    <a id="callback" class="jmbtn jmbtn-succeed" href="#"><span class="ico-see-w16"></span>返回团队列</a>
+                </h3>
+            </div>
+            <div class="jm-section">
+                <table class="jmtable-type01" id="user_list_table">
+    
+                    <thead>
+                        <tr>
+                            <th>成员ID</th>
+                            <th>成员昵称</th>
+                            <th>等级</th>
+                            <th>团队积分</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gm_cc_RecordHtml">
+                        <script id="gm_member_RecordData" type="text/html">
+                            <%for(i = 0; i < data.length; i++) {%>    
+                            <tr>
+                                <td><%=data[i].accid%></td>
+                                <td><%=data[i].account%></td>
+                                <td><%=data[i].charid%></td>
+                                <td><%=data[i].charname%></td>
+                            </tr>
+                            <%}%>
+                        </script>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- jm-section start-->
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+           <div class="jm-epages" id="pageHtml">
+            	<script type="text/html" id="pageData">
+				<%if(isenptydata(data)){%>
+					<div style="color:#ff6600" class="fleft">暂无查询记录！</div>
+				<%} else{%>
+					<div class = "fright">
+					<%if(Curpage != 1) {%>
+						<a href="javascript:listToPage(1);">首页</a>
+						<a href="javascript:listToPage('<%=Curpage - 1%>');">上一页</a>
+					<%}%>
+					<%if(Curpage == 1 && Maxpage != 0 && Maxpage != 1) {%>
+						<a>首页</a>
+						<a>上一页</a>
+					<%}%>
+					<%if(Maxpage <= 8){%>
+						<%for(i = 1; i <= Maxpage; i++) {%>
+						<%if(Curpage == i) {%>
+							<a href="#" class="on"><%=i%></a>
+						<%}else {%>
+							<a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+						<%}%>
+					<%}%>
+					<%}else {%>
+						<%if(Curpage == 1) {%>
+							<a href="#" class="on">1</a>
+							<a href="javascript:listToPage(2);">2</a>
+							<a href="javascript:listToPage(3);">3</a>
+							...
+							<a href="javascript:listToPage('<%=Maxpage - 1%>');"><%=Maxpage - 1%></a>
+							<a href="javascript:listToPage('<%=Maxpage%>');"><%=Maxpage%></a>
+						<%}else if(Curpage < 6) {%>
+							<%for(i = 1; i <= Curpage - 1; i++ ) {%>
+								<a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+							<%}%>
+							<span class="on"><%=Curpage%></span>
+							<a href="javascript:listToPage('<%=Curpage + 1%>');"><%=Curpage + 1%></a>
+							...
+							<a href="javascript:listToPage('<%=Maxpage - 1%>');"><%=Maxpage - 1%></a>
+							<a href="javascript:listToPage('<%=Maxpage%>');"><%=Maxpage%></a>
+						<%}else if(Curpage >= 6 && Curpage < Maxpage - 4) {%>
+							<a href="javascript:listToPage(1);">1</a>
+							<a href="javascript:listToPage(2);">2</a>
+							...
+							<a href="javascript:listToPage('<%=Curpage - 1%>');"><%=Curpage - 1%></a>
+							<span class="on"><%=Curpage%></span>
+							<a href="javascript:listToPage('<%=Curpage + 1%>');"><%=Curpage + 1%></a>
+							...
+							<a href="javascript:listToPage('<%=Maxpage-1%>');"><%=Maxpage - 1%></a>
+							<a href="javascript:listToPage('<%=Maxpage%>');"><%=Maxpage%></a>
+						<%}else {%>
+							<a href="javascript:listToPage(1);">1</a>
+							<a href="javascript:listToPage(2);">2</a>
+							...
+							<%for(i = Maxpage - 4; i <= Maxpage; i++) {%>
+								<%if(Curpage == i) {%>
+									<span class="on"><%=i%></span>
+								<%}else {%>
+									<a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+								<%}%>
+							<%}%>
+						<%}%>
+					<%}%>
+					<%if(Curpage < Maxpage) {%>
+						<a href="javascript:listToPage('<%=Curpage + 1%>');">下一页</a>
+						<a href="javascript:listToPage('<%=Maxpage%>');">尾页</a>
+					<%}%>
+					</div>
+				<%}%>
+				</script>
+            </div>
+            <!-- epages -->
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    var teamid  = 0;
+    var is_team = true;
+
+
+    template.helper('isenptydata', function (data) {    
+   		if($.isEmptyObject(data)){
+			return true;
+		}else{
+			return false;
+		}
+   	})	
+    function member(teamid , ids){
+        is_team = false;
+        teamid = teamid
+        $("#team").hide();
+        $("#team_member").show()
+        //成员信息查询
+
+    }
+    $('#callback').click(function(){
+        is_team = true;
+        teamid = 0;
+        $("#team").show();
+        $("#team_member").hide()
+        rolesearch();
+    })
+	
+    function rolesearch(id) {
+
+		var isonline = Number($("#online_flag option:selected").val()) || 0;
+        var accid = Number($("#accid").val()) || 0;
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+		
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+		var starttime = Date.parse($("#starttime").val())/1000||0;
+        var endtime = Date.parse($("#endtime").val())/1000||0;
+        var charname = $("#charname").val() || "" ;
+
+        var perpage = 10;
+		var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "user_list_search", accid: accid, gameid:gameid, charname:charname, zoneid:zoneid,isonline:isonline,curpage:toCurPage,perpage:perpage,starttime:starttime,endtime:endtime},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.data&&data.data.length>0) {
+						for(var i=0;i<data.data.length;i++){
+							data.data[i].lastofftime = format_time(data.data[i].lastofftime);
+						}
+	                      var html = template("gm_cc_RecordData", data); 
+	                      $("#gm_cc_RecordHtml").html(html);              
+	                    }
+					var pageHtml = template("pageData", data);  
+					$("#pageHtml").html(pageHtml);						
+				}
+			}
+		});	
+    }
+	function listToPage(id){
+		var ids = id
+        if(is_team){
+            rolesearch(ids);
+        }else{
+            member(teamid , ids);
+        }
+		
+	};
+    $(document).ready(function(){
+        $("#user_info_search").click(rolesearch);
+    });
+</script>
+</body>
+</html>

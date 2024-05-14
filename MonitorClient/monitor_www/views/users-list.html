@@ -1,0 +1,479 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- basic styles -->
+
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+	
+
+		<link rel="stylesheet" href="css/ace.min.css" />
+		<link rel="stylesheet" href="css/gm.css" />
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+<body class="bg-layout">
+	
+	<div class="page-content" >
+		<div class="row">
+			<div class="table-search">
+			<div class="bootstrap-select">
+				<input class="input-sm tInput"  placeholder="输入用户名" type="text" value="" id="account">
+			</div>
+			<a class="btn btns-green btn-refresh btns-tables" href="javascript:search();" ><i class="icon-search bigger-110"> </i>查询</a>
+			</div>
+			<div class="table-header">
+				用户信息列表
+			</div>
+
+			<div class="table-responsive content-details">
+				<table id="sample-table-1" class="gameTable table table-hover">
+					<thead>
+						<tr>
+							<th align="center">用户ID</th>
+							<th>账号</th>
+							<th>电话</th>
+							<th>权限</th>
+							<th>游戏</th>
+							<th>plat_list</th>
+							<th>备注</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+					<h4 class="modal-title" id="myModalLabel">修改</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="modify_name">修改电话</label>
+						<input type="text" name="modify_name" class="form-control" id="modify_name" placeholder="修改电话:如不修改可不用填写">
+					</div>
+					<div class="form-group">
+						<label for="modify_password">修改密码</label>
+						<input type="password" name="modify_password" class="form-control" id="modify_password" placeholder="修改密码:如不修改可不用填写">
+					</div>
+
+<!--					<div class="form-group">-->
+<!--						<label for="txt_statu">描述</label>-->
+<!--						<input type="text" name="txt_statu" class="form-control" id="txt_statu" placeholder="状态">-->
+<!--					</div>-->
+
+					<label for="checkboxlist">修改权限</label>
+					<div class="form-group">
+						<div class="col-sm-8" id="checkboxlist">
+							<input type="checkbox" id="per_1" >运营总况
+							<input type="checkbox" id="per_2" >用户分析
+							<input type="checkbox" id="per_3" >留存分析
+							<input type="checkbox" id="per_4" >充值分析
+							<p/>
+							
+							<input type="checkbox" id="per_5" >货币分析
+							<input type="checkbox" id="per_6" >投放分析
+							<input type="checkbox" id="per_7" >游戏管理
+							
+							<input type="checkbox" id="per_8" >用户管理
+						</div>
+					</div>
+					<input type="checkbox" id="per_all"  ><text style="color:blue">全选</text>
+					<input type="checkbox" id="per_default"  ><text style="color:blue">默认</text>
+
+					<p/>
+
+					<label >修改游戏列表</label>
+					<input type="checkbox" id="check_all"  ><text style="color:blue">全选</text>
+<!--					<input type="checkbox" id="check_default"  ><text style="color:blue">默认</text>-->
+					<div class="form-group">
+						<div class="col-sm-8" id="checkgamelist">
+<!--							<input type="checkbox" id="game_8" >1111-->
+						</div>
+					</div>
+
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="btn_modify" class="btn btn-primary" >修改</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" role="dialog" id="modal1">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+					<h4 class="modal-title">警告！</h4>
+				</div>
+				<div class="modal-body">
+					<p>确认删除此用户?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" aria-label="Close" id="confirm_delete" data-dismiss="modal">确认</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+	<!-- /.page-content -->
+
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+		
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="js/bootstrap.min.js"></script>
+		
+		<script src="js/jquery.dataTables.min.js"></script>
+		<script src="js/jquery.dataTables.bootstrap.js"></script>
+
+		<script src="js/ace-elements.min.js"></script>
+		<script src="js/ace.min.js"></script>
+
+		<script src="layer/layer.js"></script>
+		<!-- inline scripts related to this page -->
+		<script>
+			jQuery(function($) {
+				$('#sample-table-1').dataTable();
+			});
+			$(document).ready(function (){
+
+				$("#btn_modify").click(btn_modify);
+				$("#confirm_delete").click(confirm_delete);
+
+				//查询所有用户
+				searchallinfo();
+			})
+			function searchallinfo(){
+				var curtype = 1;
+				$.post("/monitor/http", {cmd: "user_list",curtype:curtype},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								if(data.data==null){
+									alert("加载失败！")
+									return
+								}
+								$('#sample-table-1').DataTable( {
+									"data":data.data,
+									"aoColumns": [
+										{ "data": "accid" },
+										{ "data": "account" },
+										{ "data": "name" },
+										{ "data": "per_list" },
+										{ "data": "game_list" },
+										{ "data": "plat_list" },
+										{ "data": "remarks" },
+										{ "data": null,"render":function(data,type,row,meat){
+												var html ='<a href="javascript:modfily_message(\'' + row.accid + '\',\''  + row.name + '\',\''  + row.game_list + '\',\'' + row.per_list  + "')\">修改</a>";
+												html += "<a href='javascript:delect_user("+row.accid+");'>删除</a>";
+												return html;
+											} },]});
+							}
+						}, "json");
+			}
+			function search(){//精确查找用户信息
+				var curtype = 2;
+				var account = $("#account").val();
+				if(account == ""){
+					alert("请输入正确信息！");
+					return
+				}
+				//alert(account)
+				$.post("/monitor/http", {cmd: "user_list",curtype:curtype,account:account},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								if(data.data==null){
+									alert("未找到该用户信息！")
+									return
+								}
+								$('#sample-table-1').DataTable( {
+									"data":data.data,
+									"aoColumns": [
+										{ "data": "accid" },
+										{ "data": "account" },
+										{ "data": "name" },
+										{ "data": "per_list" },
+										{ "data": "game_list" },
+										{ "data": "plat_list" },
+										{ "data": "remarks" },
+										{ "data": null,"render":function(data,type,row,meat){
+												var html ='<a href="javascript:modfily_message(\'' + row.accid + '\',\''  + row.name + '\',\''  + row.game_list + '\',\'' + row.per_list  + "')\">修改</a>";
+												html += "<a href='javascript:delect_user("+row.accid+");'>删除</a>";
+												return html;
+											} },]})
+							}
+						}, "json");
+			}
+
+			var sid;
+			var sid2;
+			var old_name;
+			var old_per;
+			var old_check = [];
+			var allgame_list = [];
+			function modfily_message(id,name,game_list,per_list){//修改用户信息
+
+				if(id==1){
+					alert("不允许修改最高权限用户信息！")
+					return;
+				}
+				allgame_list = [];
+				old_check = [];
+				$("#modify_name").val(name);
+				$("#modify_password").val("");
+				old_name = name;
+				old_per = per_list;
+				for(var i=1; i<9; i++) {
+					if (((1<<i)&per_list) || per_list == 0) {
+						$("#per_"+i).prop('checked',true);
+					}
+				}
+				$('#myModal').modal();
+				sid = id;
+				//alert(sid)
+				//修改用户的游戏列表
+				//显示所有游戏  让用户按需求添加 修改  返回游戏名而不是游戏id
+				var curtype = 1;
+				$.post("/monitor/http", {cmd: "game_list2",curtype:curtype,
+						},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								if(null!=data.data){
+									var html = "";
+									for(var i=0;i<data.data.length;i++){
+										html += "<input type='checkbox' id='game_"+data.data[i].gameid+"' >"+data.data[i].gamename;
+										allgame_list.push(data.data[i].gameid)
+									}
+									$("#checkgamelist").html(html);
+								}
+
+								//勾选已经拥有的游戏
+								$.post("/monitor/http", {cmd: "game_list3",
+											accid:sid,
+										},
+										function(data1){
+											if (data1.retcode == 1) {
+												alert(data1.retdesc);
+											} else {
+												if (data1.data != null){
+													for(var i=0;i<data1.data.length;i++){
+														//alert(data1.data[i].gamename)
+														old_check.push(data1.data[i].gameid);
+														$("#game_"+data1.data[i].gameid).prop('checked', true);
+													}
+												}
+
+											}
+										}, "json");
+							}
+
+						}, "json");
+			}
+			function btn_modify(){//修改用户信息
+				var id = sid;
+				var modify_name = $("#modify_name").val();
+				var modify_password = $("#modify_password").val();
+				var modify_per;// = $("#modify_per").val();
+				var curtype = 1;//修改用户信息
+				var per_bool = "123";
+				var per_list  = 0;
+				for(var i=1; i<9; i++) {
+					if($("#per_"+i).prop('checked')){
+						per_list += (1<<i);
+					}
+				}
+				var have_check = false;
+				
+				for(var i=0;i<allgame_list.length;i++){
+					if($("#game_"+allgame_list[i]).is(':checked')) {
+						have_check = true;
+					}
+				}
+				if(!have_check){
+					alert("请至少勾选一项游戏！");
+					return;
+				}
+
+				var delete_game_list = [];
+				var add_game_list = [];
+				var same_value = [];
+				//先判断游戏有无修改
+				for(var i=0;i<allgame_list.length;i++){
+					for(var j=0;j<old_check.length;j++){
+						if(old_check[j] == allgame_list[i]){
+							if(!$("#game_"+old_check[j]).is(':checked')) {//表示需要删除的游戏
+								delete_game_list.push(old_check[j]);
+								same_value.push(old_check[j]);
+							}
+						}
+					}
+				}
+				//找到需要添加的游戏
+				var temp = [];
+				temp = allgame_list;
+				for(var i=0;i<temp.length;i++){
+					for(var j=0;j<old_check.length;j++){
+						if(old_check[j] == temp[i]){
+							temp[i] = "";
+						}
+					}
+				}
+				var arr = [];
+				for(var i=0;i<temp.length;i++){
+					if(temp[i] != ""){
+						arr.push(temp[i]);
+					}
+				}
+				for(var i=0;i<arr.length;i++){
+					if($("#game_"+arr[i]).is(':checked')){
+						add_game_list.push(arr[i])
+					}
+				}
+				console.log("add_game_list:"+add_game_list)
+				console.log("delete_game_list:"+delete_game_list)
+				//alert(add_game_list)
+
+				if(per_list == old_per){
+					modify_per = "";
+				}else{
+					modify_per = per_list;
+				}
+				if(old_name == modify_name){
+					modify_name = "";
+				}
+				if(modify_name == "" && modify_password == "" && modify_per == ""&&add_game_list==""&&delete_game_list==""){
+					alert("请输入需要修改的数据,如不修改请点击取消！");
+					return;
+				}
+
+				if(modify_per == ""){
+					per_bool = "";
+				}
+				//alert("add:"+add_game_list+ "/n delete:"+ delete_game_list);
+				$.post("/monitor/http", {cmd: "user_setting",
+							curtype:curtype,
+							id:id,
+							modify_name:modify_name,
+							modify_password:modify_password,
+							modify_per:modify_per,
+							per_bool:per_bool,
+							add_game_list:JSON.stringify(add_game_list),
+							delete_game_list:JSON.stringify(delete_game_list),
+						},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								alert(data.retdesc);
+								$("#cancel").click()
+								searchallinfo();
+							}
+						}, "json");
+			}
+			function confirm_delete() {
+				var curtype = 2;
+				$.post("/monitor/http", {cmd: "user_setting",
+							curtype:curtype,
+							id:sid2,
+						},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								alert(data.retdesc);
+								searchallinfo();
+							}
+						}, "json");
+			}
+			function delect_user(id){//删除用户
+				sid2 = id;
+				if(sid2==1){
+					alert("不允许修改最高权限用户信息！")
+					return;
+				}
+				//显示确认删除
+				$('#modal1').modal();
+			}
+			function num(temp){//正整数判断
+				if(/^\+?[1-9][0-9]*$/.test(temp)){
+					return true;
+				}
+				return false;
+			}
+			$('#per_all').click(function(){
+				if($(this).is(':checked')) {
+					$("#checkboxlist :checkbox").prop('checked', true);
+				}else{
+					$("#checkboxlist :checkbox").prop('checked',false);
+				}
+			});
+			$('#per_default').click(function(){
+				for(var i=0;i<7;i++){
+					if($(this).is(':checked')) {
+						$("#per_"+i).prop('checked', true);
+					}else{
+						$("#per_"+i).prop('checked', false);
+					}
+				}
+			});
+			$('#check_all').click(function(){
+				if($(this).is(':checked')) {
+					$("#checkgamelist :checkbox").prop('checked', true);
+				}else{
+					$("#checkgamelist :checkbox").prop('checked',false);
+				}
+			});
+		</script>
+	
+	
+</body>
+</html>
+

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script> 
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">		
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">系统设置修改</h3>
+        </div>
+        <div class="box-inner jm-userInfoModify">
+            <div class="jmform-vertical">
+                <form action="">
+                    
+                    <div class="jmform-vgroup">
+                        <label class="control-label">执行方式：</label>
+                        <div class="jqtransform fleft">
+                            <select id="optype" name="select" style="width: 60px;">
+                                <option value="1">重启进程</option>
+                                <option value="2">更新程序</option>
+                                <option value="3">刷新网关</option>
+                                <!--option value="4">重载配置</option-->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label">内容描述：</label>
+                        <div class="fillform">
+                            <textarea id="opdesc" class="textarea01 textarea03 txt-default" placeholder="备注"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn-lg jmbtn-default" href="javascript:void(0)" id="gm_system_set">执行</a>                       	
+                            <a class="jmbtn jmbtn-lg jmbtn-info" href="javascript:void(0)" id="cancle">取消</a>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>            
+            
+        </div>        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    function gmsystemset(e) {
+        var gameid = Number($.cookie("gameid") || "");
+        var zoneid = Number($.cookie("zoneid") || "");
+        if (!(gameid && zoneid)) {
+            alert("Please select game and zone first");
+            return;
+        }
+        var optype = Number($("#optype option:selected").val());
+        var opdesc = $("#opdesc").val();
+        if (!confirm("你确定对游戏："+gameid+" 区服:"+zoneid+" 执行"+$("#optype option:selected").text()+"操作吗?")) {
+            return;
+        }
+        $.post("/gm/http", {cmd: "gm_system_set", optype: optype, opdesc: opdesc, gameid:gameid, zoneid:zoneid}, 
+            function(data){
+                if (!data) {
+                    alert("Execute timeout");
+                } else if (data.retcode != 0){
+                    alert(data.retdesc);
+                } else {
+                    alert("Execute success");
+                }
+            }, "json");
+    }
+    $(document).ready(function(){
+        $("#gm_system_set").click(gmsystemset);
+    });
+
+</script>
+
+</body>
+</html>

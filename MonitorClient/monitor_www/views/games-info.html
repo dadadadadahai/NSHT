@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- basic styles -->
+
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+	
+		<link rel="stylesheet" href="css/chosen.css">
+		<link rel="stylesheet" href="css/ace.min.css" />
+		<link rel="stylesheet" href="css/gm.css" />
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+<body class="bg-layout">
+
+	<div class="page-content">
+		<div class="row">
+			<div class="table-search">
+				<div class="bootstrap-select">
+					<input class="input-sm tInput"  placeholder="输入游戏ID" type="text" value="" id="search_gameid">
+				</div>
+				<a class="btn btns-green btn-refresh btns-tables" href="javascript:searchgame();" ><i class="icon-search bigger-110"> </i>查询</a>
+			</div>
+			<div class="table-header">
+				游戏列表
+			</div>
+			<div class="table-responsive content-details">
+				<table  id="sample-table-3" class="gameTable table table-hover">
+					<thead>
+						<tr>
+							<th align="center">游戏ID</th>
+							<th>游戏名称</th>
+							<th>游戏密匙</th>
+							<th>备注信息</th>
+							<th>游戏类型</th>
+							<th>连接类型</th>
+							<th>游戏状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+				
+				
+			</div>
+		</div>	
+	</div><!-- /.page-content -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+					<h4 class="modal-title" id="myModalLabel">修改</h4>
+				</div>
+				<div class="modal-body">
+
+					<div class="form-group">
+						<label for="modify_gamename">修改游戏名称</label>
+						<input type="text" name="modify_gamename" class="form-control" id="modify_gamename" placeholder="如不修改可不用填写">
+					</div>
+					<div class="form-group">
+						<label for="modify_gamekey">修改游戏密匙</label>
+						<input type="text" name="modify_gamekey" class="form-control" id="modify_gamekey" placeholder="如不修改可不用填写">
+					</div>
+					<div class="form-group">
+						<label for="modify_remarks">修改备注</label>
+						<input type="text" name="modify_remarks" class="form-control" id="modify_remarks" placeholder="如不修改可不用填写">
+					</div>
+					<div class="form-group">
+						<label for="modify_type">修改游戏类型</label>
+<!--						<input type="text" name="modify_type" class="form-control" id="modify_type" placeholder="如不修改可不用填写,1 手游 2 端游 3 页游"><div class="col-sm-8">-->
+
+							<select id="modify_type">
+								<option value="1">手游</option>
+								<option value="2">端游</option>
+								<option value="3">页游</option>
+							</select>
+
+					</div>
+					<div class="form-group">
+						<label for="modify_conntype">修改游戏连接类型</label>
+<!--						<input type="text" name="modify_conntype" class="form-control" id="modify_conntype" placeholder="如不修改可不用填写,1 TCP 2 HTTP">-->
+
+							<select id="modify_conntype">
+								<option value="1">TCP</option>
+								<option value="2">HTTP</option>
+							</select>
+
+					</div>
+					<div class="form-group">
+						<label for="modify_state">修改游戏是否在线</label>
+<!--						<input type="text" name="modify_state" class="form-control" id="modify_state" placeholder="如不修改可不用填写,0 不在线 1 在线">-->
+							<select id="modify_state">
+								<option value="0">在线</option>
+								<option value="1">离线</option>
+							</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="file" class="col-sm-2 control-label">修改图片</label>
+					<div class="col-sm-8">
+						<input class="form-control1 form-controlfile" id="file"  type="file" name="file" accept=".jpg,.png,.jpeg,.gif">
+						<!--						<a class="btns-blue form-controlfileBtn" id="uploadpictures" type="submit">上传图片</a>-->
+						<span class="red controlfiletips " id="size">预览图片尺寸为：150*80</span>
+						<img alt="图片浏览" class="hidden"  width="150px" height="80px" id="demo1" src="">
+					</div>
+
+				</div>
+
+
+				<div class="modal-footer">
+					<button type="button" id="btn_gamemodify" class="btn btn-primary" >修改</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<!--删除框提示-->
+	<div class="modal fade" tabindex="-1" role="dialog" id="modal1">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+					<h4 class="modal-title">警告！</h4>
+				</div>
+				<div class="modal-body">
+					<p>确认删除此游戏?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" aria-label="Close" id="confirm_delete" data-dismiss="modal">确认</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" >取消</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+		
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="js/bootstrap.min.js"></script>
+		
+		<script src="js/jquery.dataTables.min.js"></script>
+		<script src="js/jquery.dataTables.bootstrap.js"></script>
+
+		<script src="js/ace-elements.min.js"></script>
+		<script src="js/ace.min.js"></script>
+		
+		<script src="layer/layer.js"></script>
+		<!-- inline scripts related to this page -->
+		<script>
+			var modify1_id = "";
+			var modify1_gamename = "";
+			var modify1_gamekey = "";
+			var modify1_remarks = "";
+			var modify1_type = "";
+			var modify1_conntype = "";
+			var modify1_state = "";
+			var delete_id = "";
+			function modfily_gamemessage(id,gamename,gamekey,remarks,type,conntype,state){
+				if(id==1){
+					alert("不允许修改admin信息！")
+					return;
+				}
+				//alert(row);
+				$("#modify_gamename").val(gamename);
+				$("#modify_gamekey").val(gamekey);
+				$("#modify_remarks").val(remarks);
+				$("#modify_type").val(type);
+				$("#modify_conntype").val(conntype);
+				$("#modify_state").val(state);
+				//$("#modify_type option:selected").val(type);
+				// $("#modify_conntype option:selected").val(conntype);
+				// $("#modify_state option:selected").val(state);
+				$('#myModal').modal();
+				modify1_id = id;
+				modify1_gamename = gamename;
+				modify1_gamekey = gamekey;
+				modify1_remarks = remarks;
+				modify1_type = type;
+				modify1_conntype = conntype;
+				modify1_state = state;
+			}
+			jQuery(function($) {
+				$('#sample-table-3').dataTable();
+			});
+
+			$(document).ready(function (){
+				$("#confirm_delete").click(confirm_delete);
+				$("#btn_gamemodify").click(btn_gamemodify);
+				searchallgameinfo();
+			})
+			var pictures = "";
+			var pictures_name = "";
+			$("#file").change(function(){
+				var val = $("#file").val();
+				if(val==null||val==""){
+					//alert(val)
+					pictures = "";
+					pictures_name = "";
+					$("#demo1").addClass("hidden");
+				}
+				//判断图片大小
+				verificationPicFile(this);
+			});
+
+			// 图片预览功能s
+			function verificationPicFile(file){
+				var filepath = file.value;
+				if(filepath){
+					//判断图片尺寸
+					var filepic = file.files[0];
+					var reader = new FileReader();
+					reader.onload = function(e){
+						var data = e.target.result;
+						var image  = new Image();
+						image.onload = function(){
+							var width = image.width;
+							var height = image.height;
+							if(width > 150 | height > 80){
+								alert("图片宽最大150px，高80px，请按照要求上传！");
+								$("#demo1").addClass("hidden");
+								return false;
+							}else{
+								pictures = data;
+								pictures_name = filepic.name;
+								$("#demo1").attr('src',data);
+								$("#demo1").removeClass("hidden");
+								return true;
+							}
+						}
+						image.src = data;
+					}
+					reader.readAsDataURL(filepic)
+				}else{
+					return false;
+				}
+			}
+
+			function btn_gamemodify(){//修改游戏信息
+				var modify_gamename = $("#modify_gamename").val();
+				var modify_gamekey = $("#modify_gamekey").val();
+				var modify_remarks = $("#modify_remarks").val();
+				var modify_type = $("#modify_type").val();
+				var modify_conntype = $("#modify_conntype").val();
+				var modify_state = $("#modify_state").val();
+				var modify_gameid = modify1_id;
+				if(modify_gamename == modify1_gamename){
+					modify_gamename = "";
+				}
+				if(modify_gamekey == modify1_gamekey){
+					modify_gamekey = "";
+				}
+				if(modify_remarks == modify1_remarks){
+					modify_remarks = "";
+				}
+				if(modify_type == modify1_type){
+					modify_type = 0;
+				}
+				if(modify_conntype == modify1_conntype){
+					modify_conntype = 0;
+				}
+				if(modify_state == modify1_state){
+					modify_state = 3;
+				}
+				if(modify_gamename==""&&modify_gamekey==""&&modify_remarks==""&&modify_type==0&&modify_conntype==0&&modify_state==3){
+					alert("请输入修改项，如不修改则点击取消！");
+					return
+
+				}
+				$.post("/monitor/http", {
+							cmd: "game_update",
+							gameid:modify_gameid,
+							modify_gamename:modify_gamename,
+							modify_gamekey:modify_gamekey,
+							modify_remarks:modify_remarks,
+							modify_type:modify_type,
+							modify_conntype:modify_conntype,
+							modify_state:modify_state,
+							pictures:pictures,
+							pictures_name:pictures_name,
+						},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								alert(data.retdesc);
+								$("#cancel").click()
+								searchallgameinfo();
+							}
+						}, "json");
+				//searchallgameinfo();
+			}
+
+
+			function delect_game(id){
+				if(id==1){
+					alert("不允许修改admin信息！")
+					return;
+				}
+				$('#modal1').modal();
+				delete_id = id;
+			}
+			function confirm_delete(){//删除游戏
+				//alert(delete_id);
+				$.post("/monitor/http", {
+							cmd: "game_del",
+							gameid:delete_id,
+						},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								alert(data.retdesc);
+								searchallgameinfo();
+							}
+						}, "json");
+			}
+			function num(temp){//正整数判断
+				if(/^\+?[1-9][0-9]*$/.test(temp)){
+					return true;
+				}
+				return false;
+			}
+			function searchgame(){//精确查找
+				var search_gameid = $("#search_gameid").val();
+				//alert(search_gameid)
+				if (search_gameid == ""){
+					alert("请输入正确信息！");
+					return
+				}
+				if(!num(search_gameid)){
+					alert("请输入正确信息！");
+					return
+				}
+				var curtype = 2;
+				$.post("/monitor/http", {cmd: "game_list2",curtype:curtype,gameid:search_gameid},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								if(data.data==null){
+									alert("未找到该游戏信息！")
+									return
+								}
+								$('#sample-table-3').DataTable( {
+									"data":data.data,
+									"aoColumns": [
+										{ "data": "gameid" },
+										{ "data": "gamename" },
+										{ "data": "gamekey" },
+										{ "data": "remarks" },
+										{ "data": "type" },
+										{ "data": "conntype" },
+										{ "data": "state" },
+										{ "data": null,"render":function(data,type,row,meat){
+												var html ='<a href="javascript:modfily_gamemessage(\'' + row.gameid + '\',\'' + row.gamename + '\',\'' + row.gamekey + '\',\'' + row.remarks + '\',\'' + row.type + '\',\'' + row.conntype + '\',\'' + row.state + "')\">修改</a>";
+												html += "<a href='javascript:delect_game("+row.gameid+");'>删除</a>";
+												return html;
+											} },]
+								});
+
+							}
+						}, "json");
+			}
+			function searchallgameinfo(){//查询所有游戏信息
+				var curtype = 1;
+				$.post("/monitor/http", {cmd: "game_list2",curtype:curtype},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								if(data.data==null){
+									alert("加载失败！")
+									return
+								}
+								$('#sample-table-3').DataTable( {
+									"data":data.data,
+									"aoColumns": [
+										{ "data": "gameid" },
+										{ "data": "gamename" },
+										{ "data": "gamekey" },
+										{ "data": "remarks" },
+										{ "data": null,"render":function(data1,type,row,meat){var html = "";switch (row.type){case 1:html = "手游";break;case 2:html = "端游";break;case 3:html = "页游";break;}return html;} },
+										{ "data": null,"render":function(data1,type,row,meat){var html = "";switch (row.conntype){case 1:html = "TCP";break;case 2:html = "HTTP";break;}return html;} },
+										{ "data": null,"render":function(data1,type,row,meat){var html = "";switch (row.state){case 0:html = "在线";break;case 1:html = "离线";break;}return html;} },
+										{ "data": null,"render":function(data1,type,row,meat){
+						var html ='<a href="javascript:modfily_gamemessage(\'' + row.gameid + '\',\'' + row.gamename + '\',\'' + row.gamekey + '\',\'' + row.remarks + '\',\'' + row.type + '\',\'' + row.conntype + '\',\'' + row.state + "')\">修改</a>";
+												html += "<a href='javascript:delect_game("+row.gameid+");'>删除</a>";
+												return html;
+											} },
+									]
+								});
+
+							}
+						}, "json");
+			}
+		</script>
+	
+	
+</body>
+</html>
+

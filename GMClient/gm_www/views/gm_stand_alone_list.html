@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                 <form action="">                 	               
+                 	
+                    
+                    <div class="jmform-group">
+                        <div class="fleft">
+                            <select id="search_sub_game" class="select_new">
+                            	                                    
+                            </select>
+                        </div>
+                    </div>  
+                    <!-- <div class="jmform-group">
+                        <div class="jqtransform fleft">
+                            <select id="search_sessions" name="select" style="width:150px;">
+                            	<option value="0" selected>场次</option>                                
+                            	<option value="1">初级场</option>
+                                <option value="2">中级场</option>
+                                <option value="3">高级场</option>                                     
+                            </select>
+                        </div>
+                    </div>       -->
+                    
+                    <div class="jmform-group">
+                        <a id="gm_log_searchBtn" class="jmbtn jmbtn-succeed" href="javascript:research(1)"><span class="ico-search-w16"></span>查询</a>
+                    </div>
+                   
+                    
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">单机游戏配置信息</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="cc_loginprops_table">
+                <thead>
+                    <tr>
+                        <th>游戏</th>
+                        <!-- <th>场次</th> -->
+                        <th>奖池ID</th>
+                        <th>实际奖池金额</th>
+                        <th>入池比例(万分比)</th>
+                        <th>爆池周期(秒)</th>
+                        <th>最低虚拟爆池金额</th>
+                        <th>虚拟奖池金额</th>
+                        <th>虚拟奖池金额增长比例(万分比)区间</th>
+                        <th>rtp参数</th>
+                        <th>房间累计盈利</th>
+                        <th>目标库存</th>
+                        <th>实际库存</th>
+                        <th>抽水比例(百分比)</th>
+                        <th>累计抽水</th>
+                        <th>衰减方式</th>
+                        <th>衰减时间(分)/局数</th>
+                        <th>衰减比例(百分比)</th>
+                        <th>累计衰减值</th>
+                        <th>最低准入金额</th>
+						<th>操作</th>
+                    </tr>
+                </thead>               
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">
+						<%for(i = 0; i < datas.length; i++) {%>    
+						<tr subgameid=<%=datas[i].subgameid%> subgametype=<%=datas[i].subgametype??0%>  addpoolper=<%=datas[i].addrealpoolper??0%> bomblooptime=<%=datas[i].bomblooptime??0%> minbombchips=<%=datas[i].standardchips??0%> fakepooladdmin=<%=datas[i].fakepoolmin??0%> fakepooladdmax=<%=datas[i].fakepoolmax??0%> rebateparam=<%=datas[i].rebatevalue??0%> limitchips=<%=datas[i].limitlow??0%> realpoolchips=<%=datas[i].realpoolchips??0%> poolId=<%=datas[i].poolId??0%> type=<%=datas[i].decaytype??0%> srcstock=<%=datas[i].srcstock??0%> tarstock=<%=datas[i].tarstock??0%> cutper=<%=datas[i].cutper??0%> decaytime=<%=datas[i].decaytime??0%> decayratio=<%=datas[i].decayratio??0%> limitchips=<%=datas[i].limitchips??0%>>
+							<td><%=gamename(datas[i].subgameid)%></td>
+							<!-- <td><%=sessionsname(datas[i].subgametype)%></td> -->
+                            <td><%=datas[i].poolId %></td>
+                            <td><%=dataaction(datas[i].realpoolchips) %></td>
+							<td><%=datas[i].addrealpoolper%></td>
+							<td><%=datas[i].bomblooptime%></td>
+
+							<td><%=dataaction(datas[i].standardchips)%></td>
+							<td><%=dataaction(datas[i].fakepoolchips)%></td>
+							<td><%=datas[i].fakepoolmin%>-<%=datas[i].fakepoolmax%></td>
+							<td><%=dataaction(datas[i].rebatevalue)%>%</td>
+							<td><%=dataaction(datas[i].totalprofit)%></td>
+
+                            <td><%=dataaction(datas[i].tarstock )%></td>
+							<td><%=dataaction(datas[i].srcstock )%></td>
+							<td><%=datas[i].cutper%></td>
+							<td><%=dataaction(datas[i].totalcutnum)%></td>
+                            <td><%=datas[i].decaytype == 1 ? "局数":(datas[i].decaytype == 2 ? "时间":"")%></td>
+							<td><%=datas[i].decaytime%></td>
+							<td><%=datas[i].decayratio%></td>
+
+                            <td><%=dataaction(datas[i].totaldecaynum)%></td>
+
+                            <td><%=dataaction(datas[i].limitlow)%></td>
+							<td><a class='releaseBtn' style="color:blue;">修改</a></td>
+						</tr>
+						<%}%>
+                       
+					</script>
+                </tbody>
+            </table>
+        </div>
+        
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+<!-- 弹窗信息 start -->
+<div id="itemInfo" style="overflow-y: auto;width: 700px;" class="popupCon " sty>
+    <h2 class="f16 newTitle" >slots设置</h2>
+    <a href="javascript:closeCont('itemInfo');"   class="btnClose">×</a>
+    <!--popupBox start-->
+    <div class="popupBox" >
+        <div class="blockbox" >
+            <div class="box-inner clearfix" style="min-height:300px">
+                <div class="jmform-vertical add-itemInfo">
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">游戏：</label>
+                        <div class=" fleft">
+							<select id="sub_game" name="select" class="select_new" >
+                            	                                    
+                            </select>
+                        </div>
+                    </div>
+                    <!-- <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">场次：</label>
+                        <div class=" fleft">
+                            <select id="sessions" name="select" class="select_new">
+                                <option value="0">请选择场次</option>
+                                <option value="1">初级场</option>
+                                <option value="2">中级场</option>
+                                <option value="3">高级场</option>
+                            </select>
+                        </div>
+                    </div> -->
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">实际奖池金额：</label>
+                        <div class="fillform">
+                            <input id="realpoolchips" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">入池比例(万分比):</label>
+                        <div class="fillform">
+                            <input id="pool_ratio" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">爆池周期(秒):</label>
+                        <div class="fillform">
+                            <input id="pool_cycle" type="text" class="jminput jminput-size05" name="real_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">最低虚拟爆池金额:</label>
+                        <div class="fillform">
+                            <input id="pool_gold" type="text" class="jminput jminput-size05" name="pumping_ratio" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">虚拟奖池金额增长比例(万分比):</label>
+                        <div class="fillform" style="width: 30%;">
+                            <input id="pool_ratio_lower" type="text" class="jminput jminput-size05" name="attenuation_form" style="width: 30%;"/>-
+                            <input id="pool_ratio_upper" type="text" class="jminput jminput-size05" name="attenuation_form" style="width: 30%;"/>
+                        </div>
+                    </div>
+                    
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">rtp参数：</label>
+                        <div class="fillform">
+                            <input id="reward" type="text" class="jminput jminput-size05" name="lowest_gold" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">目标库存：</label>
+                        <div class="fillform">
+                            <input id="target_stock" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">实际库存：</label>
+                        <div class="fillform">
+                            <input id="real_stock" type="text" class="jminput jminput-size05" name="real_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">抽水比例(百分比):</label>
+                        <div class="fillform">
+                            <input id="pumping_ratio" type="text" class="jminput jminput-size05" name="pumping_ratio" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">衰减方式：</label>
+                        <div class="fillform">
+                            <!-- <input id="attenuation_form" type="radio" class="jminput jminput-size05" name="type" /> -->
+                            <input type="radio" name="type" value="1" >局数 &nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="type" value="2">时间
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">衰减时间(分)/局数:</label>
+                        <div class="fillform">
+                            <input id="attenuation_form" type="text" class="jminput jminput-size05" name="attenuation_form" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">衰减比例(百分比):</label>
+                        <div class="fillform">
+                            <input id="attenuation_ratio" type="text" class="jminput jminput-size05" name="attenuation_ratio" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">最低准入金额：</label>
+                        <div class="fillform">
+                            <input id="lowest_gold" type="text" class="jminput jminput-size05" name="lowest_gold" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn jmbtn-info" href="javascript:void(0)" onclick="submit()">提交</a>  
+							<a class="jmbtn jmbtn jmbtn-default" href="javascript:closeCont('itemInfo');">取消</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--popupBox end-->
+</div>
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<!--报表导出 js -->
+<script src="js/export/tableExport.js"></script>
+<script src="js/export/jquery.base64.js"></script>
+<style>
+.select_new{
+  width:150px;height:36px; border:1px solid #ddd;border-radius: 5px;color: #555555
+}
+</style>
+<script type="text/javascript">
+	var sub_game_old = 0;
+	var sessions_old = 0;
+	var pool_ratio_old       = 0;
+	var pool_cycle_old       = 0;
+	var pool_gold_old        = 0;
+	var pool_ratio_lower_old = 0;
+	var pool_ratio_upper_old = 0;
+	var reward_old = 0;
+	var lowest_gold_old    = 0;
+
+    var target_stock_old  = 0;
+    var real_stock_old   = 0;
+    var pumping_ratio_old = 0;
+    var attenuation_form_old = 0;
+    var attenuation_ratio_old = 0;
+
+    var perpage=  50;
+    var curpage = 1;
+    var jsonPlat ;
+    var realpoolchips_old = 0;
+    var poolId = 0;
+    var type_old = 0;
+
+    template.helper('gamename', function (data) {    
+        for(var i=0; i<jsonPlat.length; i++) {
+            if(jsonPlat[i].subgameid == data){
+               return jsonPlat[i].subgamename;
+               break;
+            }
+        }
+   	})
+    template.helper('dataaction', function (data) {    
+    
+        return (data/100).toFixed(2)
+        })
+    template.helper('sessionsname', function (data) {    
+   		switch(data){
+			case 1:
+				return "初级场";
+			case 2:
+				return "中级场";
+			case 3:
+				return "高级场";
+		}
+   	})
+    //判断是否有数据，记录为空
+    template.helper('isenptydata', function (data) {
+        if($.isEmptyObject(data)){
+            return true;
+        }else{
+            return false;
+        }
+    })
+    function da(data){
+        return (data/100).toFixed(2);
+    }
+    function research(id) {
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+        let sub_game = Number($('#search_sub_game').val());
+        let sessions = Number($('#search_sessions').val());
+        
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+        
+        var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "gm_stand_alone_list", gameid: gameid,zoneid:zoneid, optype: 1, sub_game:sub_game, sessions:sessions,curpage: toCurPage , perpage :perpage},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.datas&&data.datas.length>0) {
+                        var html = template("gm_cc_RecordData", data); 
+                        $("#gm_cc_RecordHtml").html(html);
+                    }else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+                    curpage = data.curpage;
+					
+                    // var html = template("pageData", data); 
+                    // $("#pageHtml").html(html);
+				}
+			}
+		});
+    }
+	function listToPage(id){
+		var ids = id
+		research(ids);
+		};
+    $(document).ready(function(){
+
+        // research(1);
+        
+		let gameid = $.cookie("gameid");
+		
+		$.getJSON("js/json/game/1002.json", function(allplat){
+			jsonPlat = eval(allplat.data);
+			var html = " <option value='0'>请选择游戏</option>";
+			for(var i=0; i<jsonPlat.length; i++) {
+				if(jsonPlat[i].gametype == 3){
+					html += "<option value='"+jsonPlat[i].subgameid+"'>"+jsonPlat[i].subgamename+"</option>";
+				}
+				
+			}
+			$("#search_sub_game").html(html)
+			$("#sub_game").html(html)
+		});	
+        research();
+		
+    });
+	$('.releaseBtn').live('click',function(){
+
+        var trItem = $(this).parent('td').parent('tr');
+        sub_game_old = trItem.attr("subgameid");
+        sessions_old = trItem.attr("subgametype");
+        pool_ratio_old       = trItem.attr("addpoolper");
+        pool_cycle_old       = trItem.attr("bomblooptime");
+        pool_gold_old        = da(trItem.attr("minbombchips"));
+        pool_ratio_lower_old = trItem.attr("fakepooladdmin");
+        pool_ratio_upper_old = trItem.attr("fakepooladdmax");
+        reward_old = da(trItem.attr("rebateparam"));
+        lowest_gold_old    = da(trItem.attr("limitchips"));
+        realpoolchips_old =  da(trItem.attr("realpoolchips"));
+        poolId =  trItem.attr("poolId");
+        target_stock_old  = da(trItem.attr("tarstock"));
+        real_stock_old   = da(trItem.attr("srcstock"));
+        pumping_ratio_old = trItem.attr("cutper");
+        attenuation_form_old = trItem.attr("decaytime");
+        attenuation_ratio_old = trItem.attr("decayratio");
+        type_old =  trItem.attr("type");
+        
+
+        $("#sub_game").find("option[value="+sub_game_old+"]").attr("selected",true);
+        $("#sub_game").attr("disabled" , true)
+        $("#sessions").find("option[value="+sessions_old+"]").attr("selected",true);
+        $("#sessions").attr("disabled" , true)
+        $('#pool_ratio').val(pool_ratio_old);
+        $('#pool_cycle').val(pool_cycle_old);
+        $('#pool_gold').val(pool_gold_old);
+        $('#pool_ratio_lower').val(pool_ratio_lower_old);
+        $('#pool_ratio_upper').val(pool_ratio_upper_old);
+        $('#reward').val(reward_old);
+        $('#lowest_gold').val(lowest_gold_old);
+        $('#realpoolchips').val(realpoolchips_old);
+        $('#target_stock').val(target_stock_old);
+        $('#real_stock').val(real_stock_old);
+        $('#pumping_ratio').val(pumping_ratio_old);
+        $('#attenuation_form').val(attenuation_form_old);
+        $('#attenuation_ratio').val(attenuation_ratio_old);
+        $(":radio[name='type'][value='" + type_old + "']").prop("checked", "checked");
+
+		showCont('itemInfo');
+
+	})
+	function submit(){
+        let sub_game = Number($('#sub_game').val());
+        let sessions = Number($('#sessions').val()) || 1;
+
+        if(sub_game == 0 || sessions == 0){
+            alert("请选择正确的游戏和场次");
+            return false;
+        }
+        let pool_ratio      = Number($('#pool_ratio').val());
+        let pool_cycle      = Number($('#pool_cycle').val());
+        let pool_gold       = Number($('#pool_gold').val()* 100) ;
+        let pool_ratio_lower = Number($('#pool_ratio_lower').val());
+        let pool_ratio_upper = Number($('#pool_ratio_upper').val());
+        let reward = Number($('#reward').val());
+        let lowest_gold    = Number($('#lowest_gold').val()* 100) ;
+        let realpoolchips      = Number($('#realpoolchips').val()* 100) ;
+
+        let target_stock  = Number($('#target_stock').val()* 100) ;
+        let real_stock   = Number($('#real_stock').val()* 100) ;
+        let pumping_ratio = Number($('#pumping_ratio').val());
+        let attenuation_form = Number($('#attenuation_form').val());
+        let attenuation_ratio = Number($('#attenuation_ratio').val());
+        let type = $(":radio[name='type']:checked").val();
+
+        let res = confirm('是否确认提交？');
+        if(res != true) {
+            return;
+        }
+        
+        let gameid = $.cookie("gameid");
+        let zoneid = $.cookie("zoneid");
+
+        $.post("/gm/http", {cmd: "gm_stand_alone_list", gameid: gameid,zoneid:zoneid, optype: 2, sub_game:sub_game, sessions:sessions, pool_ratio:pool_ratio, pool_cycle:pool_cycle,pool_gold:pool_gold, pool_ratio_lower:pool_ratio_lower, pool_ratio_upper:pool_ratio_upper,reward:reward, curpage: curpage , perpage :perpage,realpoolchips:realpoolchips,poolId:poolId,target_stock:target_stock, real_stock:real_stock, pumping_ratio:pumping_ratio, attenuation_form:attenuation_form, lowest_gold:lowest_gold,attenuation_ratio:attenuation_ratio,type:type},
+        function(data){
+            alert(data.retdesc);
+            if(data.retcode == 0){
+                listToPage(curpage);
+            }
+        }, "json");
+ 
+    }
+</script>
+</body>
+</html>

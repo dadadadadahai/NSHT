@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script> 
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">		
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">处罚玩家</h3>
+        </div>
+        <div class="box-inner jm-userInfoModify">
+            <div class="jmform-vertical">
+                <form action="">
+                    <div class="jmform-vgroup">
+                        <label class="control-label">玩家ID：</label>
+                        <div class="fillform">
+                            <textarea id="charid" name="content" class="textarea01 textarea08 txt-default input-empty" placeholder="例如：12525,18520,19542"></textarea>
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label">处罚类型：</label>
+                        <div class="jqtransform fleft">
+                            <select id="optype" name="select" style="width: 120px;" onchange="choice()">
+                                <!-- <option value="1">禁言</option> -->
+                                <option value="2">踢下线</option>
+                                <option value="3">封号</option>
+                                <option value="4" selected>点控</option>
+                                <option value="5">追踪</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup" id="kill">
+                        <label class="control-label">点控值：</label>
+                        <div class="fillform">
+                            <input id="pointnum" type="number" class="jminput jminput-sm jminput-size05"  autocomplete="off" min="50" max="200">
+                            <div style="color: red;">点控值需在50-200之间的整数</div>
+                        </div>
+                        
+                    </div>
+                    <!-- <div class="jmform-vgroup" id="killmultiple">
+                        <label class="control-label">倍数：</label>
+                        <div class="fillform">
+                            <input id="multiple" type="number" class="jminput jminput-sm jminput-size05" value="" autocomplete="off" min="0">
+                            <div style="color: red;">点控值大于100,倍数为0</div>
+                        </div>
+                       
+                    </div> -->
+                    <div class="jmform-vgroup" id="hour">
+                        <label class="control-label">控制时长(分):</label>
+                        <div class="fillform">
+                            <input id="hours" type="text" class="jminput jminput-sm jminput-size05" value="" autocomplete="off" >
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup" id="start">
+                        <label class="control-label">开始时间：</label>
+                        <div class="fillform">
+                            <input id="starttime" type="text" class="jminput jminput-sm jminput-size05 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy/MM/dd HH:mm:ss'})" value="" autocomplete="off">
+                        </div>
+                    </div>
+                    
+                    <div class="jmform-vgroup" id="end">
+                        <label class="control-label">结束时间：</label>
+                        <div class="fillform">
+                            <input id="endtime" type="text" class="jminput jminput-sm jminput-size05 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy/MM/dd HH:mm:ss'})" value="" autocomplete="off">
+                        </div>
+                    </div>
+                    
+                    <div class="jmform-vgroup">
+                        <label class="control-label">原因：</label>
+                        <div class="fillform">
+                            <textarea id="content" class="textarea01 textarea03 txt-default"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn-lgLm jmbtn-default" href="javascript:void(0)" id="gm_punish_user">提交</a>  
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>            
+            
+        </div>        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    function gm_punish_user(e) {
+        var gameid = Number($.cookie("gameid"))
+        var zoneid = Number($.cookie("zoneid"))
+        
+        var charid = $("#charid").val();
+
+        charid = charid.replace(/\s+/g , '')
+        var pid = $("#charid").val();
+        var optype = Number($("#optype option:selected").val());
+        var content = $("#content").val();
+        var starttime = Date.parse($("#starttime").val())/1000;
+        var endtime = Date.parse($("#endtime").val())/1000;
+        var hours = Number($("#hours").val());
+        var pointnum ='';
+        var multiple = 0;
+        if(optype == 4){
+            var pointnum = $("#pointnum").val() * 100;
+            if(pointnum < 5000 || pointnum>20000){
+                alert("点控值需在50-200之间");
+                return;
+            }
+            if(pointnum < 10000){
+                multiple =  Number($("#multiple").val());
+            }
+            
+            endtime = hours*60;
+        }
+        if (!(gameid && zoneid && pid && optype)){
+            alert("请输入正确完整的数据!");
+            return;
+        }
+        $("#content").val("");
+        $.post("/gm/http", {cmd:"gm_punish_user",charid:charid,pid:pid,optype:optype,content:content,gameid:gameid,zoneid:zoneid,starttime:starttime,endtime:endtime,pointnum:pointnum,multiple:multiple}, function(data){
+                if (!data) {
+                    alert("超时");
+                } else if (data.retcode != 0){
+                    alert(data.retdesc);
+                } else {
+                    alert("执行成功");
+                    $("#content").val("");
+                }
+            }, "json");
+    }
+    $(document).ready(function(){
+        const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		
+		const charid = urlParams.get('charid');
+
+		
+		$("#charid").val(charid);
+
+        $("#gm_punish_user").click(gm_punish_user);
+        $("#start").hide();
+        $("#end").hide();
+    });
+    function choice(){
+        var type = $("#optype option:selected").val()
+
+        if(type == 4){
+            $("#kill").show();
+            $("#killmultiple").show();
+            $("#hour").show();
+            $("#start").hide();
+            $("#end").hide();
+        }else{
+            $("#kill").hide();
+            $("#hour").hide();
+            $("#start").show();
+            $("#end").show();
+            $("#killmultiple").hide();
+        }
+    }
+
+</script>
+</body>
+</html>

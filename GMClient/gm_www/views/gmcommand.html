@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>后台管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<script src="js/jquery-1.7.2.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+</head>
+
+<body>
+<!-- jm-maincon start -->
+<div class="jm-maincon">
+    
+    <div class="jm-plr15">
+    	<div class="jm-inner-title">
+        	<p>内置指令</p>
+        </div>
+        <!-- jmform-vertical start -->
+        <div class="jmform-vertical jm-ptb20">
+            <form action="">
+                <div class="jmform-vgroup jm-pt20">
+                    <label class="control-label control-label-md">区服选择：</label>
+                    <div class="fleft controlBoxs online_controlBoxs">
+                        <label><input id="curzone1" type="radio" name="zoneradio1" value="0"/>本服</label>
+                        <label><input id="allzone1" type="radio" name="zoneradio1" value="1"/>全服</label>
+                    </div>                        
+                </div>
+                <div class="jmform-vgroup jm-pt20">
+                    <label class="control-label control-label-md">执行指令：</label>
+                    <div class="fillform">
+                        <input id="commandname" type="text" class="jminput jminput-md jminput-size05" name="" value="" placeholder="执行指令名称" />
+                    </div>
+                </div>
+                <div class="jmform-vgroup jm-pt20">
+                    <label class="control-label control-label-md">指令参数：</label>
+                    <div class="fillform">
+                        <input id="commandargs" type="text" class="jminput jminput-md jminput-size05" name="" value="" placeholder="参数以空格分隔" />
+                    </div>
+                </div>
+                <div class="jmform-vgroup jm-pt20">
+                    <label class="control-label control-label-md">执行结果：</label>
+                    <div class="fillform">
+                        <input id="result" type="text" class="jminput jminput-md jminput-size06" name="" value="" placeholder="执行结果" />
+                    </div>
+                </div>
+                <div class="jmbtn-group jm-pt20" style="margin-left: 185px;">
+                    <a class="jmbtn jmbtn-huge jmbtn-info" id="gm_exec_func" href="javascript:void(0)">执行命令</a>
+                </div>
+            </form>
+        </div>
+        <!-- jmform-vertical end -->
+        
+        <div class="jm-inner-title">
+        	<p>脚本指令</p>
+        </div>
+         <!-- jmform-vertical start -->
+        <div class="jmform-vertical jm-ptb20">
+            <form action="">
+                <div class="jmform-vgroup jm-pt20">
+                    <label class="control-label control-label-md">区服选择：</label>
+                    <div class="fleft controlBoxs online_controlBoxs">
+                        <label><input id="curzone2" type="radio" name="zoneradio2" value="0"/>本服</label>
+                        <label><input id="allzone2" type="radio" name="zoneradio2" value="1"/>全服</label>
+                    </div>                        
+                </div>
+                <div class="jmform-vgroup jm-pt20">
+                    <label class="control-label control-label-md">执行脚本：</label>
+                    <div class="fillform">
+                        <textarea id="commandstr" class="textarea01 textarea09 txt-default" placeholder="执行脚本内容"></textarea>
+                    </div>
+                </div>               
+                <div class="jmform-vgroup jm-pt20">
+                    <label class="control-label control-label-md">执行结果：</label>
+                    <div class="fillform">
+                        <input id="result_str" type="text" class="jminput jminput-md jminput-size06" name="" value="" placeholder="执行结果" />
+                    </div>
+                </div>
+                <div class="jmbtn-group jm-pt20" style="margin-left: 185px;">
+                    <a class="jmbtn jmbtn-huge jmbtn-info" id="gm_exec_str" href="javascript:void(0)">执行脚本</a>
+                </div>
+            </form>
+        </div>
+        <!-- jmform-vertical end -->
+        
+        
+    </div>
+    
+</div>
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    function gm_exec_func(e) {
+        var command = $("#commandname").val();
+        var commandargs = $("#commandargs").val();
+        var gameid = $.cookie("gameid");
+        var zoneid = $.cookie("zoneid");
+        if(command == "" || !(gameid && zoneid) ) {
+            alert("command error or not select game and zone!");
+            return;
+        }
+        var allzone = Number($('.controlBoxs input[name="zoneradio1"]:checked ').val()) || 0;
+        if (allzone != 0) {
+            zoneid = 0;
+        }
+        $.ajax({
+            type:'POST',
+            url:"/gm/http",
+            data:{cmd: e.target.id, command: command, commandargs: commandargs, gameid:gameid, zoneid:zoneid},
+            error:function(data){
+                $("#result").val(data);
+                //alert(data);
+            },
+            success : function(data) {
+                $("#result").val(data);
+                //alert(data);
+            }
+        });
+    }
+
+    function gm_exec_str(e) {
+        var command = $("#commandstr").val();
+        var gameid = $.cookie("gameid");
+        var zoneid = $.cookie("zoneid");
+        if(command == "" || !(gameid && zoneid) ) {
+            alert("command error or not select game and zone!");
+            return;
+        }
+        var allzone = Number($('.controlBoxs input[name="zoneradio2"]:checked ').val()) || 0;
+        
+        if (allzone != 0) {
+            zoneid = 0;
+        }
+        
+        $.ajax({
+            type:'POST',
+            url:"/gm/http", 
+            data:{cmd: e.target.id, command: command, gameid:gameid, zoneid:zoneid}, 
+            error:function(data){
+                $("#result_str").val(data);
+            },
+            success : function(data) {
+                $("#result_str").val(data);
+            }
+        });
+    }
+
+    $(document).ready(function(){
+        $("#gm_exec_func").click(gm_exec_func);
+        $("#gm_exec_str").click(gm_exec_str);
+    });
+</script>
+</body>
+</html>

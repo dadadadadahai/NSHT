@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/template-native.js"></script>
+    <script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">		
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">玩家信息修改</h3>
+           
+        </div>
+        <div class="box-inner jm-userInfoModify">
+            <div class="jmform-vertical">
+                <form action="">
+                    <div class="jmform-vgroup">
+                        <label class="control-label">玩家ID：</label>
+                        <div class="fillform">
+                            <textarea id="charid" name="content" class="textarea01 textarea08 txt-default input-empty" placeholder="例如：12525,18520,19542"></textarea>
+                            <div class="email-tips-box">
+                                <P class="control-tips" style="margin-left:0;">每个玩家ID以英文,隔开</P>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!--
+                    <div class="jmform-vgroup">
+                        <label class="control-label">更改方式：</label>
+                        <div class="jqtransform fleft">
+                            <select id="changetype" name="select" style="width: 60px;">
+                                <option value="1">增减</option>
+                                <option value="0">设定</option>
+                            </select>
+                        </div>
+                    </div>
+                    -->
+                    <div class="jmform-vgroup">
+
+                        <label class="control-label">更改类型：</label>
+                        <div class="fillform" >
+                            <select id="typelisthtml"  style="width: 15rem;float: left;" class="jminput jminput-sm jminput-sizetp">
+                                <script id="typelistData" type="text/html"  >
+                                    <%for(i = 0; i < data.length; i++) {%>
+                                    <option value="<%=data[i].typeid%>"><%=data[i].typename%></option>
+                                    <%}%>
+                                </script>
+                            </select>
+
+                            <div class="email-tips-box" style="margin-left: 7rem;">
+                                <P class="control-tips" >
+                                充值补偿ID:&nbsp;&nbsp;&nbsp;首充-201&nbsp;&nbsp;&nbsp;
+                                二充-501&nbsp;&nbsp;&nbsp;
+                                普通30充值-101&nbsp;&nbsp;&nbsp;
+                                普通50充值-102&nbsp;&nbsp;&nbsp;
+                                普通100充值-103&nbsp;&nbsp;&nbsp;
+                                普通20充值-111&nbsp;&nbsp;&nbsp;
+                                Vip1周卡-301&nbsp;&nbsp;&nbsp;
+                                Vip2周卡-302&nbsp;&nbsp;&nbsp;
+                                </P>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="jmform-vgroup">
+                        <label class="control-label">更改内容：</label>
+                        <div class="fillform">
+                            <input id="content" placeholder="" type="text" class="jminput jminput-size05" name="content" />
+                        </div>
+                    </div>
+                    
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn-lg jmbtn-default" href="javascript:void(0)" id="user_info_modify">修改</a>                       	
+                            <a class="jmbtn jmbtn-lg jmbtn-info" href="javascript:void(0)" id="cancle">取消</a>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>            
+            
+        </div>        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    function user_info_modify(e) {
+        var gameid = $.cookie("gameid")
+        var zoneid = $.cookie("zoneid")
+        if (!(gameid && zoneid)) {
+            alert("Please select game and zone id first");
+            return
+        }
+        var charid = $("#charid").val();
+        charid = charid.replace(/\s+/g , '')
+        var optype = $("#typelisthtml").val();
+        // var changetype = $("#changetype option:selected").val();
+        var content = $("#content").val();
+       
+        if (!(optype && content && charid)){
+            alert("content can not empty");
+            return;
+        }
+        if(optype == 23 && content < 0 ){
+            alert("累计充值金额不能低于0");
+            return;
+        }  
+        
+        if(optype == 7 || optype == 22 || optype == 23){
+            content = content * 100;
+        }
+       
+        $.post("/gm/http", {cmd:"user_info_modify",charid:charid,optype:optype,content:content,gameid:gameid,zoneid:zoneid}, function(data){
+                if (!data) {
+                    alert("执行超时");
+                } else if (data.retcode != 0){
+                    alert("执行失败");
+                } else {
+                    alert("执行成功");
+                    $("#content").val("");
+                }
+            }, "json");
+    }
+    function cancle(){
+        $("#content").val("");
+    }
+    $(document).ready(function(){
+        $("#user_info_modify").click(user_info_modify);
+        $("#cancle").click(cancle);
+        var curtype = 2;
+        var gameid = $.cookie("gameid");
+        $.ajax({
+            type: "post",
+            url:"/gm/http",
+            data:{cmd: "get_modify_typeslist",gameid:gameid, curtype:curtype},
+            dataType:"json",
+            beforeSend: function(){
+                //加载中...提示
+                onLoadTip = layer.load(1);
+            },
+            success: function(data){
+                //有返回值,则关闭加载
+                layer.close(onLoadTip);
+                if (!data) {
+                    alert("command timeout");
+                } else {
+                    if (data.data&&data.data.length>0) {
+                        var html = template("typelistData", data);
+                        $("#typelisthtml").html(html);
+                    }else{
+                        var tt = "";
+                        // tt+= "<option value='2'>等级(在线)</option>"+
+                        tt+="<option value='7'>金币</option>"+
+                        "<option value='3'>VIP</option>"+
+                        // "<option value='4'>GM(在线)</option>"+
+                        // "<option value='5'>元宝(在线)</option>"+
+                        // "<option value='6'>绑定元宝(在线)</option>"+
+                        
+                        // "<option value='22'>银币</option>"+
+                        "<option value='15'>真实姓名</option>"+
+                        "<option value='16'>cpf信息</option>"+
+                        "<option value='20'>邮箱</option>"+
+                        "<option value='21'>绑定手机</option>"+
+                        "<option value='23'>累计充值金额</option>"+
+                        "<option value='24'>提现通道(0:姓名+cpf,1:手机,2:邮箱)</option>"+
+                        "<option value='25'>清理账号</option>"+
+                        "<option value='26'>可提现金额</option>"+
+                        "<option value='27'>同意提现</option>"+
+                        "<option value='28'>累计提现</option>"+
+                        "<option value='11'>充值补偿(商品id)</option>"+
+                        "<option value='29'>累计下注</option>";
+                        // "<option value='12'>账号切换(离线)</option>"+
+                        // "<option value='13'>内部福利(在线)</option>"+
+                        // "<option value='14'>修改绿钻(在线)</option>";
+                        // "<option value='101'>掉落ID(离线)</option>"
+                        // "<option value='102'>掉落经验(离线)</option>"+
+                        // "<option value='103'>掉落临时经验(离线)</option>"+
+                        // "<option value='104'>野外掉落经验(离线)</option>"+
+                        // "<option value='105'>绑定掉落ID(离线)</option>"+
+                        // "<option value='106'>绑定掉落经验(离线)</option>"+
+                        // "<option value='107'>绑定掉落临时经验(离线)</option>";
+                        $("#typelisthtml").html(tt);
+                    }
+                }
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

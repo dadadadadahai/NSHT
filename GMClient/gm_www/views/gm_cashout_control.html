@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                 <form action="">                 	               
+                    
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">可提现金额控制</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="cc_loginprops_table">
+                <thead>
+                    <tr>
+                        <th>不增加概率</th>
+                        <th>增加下限</th>
+                        <th>增加上限</th>
+                        <th>生效金额</th>
+                        <th>随机值下限</th>
+                        <th>随机值上限</th>
+                       
+						<th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">
+						<%for(i = 0; i < data.length; i++) {%>    
+						<tr noaddpro=<%=data[i].intdatas[0]%> minadd=<%=data[i].intdatas[1]%> maxadd=<%=data[i].intdatas[2]%> score=<%=data[i].intdatas[3]%> addrandommin=<%=data[i].intdatas[4]%> addrandommax=<%=data[i].intdatas[5]%> id = <%=data[i].id%>>
+                            <td><%=data[i].intdatas[0]%></td>
+							<td><%=data[i].intdatas[1]%></td>
+                            <td><%=data[i].intdatas[2] %></td>
+                            <td><%=data[i].intdatas[3]%></td>
+							<td><%=data[i].intdatas[4]%></td>
+							<td><%=data[i].intdatas[5]%></td>
+                            
+							<td><a class='releaseBtn' style="color:blue;">修改</a></td>
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div>
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+           
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+<!-- 弹窗信息 start -->
+<div id="itemInfo" style="overflow-y: auto;width: 700px;" class="popupCon " sty>
+    <h2 class="f16 newTitle" >可提现金额控制</h2>
+    <a href="javascript:closeCont('itemInfo');"   class="btnClose">×</a>
+    <!--popupBox start-->
+    <div class="popupBox" >
+        <div class="blockbox" >
+            <div class="box-inner clearfix" style="min-height:300px">
+                <div class="jmform-vertical add-itemInfo">
+                   
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">不增加概率:</label>
+                        <div class="fillform">
+                            <input id="noaddpro" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">增加下限:</label>
+                        <div class="fillform">
+                            <input id="minadd" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">增加上限:</label>
+                        <div class="fillform">
+                            <input id="maxadd" type="text" class="jminput jminput-size05" name="real_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">生效金额:</label>
+                        <div class="fillform">
+                            <input id="score" type="text" class="jminput jminput-size05" name="real_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">随机值下限:</label>
+                        <div class="fillform">
+                            <input id="addrandommin" type="text" class="jminput jminput-size05" name="real_stock" />
+                        </div>
+                    </div>
+
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">随机值上限:</label>
+                        <div class="fillform">
+                            <input id="addrandommax" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">等效:<span id="equivalent" style="color: red;"></span></label>
+                        
+                    </div>
+
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn jmbtn-info" href="javascript:void(0)" onclick="submit(1)">提交</a>  
+							<a class="jmbtn jmbtn jmbtn-default" href="javascript:closeCont('itemInfo');">取消</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--popupBox end-->
+</div>
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<!--报表导出 js -->
+<script src="js/export/tableExport.js"></script>
+<script src="js/export/jquery.base64.js"></script>
+<style>
+.select_new{
+  width:150px;height:36px; border:1px solid #ddd;border-radius: 5px;color: #555555
+}
+</style>
+<script type="text/javascript">
+	var noaddpro = 0;
+    var minadd= 0;
+    var maxadd= 0;
+    var score= 0;
+    var addrandommin= 0;
+    var addrandommax= 0;
+    var id = 0;
+	
+    template.helper('dataaction', function (data) {    
+   		
+        return (data/100).toFixed(2)
+   	})
+    //判断是否有数据，记录为空
+    template.helper('isenptydata', function (data) {
+        if($.isEmptyObject(data)){
+            return true;
+        }else{
+            return false;
+        }
+    })
+    function research(id) {
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+       
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+        
+        var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "gm_false_gold", gameid: gameid,zoneid:0, type: 1, curpage: toCurPage , perpage :50,reqtype:2},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.data&&data.data.length>0) {
+                        var html = template("gm_cc_RecordData", data); 
+                        $("#gm_cc_RecordHtml").html(html);
+                    }else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+				}
+			}
+		});
+    }
+	function listToPage(id){
+		var ids = id
+		research(ids);
+		};
+    $(document).ready(function(){
+
+        research(1);
+		
+    });
+	$('.releaseBtn').live('click',function(){
+
+        var trItem = $(this).parent('td').parent('tr');
+        
+        id = trItem.attr("id");
+
+
+        noaddpro = trItem.attr("noaddpro");
+        minadd= trItem.attr("minadd");
+        maxadd= trItem.attr("maxadd");
+        score= trItem.attr("score");
+        addrandommin= trItem.attr("addrandommin");
+        addrandommax= trItem.attr("addrandommax");
+       
+         $('#noaddpro').val(noaddpro)
+         $('#minadd').val(minadd)
+         $('#maxadd').val(maxadd)
+         $('#score').val(score)
+         $('#addrandommin').val(addrandommin)
+         $('#addrandommax').val(addrandommax)
+
+		showCont('itemInfo');
+
+	})
+	function submit(){
+        let gameid = $.cookie("gameid");
+        let zoneid = $.cookie("zoneid");
+       
+        let nnoaddpro = Number($('#noaddpro').val());    
+        let nminadd= Number($('#minadd').val());    
+        let nmaxadd= Number($('#maxadd').val());    
+        let nscore= Number($('#score').val());    
+        let naddrandommin= Number($('#addrandommin').val());    
+        let naddrandommax= Number($('#addrandommax').val());    
+          
+        let res = confirm('是否确认提交？');
+        if(res != true) {
+            return;
+        }
+        var datastr = nnoaddpro+","+nminadd+","+nmaxadd+","+nscore+","+naddrandommin+","+naddrandommax;
+
+        $.post("/gm/http", {cmd: "gm_false_gold", gameid: gameid,zoneid:0, type: 2,  curpage: 1 , perpage :50,datastr:datastr,id:id,reqtype:2},
+        function(data){
+            alert(data.retdesc);
+            if(data.retcode == 0){
+                listToPage(1);
+            }
+        }, "json");
+ 
+    }
+    $("#noaddpro ,#minadd, #maxadd").bind('input propertychange', function () {
+
+        let nnoaddpro = Number($('#noaddpro').val());    
+        let nminadd= Number($('#minadd').val());    
+        let nmaxadd= Number($('#maxadd').val());  
+
+        let result  = 0;
+
+        result = ((1-nnoaddpro / 10000)*(nminadd + nmaxadd) / 20000).toFixed(4);
+        
+        $("#equivalent").html(result)
+    })
+</script>
+</body>
+</html>

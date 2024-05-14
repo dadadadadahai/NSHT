@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                 <form action="">                 	               
+                    
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">上限点杀配置</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="cc_loginprops_table">
+                <thead>
+                    <tr>
+                        <th>充值下限1</th>
+                        <th>充值上限1</th>
+                        <th>点控rtp1</th>
+                        <th>点控倍数1</th>
+                        <th>假金币点杀rtp</th>
+                        <th>假金币点杀倍数</th>
+                        <th>假金币系数值</th>
+                        <th>虚拟金币下注倍数</th>
+                        <th>虚拟金币点杀rtp</th>
+                        <th>虚拟金币点杀倍数</th>
+						<th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">
+						<%for(i = 0; i < data.length; i++) {%>    
+						<tr chargelow1=<%=data[i].intdatas[0]%> changeup1=<%=data[i].intdatas[1]%> rtp1=<%=data[i].intdatas[2]%> rtpmul1=<%=data[i].intdatas[3]%> visualrtp=<%=data[i].intdatas[4]%> visualmul=<%=data[i].intdatas[5]%> visualgold=<%=data[i].intdatas[6]%> visualbetmul=<%=data[i].intdatas[7]%>  visualkillrtp=<%=data[i].intdatas[8]%> visualkillmul=<%=data[i].intdatas[9]%> id = <%=data[i].id%>>
+                            <td><%=data[i].intdatas[0]%></td>
+							<td><%=data[i].intdatas[1]%></td>
+                            <td><%=dataaction(data[i].intdatas[2]) %></td>
+                            <td><%=data[i].intdatas[3]%></td>
+							
+							<td><%=dataaction(data[i].intdatas[4])%></td>
+							<td><%=data[i].intdatas[5]%></td>
+                            <td><%=data[i].intdatas[6] %></td>
+                            <td><%=data[i].intdatas[7] %></td>
+                            <td><%=dataaction(data[i].intdatas[8]) %></td>
+                            <td><%=data[i].intdatas[9] %></td>
+                            
+							<td><a class='releaseBtn' style="color:blue;">修改</a></td>
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div>
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+           
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+<!-- 弹窗信息 start -->
+<div id="itemInfo" style="overflow-y: auto;width: 700px;" class="popupCon " sty>
+    <h2 class="f16 newTitle" >上限点杀配置</h2>
+    <a href="javascript:closeCont('itemInfo');"   class="btnClose">×</a>
+    <!--popupBox start-->
+    <div class="popupBox" >
+        <div class="blockbox" >
+            <div class="box-inner clearfix" style="min-height:300px">
+                <div class="jmform-vertical add-itemInfo">
+                   
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">充值下限1:</label>
+                        <div class="fillform">
+                            <input id="chargelow1" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">充值上限1:</label>
+                        <div class="fillform">
+                            <input id="changeup1" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">点控rtp1:</label>
+                        <div class="fillform">
+                            <input id="rtp1" type="text" class="jminput jminput-size05" name="real_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">点控倍数1:</label>
+                        <div class="fillform">
+                            <input id="rtpmul1" type="text" class="jminput jminput-size05" name="real_stock" />
+                        </div>
+                    </div>
+
+                    <!-- <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">充值下限2:</label>
+                        <div class="fillform">
+                            <input id="chargelow2" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">充值上限2:</label>
+                        <div class="fillform">
+                            <input id="changeup2" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">点控rtp2:</label>
+                        <div class="fillform">
+                            <input id="rtp2" type="text" class="jminput jminput-size05" name="real_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">点控倍数2:</label>
+                        <div class="fillform">
+                            <input id="rtpmul2" type="text" class="jminput jminput-size05" name="real_stock" />
+                        </div>
+                    </div> -->
+
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">假金币点杀rtp:</label>
+                        <div class="fillform">
+                            <input id="visualrtp" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">假金币点杀倍数:</label>
+                        <div class="fillform">
+                            <input id="visualmul" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">假金币系数值:</label>
+                        <div class="fillform">
+                            <input id="visualgold" type="text" class="jminput jminput-size05" name="real_stock" />
+                        </div>
+                    </div>
+
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">虚拟金币下注倍数:</label>
+                        <div class="fillform">
+                            <input id="visualbetmul" type="text" class="jminput jminput-size05" name="real_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">虚拟金币点杀rtp:</label>
+                        <div class="fillform">
+                            <input id="visualkillrtp" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">虚拟金币点杀倍数:</label>
+                        <div class="fillform">
+                            <input id="visualkillmul" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    
+
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn jmbtn-info" href="javascript:void(0)" onclick="submit(1)">提交</a>  
+							<a class="jmbtn jmbtn jmbtn-default" href="javascript:closeCont('itemInfo');">取消</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--popupBox end-->
+</div>
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<!--报表导出 js -->
+<script src="js/export/tableExport.js"></script>
+<script src="js/export/jquery.base64.js"></script>
+<style>
+.select_new{
+  width:150px;height:36px; border:1px solid #ddd;border-radius: 5px;color: #555555
+}
+</style>
+<script type="text/javascript">
+	var chargelow1 = 0;
+    var changeup1= 0;
+    var rtp1= 0;
+    var rtpmul1= 0;
+    var chargelow2= 0;
+    var changeup2= 0;
+    var rtp2= 0;
+    var rtpmul2= 0;
+    var visualrtp= 0;
+    var visualmul= 0;
+    var visualgold= 0;
+    var visualkillrtp= 0;
+    var visualkillmul= 0;
+    var visualbetmul= 0;
+    var id = 0;
+	
+    template.helper('dataaction', function (data) {    
+   		
+        return (data/100).toFixed(2)
+   	})
+    //判断是否有数据，记录为空
+    template.helper('isenptydata', function (data) {
+        if($.isEmptyObject(data)){
+            return true;
+        }else{
+            return false;
+        }
+    })
+    function research(id) {
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+       
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+        
+        var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "gm_false_gold", gameid: gameid,zoneid:zoneid, type: 1, curpage: toCurPage , perpage :50,reqtype:1},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.data&&data.data.length>0) {
+                        var html = template("gm_cc_RecordData", data); 
+                        $("#gm_cc_RecordHtml").html(html);
+                    }else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+				}
+			}
+		});
+    }
+	function listToPage(id){
+		var ids = id
+		research(ids);
+		};
+    $(document).ready(function(){
+
+        research(1);
+		
+    });
+	$('.releaseBtn').live('click',function(){
+
+        var trItem = $(this).parent('td').parent('tr');
+        
+        id = trItem.attr("id");
+
+        chargelow1 = trItem.attr("chargelow1");
+        changeup1= trItem.attr("changeup1");
+        rtp1= trItem.attr("rtp1");
+        rtpmul1= trItem.attr("rtpmul1");
+        // chargelow2= trItem.attr("chargelow2");
+        // changeup2= trItem.attr("changeup2");
+        // rtp2= trItem.attr("rtp2");
+        // rtpmul2= trItem.attr("rtpmul2");
+        visualrtp= trItem.attr("visualrtp");
+        visualmul= trItem.attr("visualmul");
+        visualgold= trItem.attr("visualgold");
+        visualkillrtp= trItem.attr("visualkillrtp");
+        visualkillmul= trItem.attr("visualkillmul");
+        visualbetmul= trItem.attr("visualbetmul");
+
+        // $('#rtp').val(rtp);
+        // $('#mul').val(mul);
+        // $('#gold').val(gold);
+         $('#chargelow1').val(chargelow1)
+         $('#changeup1').val(changeup1)
+         $('#rtp1').val((rtp1/100).toFixed(2))
+         $('#rtpmul1').val(rtpmul1)
+        //  $('#chargelow2').val(chargelow2)
+        //  $('#changeup2').val(changeup2)
+        //  $('#rtp2').val((rtp2/100).toFixed(2))
+        //  $('#rtpmul2').val(rtpmul2)
+         $('#visualrtp').val((visualrtp/100).toFixed(2))
+         $('#visualmul').val(visualmul)
+         $('#visualgold').val(visualgold)
+
+         $('#visualkillrtp').val((visualkillrtp/100).toFixed(2))
+         $('#visualkillmul').val(visualkillmul)
+         $('#visualbetmul').val(visualbetmul)
+
+		showCont('itemInfo');
+
+	})
+	function submit(){
+        let gameid = $.cookie("gameid");
+        let zoneid = $.cookie("zoneid");
+        let nchargelow1  = Number($('#chargelow1').val());    
+        let nchangeup1   = Number($('#changeup1').val());
+        let nrtp1        = Number($('#rtp1').val() * 100);
+        let nrtpmul1     = Number($('#rtpmul1').val());
+        // let nchargelow2  = Number($('#chargelow2').val());
+        // let nchangeup2   = Number($('#changeup2').val());
+        // let nrtp2        = Number($('#rtp2').val() * 100);
+        // let nrtpmul2     = Number($('#rtpmul2').val());
+        let nvisualrtp   = Number($('#visualrtp').val() * 100);
+        let nvisualmul   = Number($('#visualmul').val());
+        let nvisualgold  = Number($('#visualgold').val());
+        let nvisualkillrtp   = Number($('#visualkillrtp').val() * 100);
+        let nvisualkillmul   = Number($('#visualkillmul').val());
+        let nvisualbetmul  = Number($('#visualbetmul').val());
+          
+        let res = confirm('是否确认提交？');
+        if(res != true) {
+            return;
+        }
+        var datastr = nchargelow1+","+nchangeup1+","+nrtp1+","+nrtpmul1+","+nvisualrtp+","+nvisualmul+","+nvisualgold+","+nvisualbetmul+","+nvisualkillrtp+","+nvisualkillmul;
+
+        $.post("/gm/http", {cmd: "gm_false_gold", gameid: gameid,zoneid:0, type: 2,  curpage: 1 , perpage :50,datastr:datastr,id:id,reqtype:1},
+        function(data){
+            alert(data.retdesc);
+            if(data.retcode == 0){
+                listToPage(1);
+            }
+        }, "json");
+ 
+    }
+</script>
+</body>
+</html>

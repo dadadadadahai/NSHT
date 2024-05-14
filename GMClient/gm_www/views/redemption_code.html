@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script type="text/javascript" src="js/layer/layer.js"></script> 
+<script src="js/jquery.cookie.js"></script> 
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">		
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">兑换码生成</h3>
+        </div>
+        <div class="box-inner jm-userInfoModify">
+            <div class="jmform-vertical">
+                <form action="">
+                    <div class="jmform-vgroup">
+                        <label class="control-label">批次码：</label>
+                        <div class="fillform">
+                            <input id="batch" type="text" class="jminput jminput-sm jminput-size05" value="" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label">兑换码类型：</label>
+                        <div class="fillform">
+                            <input type="radio"  name="codetype" value="1" autocomplete="off" style="margin-top: 8px;" checked>普通兑换码
+                            <input type="radio"  name="codetype" value="2" autocomplete="off">代理兑换码
+                        </div>
+                    </div>
+                    <div class="agent" style="display: none;">
+                        <div class="jmform-vgroup">
+                            <label class="control-label">下线人数：</label>
+                            <div class="fillform">
+                                <input id="childnum" type="text" class="jminput jminput-sm jminput-size05" value="" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="jmform-vgroup">
+                            <label class="control-label">下线充值人数：</label>
+                            <div class="fillform">
+                                <input id="actchildnum" type="text" class="jminput jminput-sm jminput-size05" value="" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="jmform-vgroup jm-ptb20">
+                            <div class="control-label clearfix">                      	
+                            </div>
+                            <div class="fillform"> 
+                                <a class="jmbtn jmbtn-lgLm jmbtn-default" href="javascript:gm_search_user(0)" >查询</a>  
+                            </div>
+                        </div>
+                        <div class="jmform-vgroup" >
+                            <span id="totalHtml">
+                                <script id="totalinfo" type="text/html">
+                                    <h3 class="h3type txt-white">
+                                        <span id="all" style="color: red;font-size: 18px;"><b>满足条件人数：<%=usernum%></b></span>
+                
+                                    </h3>
+                                </script>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="jmform-vgroup">
+                        <label class="control-label">数量：</label>
+                        <div class="fillform">
+                            <input id="codenum" type="text" class="jminput jminput-sm jminput-size05" value="" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label">单个兑换码可重复使用次数：</label>
+                        <div class="fillform">
+                            <input id="coderepeatcount" type="text" class="jminput jminput-sm jminput-size05"  value="" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label">玩家是否可以多次领取：</label>
+                        <div class="fillform">
+                            <input type="radio"  name="batchtype" value="1" autocomplete="off" style="margin-top: 8px;">是
+                            <input type="radio"  name="batchtype" value="0" autocomplete="off" checked>否
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label">兑换码金额：</label>
+                        <div class="fillform">
+                            <input id="gold" type="text" class="jminput jminput-sm jminput-size05" value="" autocomplete="off">
+                        </div>
+                    </div>
+                    
+                    <div class="jmform-vgroup">
+                        <label class="control-label">过期时间：</label>
+                        <div class="fillform">
+                            <input id="expiretime" type="text" class="jminput jminput-sm jminput-size05 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" autocomplete="off">
+                        </div>
+                    </div>
+                    
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn-lgLm jmbtn-default" href="javascript:void(0)" id="gm_punish_user">提交</a>  
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>            
+            
+        </div>        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    var gameid = Number($.cookie("gameid"))
+    var zoneid = Number($.cookie("zoneid"))
+    function gm_punish_user(e) {
+        var batch = $("#batch").val();
+        var codenum = $("#codenum").val();
+        var coderepeatcount = Number($("#coderepeatcount").val());
+        var batchtype = $('input[name="batchtype"]:checked').val();
+
+        var gold = $("#gold").val()*100;
+        var expiretime = $("#expiretime").val();
+
+        var childnum = $("#childnum").val();
+        var actchildnum = $("#actchildnum").val();
+        var codetype = $('input[name="codetype"]:checked').val();
+      
+        if (!(batch && codenum && coderepeatcount && batchtype && gold && expiretime)){
+            alert("请输入正确完整的数据!");
+            return;
+        }
+        if(codenum ==2 ){
+            if (!(childnum && actchildnum)){
+                alert("请输入正确完整的数据!");
+                return;
+            }
+        }
+        layer.confirm('是否确认生成兑换码', function(index){
+			layer.close(layer.index);
+            $.post("/gm/http", {cmd:"redemption_code",batch:batch,codenum:codenum,coderepeatcount:coderepeatcount,batchtype:batchtype,gameid:gameid,zoneid:zoneid,gold:gold,expiretime:expiretime,optype:2 , codenum:codenum,childnum:childnum,actchildnum:actchildnum,codetype:codetype}, function(data){
+                    if (!data) {
+                        alert("超时");
+                    } else if (data.retcode != 0){
+                        alert(data.retdesc);
+                    } else {
+                        alert("执行成功");
+                        $("#content").val("");
+                    }
+                }, "json");
+        })
+    }
+    function gm_search_user(e){
+        var childnum = $("#childnum").val();
+        var actchildnum = $("#actchildnum").val();
+        var codetype = $('input[name="codetype"]:checked').val();
+
+        if (!(childnum && actchildnum)){
+            alert("请输入正确完整的数据!");
+            return;
+        }
+
+        $.post("/gm/http", {cmd:"redemption_code",childnum:childnum,actchildnum:actchildnum,codetype:codetype,gameid:gameid,zoneid:zoneid,optype:1}, function(data){
+                if (!data) {
+                    alert("超时");
+                } else if (data.retcode != 0){
+                    
+                    alert(data.retdesc);
+                    
+                } else {
+                    var totalHtml = template("totalinfo", data);  
+                    $("#totalHtml").html(totalHtml);
+                  
+                }
+            
+           
+            }, "json");
+
+
+    }
+    $(document).ready(function(){
+        $("#gm_punish_user").click(gm_punish_user);
+        
+        const date = new Date();
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        const dateString = date.toLocaleDateString('Brazil', options); 
+        const [year, month, day] = dateString.split('/');
+
+        $("#batch").val(""+year+month+day+"0001")
+        
+        
+       
+    });
+    $('input[type="radio"][name="codetype"]').change(function(){
+       
+        var selectedValue = $(this).val();
+        
+        if (selectedValue == 2 ){
+            $(".agent").show();
+        }else{
+            $(".agent").hide();
+        }
+    });
+    
+
+</script>
+</body>
+</html>

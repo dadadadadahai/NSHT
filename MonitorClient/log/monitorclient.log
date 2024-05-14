@@ -1,0 +1,33 @@
+[240422-10:24:52] MTC ERROR net.InterfaceByName err:,route ip+net: invalid network interface name
+[240422-10:24:53] MTC ERROR basename:/views.zip, err:template: views.zip:9: unrecognized character in action: U+FFFD '�'
+[240422-10:24:53] MTC ERROR net.InterfaceByName err:,route ip+net: invalid network interface name
+[240422-10:25:15] MTC ERROR MonitorClientTask[0,0,]websocket.Dial:ws://15.197.195.55:7002/monitor/user,websocket.Dial ws://15.197.195.55:7002/monitor/user: dial tcp 15.197.195.55:7002: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+[240422-10:25:15] MTC ERROR MonitorClientTask[0,0,]Dial to monitor server failed
+[240422-10:25:36] MTC ERROR MonitorClientTask[0,0,]websocket.Dial:ws://15.197.195.55:7002/monitor/user,websocket.Dial ws://15.197.195.55:7002/monitor/user: dial tcp 15.197.195.55:7002: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+[240422-10:25:36] MTC ERROR MonitorClientTask[0,0,]Dial to monitor server failed
+[240422-10:25:57] MTC ERROR MonitorClientTask[0,0,]websocket.Dial:ws://15.197.195.55:7002/monitor/user,websocket.Dial ws://15.197.195.55:7002/monitor/user: dial tcp 15.197.195.55:7002: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+[240422-10:25:57] MTC ERROR MonitorClientTask[0,0,]Dial to monitor server failed
+[240422-10:26:18] MTC ERROR MonitorClientTask[0,0,]websocket.Dial:ws://15.197.195.55:7002/monitor/user,websocket.Dial ws://15.197.195.55:7002/monitor/user: dial tcp 15.197.195.55:7002: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+[240422-10:26:18] MTC ERROR MonitorClientTask[0,0,]Dial to monitor server failed
+[240422-10:26:38] MTC ERROR net.InterfaceByName err:,route ip+net: invalid network interface name
+[240422-10:26:38] MTC ERROR basename:/views.zip, err:template: views.zip:9: unrecognized character in action: U+FFFD '�'
+[240422-10:26:38] MTC ERROR net.InterfaceByName err:,route ip+net: invalid network interface name
+[240422-10:27:01] MTC ERROR MonitorClientTask[0,0,]websocket.Dial:ws://15.197.195.55:7002/monitor/user,websocket.Dial ws://15.197.195.55:7002/monitor/user: dial tcp 15.197.195.55:7002: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+[240422-10:27:01] MTC ERROR MonitorClientTask[0,0,]Dial to monitor server failed
+[240422-10:27:22] MTC ERROR MonitorClientTask[0,0,]websocket.Dial:ws://15.197.195.55:7002/monitor/user,websocket.Dial ws://15.197.195.55:7002/monitor/user: dial tcp 15.197.195.55:7002: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+[240422-10:27:22] MTC ERROR MonitorClientTask[0,0,]Dial to monitor server failed
+[240422-10:27:43] MTC ERROR MonitorClientTask[0,0,]websocket.Dial:ws://15.197.195.55:7002/monitor/user,websocket.Dial ws://15.197.195.55:7002/monitor/user: dial tcp 15.197.195.55:7002: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+[240422-10:27:43] MTC ERROR MonitorClientTask[0,0,]Dial to monitor server failed
+[240422-10:28:04] MTC ERROR MonitorClientTask[0,0,]websocket.Dial:ws://15.197.195.55:7002/monitor/user,websocket.Dial ws://15.197.195.55:7002/monitor/user: dial tcp 15.197.195.55:7002: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+[240422-10:28:04] MTC ERROR MonitorClientTask[0,0,]Dial to monitor server failed
+[240422-10:28:25] MTC ERROR MonitorClientTask[0,0,]websocket.Dial:ws://15.197.195.55:7002/monitor/user,websocket.Dial ws://15.197.195.55:7002/monitor/user: dial tcp 15.197.195.55:7002: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+[240422-10:28:25] MTC ERROR MonitorClientTask[0,0,]Dial to monitor server failed
+[240422-10:28:33] MTC ERROR net.InterfaceByName err:,route ip+net: invalid network interface name
+[240422-10:28:37] MTC ERROR basename:/views.zip, err:template: views.zip:9: unrecognized character in action: U+FFFD '�'
+[240422-10:28:37] MTC ERROR net.InterfaceByName err:,route ip+net: invalid network interface name
+[240422-10:28:56] MTC ERROR MonitorClientTask[0,0,]websocket.Dial:ws://15.197.195.55:7002/monitor/user,websocket.Dial ws://15.197.195.55:7002/monitor/user: dial tcp 15.197.195.55:7002: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+[240422-10:28:56] MTC ERROR MonitorClientTask[0,0,]Dial to monitor server failed
+[240422-10:29:17] MTC ERROR MonitorClientTask[0,0,]websocket.Dial:ws://15.197.195.55:7002/monitor/user,websocket.Dial ws://15.197.195.55:7002/monitor/user: dial tcp 15.197.195.55:7002: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+[240422-10:29:17] MTC ERROR MonitorClientTask[0,0,]Dial to monitor server failed
+[240422-10:29:38] MTC ERROR MonitorClientTask[0,0,]websocket.Dial:ws://15.197.195.55:7002/monitor/user,websocket.Dial ws://15.197.195.55:7002/monitor/user: dial tcp 15.197.195.55:7002: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+[240422-10:29:38] MTC ERROR MonitorClientTask[0,0,]Dial to monitor server failed

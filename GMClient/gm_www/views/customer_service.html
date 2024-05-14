@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Expires" content="0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-control" content="no-cache">
+<meta http-equiv="Cache" content="no-cache">
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+    <script type="text/javascript" src="js/template-native.js"></script>
+    <script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">		
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">修改客服地址</h3>
+           
+        </div>
+        <div class="box-inner jm-userInfoModify">
+            <div class="jmform-vertical">
+                <form action="">
+                    
+                    <div class="jmform-vgroup">
+
+                        <label class="control-label">客服地址：</label>
+
+                        <input id="kf" placeholder="" type="text" class="jminput jminput-size05" name="content" autocomplete="off"/>
+                    </div>
+                    <div class="jmform-vgroup">
+
+                        <label class="control-label">TG代理群:</label>
+
+                        <input id="tg1" placeholder="" type="text" class="jminput jminput-size05" name="content" autocomplete="off"/>
+                    </div>
+                    <div class="jmform-vgroup">
+
+                        <label class="control-label">TG大群:</label>
+
+                        <input id="tg2" placeholder="" type="text" class="jminput jminput-size05" name="content" autocomplete="off"/>
+                    </div>
+                    
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn-lg jmbtn-default" href="javascript:void(0)" id="user_info_modify" onclick="user_info_modify()">修改</a>                       	
+                            <a class="jmbtn jmbtn-lg jmbtn-info" href="javascript:void(0)" id="cancle">取消</a>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>            
+            
+        </div>        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+<script type="text/javascript">
+    function user_info_modify(e) {
+
+        var kf   = $("#kf").val();
+        var tg1  = $("#tg1").val();
+        var tg2  = $("#tg2").val();
+        var url  = "/var/www/kf/server.json";
+
+
+        $.post("/gm/http", {cmd: "update_server_url",kf:kf , url : url,tg1:tg1,tg2:tg2},
+            function(data){
+                if (!data) {
+                    alert("执行超时");
+                } else {
+
+                    alert(data.retdesc)
+                }
+                
+        }, "json");
+    }
+    $(document).ready(function(){
+
+
+        $.getJSON("http://kf.5r5.com/server.json?t="+new Date(), function(data){
+            $("#kf").val(data.kf)
+            $("#tg1").val(data.tg1)
+            $("#tg2").val(data.tg2)
+            
+        });	
+
+    });
+
+</script>
+</body>
+</html>

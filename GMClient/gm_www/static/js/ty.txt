@@ -1,0 +1,239 @@
+{
+    "clientid": 100312,
+    "data": [
+        {
+            "columnid": 5501,
+            "columnname": "玩家充值",
+            "columnnum": 123143,
+            "columndata": [
+                {
+                    "columnname": "微信",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "支付宝",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "闪付",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "财付通",
+                    "cellnum": 15496
+                }
+            ]
+        },
+        {
+            "columnid": 5501,
+            "columnname": "游戏盈利",
+            "columnnum": 1232421,
+            "columndata": [
+                {
+                    "columnname": "扑鱼盈利",
+                    "cellnum": 15496,
+                    "celldata": [
+                        {
+                            "columnname": "扑鱼1",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "扑鱼2",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "麻将3",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "扑鱼4",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "扑鱼5",
+                            "cellnum": 15496
+                        }
+                    ]
+                },
+                {
+                    "columnname": "麻将盈利",
+                    "cellnum": 15496,
+                    "celldata": [
+                        {
+                            "columnname": "麻将1",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "麻将2",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "麻将3",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "麻将4",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "麻将5",
+                            "cellnum": 15496
+                        }
+                    ]
+                },
+                {
+                    "columnname": "牛牛盈利",
+                    "cellnum": 15496,
+                    "celldata": [
+                        {
+                            "columnname": "牛牛1",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "牛牛2",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "牛牛3",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "牛牛4",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "牛牛5",
+                            "cellnum": 15496
+                        }
+                    ]
+                },
+                {
+                    "columnname": "金花盈利",
+                    "cellnum": 15496,
+                    "celldata": [
+                        {
+                            "columnname": "金花1",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "金花2",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "金花3",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "金花4",
+                            "cellnum": 15496
+                        },
+                        {
+                            "columnname": "金花5",
+                            "cellnum": 15496
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "columnid": 5501,
+            "columnname": "活跃人数",
+            "columnnum": 532623,
+            "columndata": [
+                {
+                    "columnname": "扑鱼",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "麻将",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "牛牛",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "金花",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "金花2",
+                    "cellnum": 15496
+                }
+            ]
+        },
+        {
+            "columnid": 5501,
+            "columnname": "在线人数",
+            "columnnum": 523235,
+            "columndata": [
+                {
+                    "columnname": "扑鱼",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "麻将",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "牛牛",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "金花",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "金花2",
+                    "cellnum": 15496
+                }
+            ]
+        },
+        {
+            "columnid": 5501,
+            "columnname": "活动支出",
+            "columnnum": 23621,
+            "columndata": [
+                {
+                    "columnname": "签到",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "救济",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "任务",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "元宝",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "元宝",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "赠送",
+                    "cellnum": 15496
+                },
+                {
+                    "columnname": "比赛",
+                    "cellnum": 15496
+                }
+            ]
+        }
+    ],
+    "zoneid": 20015,
+    "gmid": 1548,
+    "regnum": 15422,
+    "paynum": 3298,
+    "dau": 57487,
+    "ccu": 15453,
+    "pcu": 85487,
+    "ptime": 1498827526,
+    "mostlogins": "LOL",
+    "leastlogins": "大萝卜"	
+}
+	

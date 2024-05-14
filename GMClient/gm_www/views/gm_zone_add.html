@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+    <script type="text/javascript" src="js/template-native.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">
+    	<div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">添加区服:</h3>
+        </div>        	
+    </div>
+    <div class="box-inner jm-userInfoModify">
+        <div class="jmform-vertical">
+            <form action="">
+                <div class="jmform-vgroup">
+                    <label class="control-label">区服Id：</label>
+                    <div class="fillform">
+                        <input id="zoneid" type="text" class="jminput jminput-size05" name="zoneid" />
+                    </div>
+                </div>
+                <div class="jmform-vgroup">
+                    <label class="control-label">区服名称：</label>
+                    <div class="fillform">
+                        <input id="zonename" type="text" class="jminput jminput-size05" name="zonename" />
+                    </div>
+                </div>
+                <div class="jmform-vgroup">
+                    <label class="control-label">GM地址：</label>
+                    <div class="fillform">
+                        <input id="gmlink" type="text" class="jminput jminput-size05" placeholder="区服接收GM命令的地址" />
+                    </div>
+                </div>
+                <div class="jmform-vgroup">
+
+                    <label class="control-label">游戏：</label>
+                    <div class="">
+
+                        <select id="gamelisthtml"  style="width: 112px;" class="jminput jminput-sm jminput-sizetp">
+                            <script id="gamelistData" type="text/html"  >
+                                <%for(i = 0; i < data.length; i++) {%>
+                                <option value="<%=data[i].Gameid%>"><%=data[i].Gamename%></option>
+                                <%}%>
+                            </script>
+                        </select>
+
+                    </div>
+
+
+                </div>
+                <div class="jmform-vgroup jm-ptb20">
+                    <div class="control-label clearfix">                                                  
+                    </div>
+                    <div class="fillform"> 
+                        <a class="jmbtn jmbtn-lg jmbtn-default" href="javascript:void(0)" id="addzone">添加</a>                       	
+                        <a class="jmbtn jmbtn-lg jmbtn-info" href="javascript:void(0)" id="canclechg">取消</a>
+                    </div>
+                </div>                
+            </form>
+        </div>   
+    </div>    
+</div>
+<!--jm-maincon warp end-->
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    function addzone() {
+        //var gameid = Number($.cookie("gameid") || "");
+        var zoneid = Number($("#zoneid").val()) || 0;
+        var zonename = $("#zonename").val();
+        var gmlink = $("#gmlink").val();
+        var gameid = $("#gamelisthtml").val();
+
+        if (gameid == 0 || zoneid == 0 || zonename == ""){
+            alert("请填入正确的参数");
+            return;
+        }
+        //alert(gameid)
+        $.post("/gm/http", {cmd:"AddNewZoneGmUserPmd_CS", gameid: gameid, zoneid:zoneid, zonename:zonename, gmlink:gmlink}, function(data){
+            if(data.retcode != 0){
+                alert(data.retdesc);
+            } else {
+                alert("添加成功!");
+            }
+        }, "json");
+    }
+    function canclechg(){
+        $("#zonename").val("");
+        $("#gmlink").val("");
+        $("#zoneid").val(0);
+    }
+    $(document).ready(function(){
+        $("#addzone").click(addzone);
+        $("#canclechg").click(canclechg);
+        var type = 1;
+        //页面初始化select所有游戏选项
+        $.post("/gm/http", {
+                cmd:"gm_get_gamelist",type:type,
+            },
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                }else {
+                    if (data.data&&data.data.length>0) {
+                        var html = template("gamelistData", data);
+                        //alert(html +"----"+data.data[0].Gameid);
+                        $("#gamelisthtml").html(html);
+                        //Searchzonelist(data.data[0].Gameid);
+                    }
+                }
+            }, "json");
+    });
+
+</script>
+</body>
+</html>

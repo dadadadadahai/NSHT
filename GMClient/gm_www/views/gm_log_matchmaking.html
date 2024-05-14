@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                 <form action="">                 	               
+                 	
+                    <div class="jmform-group">
+                        <input id="uid" type="text" placeholder="玩家ID" class="jminput jminput-sm jminput-size04" name="">
+                    </div>
+                    <div class="jmform-group">
+                        <div class="fleft">
+                            <select id="sub_game" name="select" class="select_new">
+                            	<option value="0" selected>游戏</option>                                
+                            	<option value="1">已领取</option>
+                                <option value="2">未领取</option>                                       
+                            </select>
+                        </div>
+                    </div>  
+                    <!-- <div class="jmform-group">
+                        <div class="fleft">
+                            <select id="sessions" name="select" class="select_new">
+                            	<option value="0" selected>场次</option>                                
+                            	<option value="1">初级场</option>
+                                <option value="2">中级场</option>
+                                <option value="3">高级场</option>                                     
+                            </select>
+                        </div>
+                    </div>      -->
+                    <div class="jmform-group">
+                        <input id="starttime" type="text" placeholder="开始时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" autocomplete="off">
+                    </div>
+                    <div class="jmform-group">
+                        <input id="endtime" type="text" placeholder="结束时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" autocomplete="off">
+                    </div>
+                    <div class="jmform-group">
+                        <a id="gm_log_searchBtn" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>查询</a>
+                    </div>
+                    <!-- <div class="jmform-group">
+                        <a class="jmbtn jmbtn-succeed" href="javascript:;" onClick ="$('#cc_loginprops_table').tableExport({type:'excel',escape:'false'});">导出报表</a>
+                    </div> -->
+                    
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">游戏对局日志</h3>
+			<span id="totalHtml">
+				<script id="totalinfo" type="text/html">
+					<h4 class="h3type txt-white"><span id="all">总输赢金币：<%= changechips(totalwinlose)%> </span></h4>
+				</script>
+					
+			</span>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="cc_loginprops_table">
+                <thead>
+                    <tr>	
+						<th>日志ID</th>	
+                        <th>开始时间</th>
+						<th>结束时间</th>
+						<th>游戏名</th>
+						<!-- <th>场次</th> -->
+						<th>玩家ID</th>
+						<th>玩家昵称 </th>
+						<th>下注</th>
+						<th>携带金币</th>
+						<th>结束后金币</th>
+						<th>输赢金币</th>
+						<th style="width: 300px;">开奖图标</th>
+						<th>开奖 倍数</th>
+						<th>手续费</th>
+						<th>爆池比例/等级</th>
+						<th>爆池金额</th>
+                        
+                    </tr>
+                </thead>               
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">
+						<%for(i = 0; i < data.length; i++) {%>    
+						<tr>
+							<td><%=data[i].logid%></td>
+							<td><%=data[i].begintime%></td>
+							<td><%=data[i].endtime%></td>
+							<td><%=gamename(data[i].subgamename)%></td>
+							<td><%=sessionsname(data[i].subgametype)%></td>
+							<td><a href="javascript:jumpToPage('user_info_search' , 'charid=<%=data[i].charid%>')"><%=data[i].charid%></a></td>
+							<td><%=data[i].charname%></td>
+							<td><%=betinfo(data[i].bet  , data[i].subgamename)%></td>
+						
+							<td><%=changechips(data[i].carrychips)%></td>
+							<td><%=changechips(data[i].endchips)%></td>
+							<td ><%=changechips(data[i].winlosechips)%></td>
+							<td style="width: 300px;"><%=jsoncode(data[i].lotteryicon , data[i].subgamename)%></td>
+							
+							<td><%=data[i].lotterymul%></td>
+							<td><%=changechips(data[i].handingfee)%></td>
+							<td><%=data[i].poolburstlevel%></td>
+							<td><%=changechips(data[i].poolburstchips)%></td>
+							
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div>
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+            <div class="jm-epages" id="pageHtml">
+            	<script type="text/html" id="pageData">
+				<%if(isenptydata(data)){%>
+					<div style="color:#ff6600" class="fleft">暂无查询记录！</div>
+				<%} else{%>
+					<div class = "fright">
+					<%if(curpage != 1) {%>   
+						<a href="javascript:listToPage(1);">首页</a>
+						<a href="javascript:listToPage(<%=curpage - 1%>);">上一页</a>
+					<%}%>
+					<%if(curpage == 1 && maxpage != 0 && maxpage != 1) {%>  
+						<a>首页</a>
+						<a>上一页</a>
+					<%}%>				
+					<%if(maxpage <= 8){%> 
+						<%for(i = 1; i <= maxpage; i++) {%>  
+						<%if(curpage == i) {%>  
+							<a href="#" class="on"><%=i%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+						<%}%>  
+					<%}%>  
+					<%}else {%>  
+						<%if(curpage == 1) {%>  
+							<a href="#" class="on">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							<a href="javascript:listToPage(3);">3</a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage < 6) {%>  
+							<%for(i = 1; i <= curpage - 1; i++ ) {%>  
+								<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+							<%}%>  
+							<span class="on"><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage >= 6 && curpage < maxpage - 4) {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<a href="javascript:listToPage(<%=curpage - 1%>);"><%=curpage - 1%></a>  
+							<span class="on"><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage-1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<%for(i = maxpage - 4; i <= maxpage; i++) {%>  
+								<%if(curpage == i) {%>  
+									<span class="on"><%=i%></span>  
+								<%}else {%>  
+									<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+								<%}%>  
+							<%}%>  
+						<%}%>  
+					<%}%>  
+					<%if(curpage < maxpage) {%>  
+						<a href="javascript:listToPage(<%=curpage + 1%>);">下一页</a>  
+						<a href="javascript:listToPage(<%=maxpage%>);">尾页</a>  
+					<%}%> 
+					<span>第<input type="text" id="choise_page" style="width: 30px;">页 <button type="button" onclick="choise()">跳转</button></span>
+					<div>
+				<%}%>
+				</script>
+            </div>
+            <!-- epages -->
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<!--报表导出 js -->
+<script src="js/export/tableExport.js"></script>
+<script src="js/export/jquery.base64.js"></script>
+<style>
+	.select_new{
+	  width:150px;height:36px; border:1px solid #ddd;border-radius: 5px;color: #555555
+	}
+	</style>
+<script type="text/javascript">
+	var jsonPlat ;
+	var jsonIcon;
+   template.helper('dateFormat', function (date, format) {  
+       date = new Date(date * 1000);  
+       var map = {  
+           "M": date.getMonth() + 1, //月份   
+           "d": date.getDate(), //日   
+           "h": date.getHours(), //小时   
+           "m": date.getMinutes(), //分   
+           "s": date.getSeconds(), //秒   
+           "q": Math.floor((date.getMonth() + 3) / 3), //季度   
+           "S": date.getMilliseconds() //毫秒   
+       };  
+       format = format.replace(/([yMdhmsqS])+/g, function(all, t){  
+           var v = map[t];  
+           if(v !== undefined){  
+               if(all.length > 1){  
+                   v = '0' + v;  
+                   v = v.substr(v.length-2);  
+               }  
+               return v;  
+           }  
+           else if(t === 'y'){  
+               return (date.getFullYear() + '').substr(4 - all.length);  
+           }  
+           return all;  
+       });  
+       return format;  
+   });  
+   template.helper("changechips" , function (data) {
+
+	return (data / 100).toFixed(2)
+
+	})
+   template.helper('isenptydata', function (data) {    
+   		if($.isEmptyObject(data)){
+			return true;
+		}else{
+			return false;
+		}
+   	})	
+	template.helper('gamename', function (data) {    
+        for(var i=0; i<jsonPlat.length; i++) {
+            if(jsonPlat[i].subgameid == data){
+               return jsonPlat[i].subgamename;
+               break;
+            }
+        }
+   	})
+    template.helper('sessionsname', function (data) {    
+   		switch(data){
+			case 1:
+				return "初级场";
+			case 2:
+				return "中级场";
+			case 3:
+				return "高级场";
+		}
+   	})
+	template.helper('betinfo', function (data , num) {  
+		var str = " ";
+		if(num  == 205){
+			
+
+			str += "龙：" + data[0]/100 + "和：" + data[1]/100 + "虎：" + data[2]/100;
+			
+
+		}else if(num  == 206){
+			
+			for(var i = 0 ; i < data.length ; i++){
+				str +=  jsonIcon.game[206][i] +": "+ data[i]/100  + " ; ";
+			}
+
+		}else{
+			return data/100;
+		}
+		return str;
+
+	})
+	   
+	template.helper('jsoncode', function (data , num) {    
+   		jsondata = jQuery.parseJSON(data);
+		
+		var str = "";
+
+		if (jsondata["type"]) {
+			str += "类型：" + jsondata["type"] + " ; ";
+		}
+		if (jsondata["type"] == "bonus" && num == 114 ){
+			if(jsondata["bonusNum"]) {
+
+				str += "转盘ID: " + jsondata["bonusNum"] + " ; ";
+
+				if(jsondata["bonusNum"] == 1 ){
+
+					let result = jsondata["bonusType"]==1?"free":"输赢金币";
+
+					str += "转盘结果类型：" + result+ " ; ";
+
+				}else if(jsondata["bonusNum"] == 2){
+
+					str += "转盘3转动次数:" + jsondata["tWinScore"] + " ; ";
+				}else{
+
+					str += "剩余次数：" + jsondata["lackTimes"] + " ; ";
+					str += "总次数：" + jsondata["totalTimes"] + " ; ";
+
+					if(jsondata["bonusType"] == 1){
+						str += "免费次数：" + jsondata["freeNum"] + " ; ";
+					}else{
+						str += "累计输赢：" + jsondata["tWinScore"] /100 + " ; ";
+					}
+					
+				}
+			}
+
+		}else{
+			if (jsondata["totalTimes"] || jsondata["totalTimes"] >= 0) {
+				str += "总次数：" + jsondata["totalTimes"] + " ; ";
+			}
+			if (jsondata["lackTimes"] || jsondata["lackTimes"] >= 0){
+				str += "剩余次数：" + jsondata["lackTimes"] + " ; ";
+			}
+			
+			if (jsondata["tWinScore"] || jsondata["tWinScore"] >= 0) {
+				if(num ==  201){
+					str += "实际输赢：" + (jsondata["tWinScore"]/100).toFixed(2) + " ; ";
+				}else{
+					str += "累计输赢：" + (jsondata["tWinScore"]/100).toFixed(2) + " ; ";
+				}
+				
+			}
+		}
+		if(num  == 206){
+			str += " 位置： " + jsondata["nId"] + ";";
+		}
+		if (jsondata["mul"] || jsondata["mul"] >= 0){
+			str += "倍数：" + jsondata["mul"] + " ; ";
+		}
+
+		if (jsondata["chessdata"]) {
+
+			str += "  布局：";
+
+			for(var i=0  ; i< jsondata["chessdata"].length ; i ++){
+				if(num == 115 ){
+					switch(i) {
+						case 0 :  str += "内圈："; break;
+						case 1 :  str += "中圈："; break;
+						case 2 :  str += "外圈："; break;
+					}
+				}
+				for(var j=0 ; j< jsondata["chessdata"][i].length ; j++){
+					if(jsonIcon.game[num]) {
+						str += jsonIcon.game[num][jsondata["chessdata"][i][j]]+ " ";
+					}else{
+						str += jsondata["chessdata"][i][j]+ " ";
+					}
+				}
+				if (i < jsondata["chessdata"].length - 1){
+					str += "、"
+				}
+				
+			}
+			str += ";";
+		}
+		if (jsondata["zmul"]) {
+			str += "  u图标加倍: " + jsondata["zmul"] + " ; ";
+		}
+		if (jsondata["isBuy"]) {
+			var buy = jsondata["isBuy"] == 0?"否":"是";
+			str += "  是否购买: " + buy + " ; ";
+		}
+		if (jsondata["ptype"]) {
+		
+			str += "  bonus类型: " + jsondata["ptype"] + " ; ";
+		}
+
+
+		if(jsondata["disInfo"]){
+
+			for(var i= 0 ; i < jsondata["disInfo"].length ; i++ ){
+				str += "  附加信息：";
+				for(var j= 0 ; j < jsondata["disInfo"][i]["info"].length ; j++ ){
+				
+					str += "  中奖图标加倍: " + jsondata["disInfo"][i]["info"][j]["mul"];
+					str += "  输赢金币：" + (jsondata["disInfo"][i]["info"][j]["winScore"]/100).toFixed(2);
+				}
+				if (i < jsondata["disInfo"].length - 1){
+					str += "、"
+				}
+				if (jsondata["disInfo"][i]["chessdata"]) {
+					str += "  附加布局：";
+
+					for(var j=0  ; j< jsondata["disInfo"][i]["chessdata"].length ; j ++){
+						
+						for(var k=0 ; k< jsondata["disInfo"][i]["chessdata"].length ; k++){
+							
+							if(jsondata["disInfo"][i]["chessdata"][j][k] != undefined){
+
+								if(jsonIcon.game[num]) {
+									str += jsonIcon.game[num][jsondata["disInfo"][i]["chessdata"][j][k]]+ " ";
+								}else{
+									str += jsondata["disInfo"][i]["chessdata"][j][k]+ " ";
+								}
+								
+							}
+							
+						}
+						if (j <jsondata["disInfo"][i]["chessdata"].length - 1){
+							str += "、"
+						}
+						
+					}	
+				}
+				if (j < jsondata["disInfo"].length - 1){
+					str += ";";
+				}
+				
+			}
+
+			str += " ;";
+
+		}
+
+		if(num  == 205){
+			str += " 龙：" + jsonIcon.poker.hua[jsondata["long"][0]] + jsonIcon.poker.num[jsondata["long"][1]];
+			str += " 虎：" + jsonIcon.poker.hua[jsondata["hu"][0]] + jsonIcon.poker.num[jsondata["hu"][1]];
+		}
+		
+		if(num  == 202){
+			str += "结算倍数:"+jsondata["settleMul"];
+			str += "结算分数:"+(jsondata["settleScore"]/100).toFixed(2);
+			str += "结算距离开始飞火箭的时间:"+ jsondata["settleTime"].toFixed(3);
+		}
+		if(num  == 204){
+
+			str += "转盘位置: "+jsonIcon.game[num].position[jsondata["position"]] + " ; ";
+			str += "游戏类型: "+jsonIcon.game[num]["redLuckType"][jsondata["redLuckType"]] + " ; ";
+			
+			if(jsondata["trainInfo"]){
+
+				if(jsondata["trainInfo"]["num"]){
+					str += "数量:"+jsondata["trainInfo"]["num"] + "; 详情： ";
+
+					for(let i = 0 ; i < jsondata["trainInfo"]["num"] ; i++){
+
+						str += " 位置: "+ jsonIcon.game[num].position[jsondata["trainInfo"]["infos"][i]["position"]];
+						str += " 倍数: "+jsondata["trainInfo"]["infos"][i]["mul"];
+						str += " 输赢金币: "+(jsondata["trainInfo"]["infos"][i]["WinScore"] / 100).toFixed(2);
+						
+						if (i < jsondata["trainInfo"]["num"] - 1){
+							str += ";";
+						}
+					}
+				}
+			}
+		}
+
+		return str;
+		
+   	})
+    
+    function research(id) {
+		var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+        var starttime = $("#starttime").val();
+        var endtime = $("#endtime").val();
+		var uid = $("#uid").val();
+		var subgameid = Number($("#sub_game").val()) ||0;
+		var sessions = Number($("#sessions").val()) ||0;
+
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+		var perpage = perpage;
+        
+		var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "gm_log_matchmaking",gameid:gameid, zoneid:zoneid, starttime: starttime, endtime: endtime,curpage:toCurPage , uid :uid , sub_game:subgameid,sessions:sessions,perpage:perpage},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.data&&data.data.length>0) {
+	                      var html = template("gm_cc_RecordData", data); 
+	                      $("#gm_cc_RecordHtml").html(html);              
+	                    }else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+					var pageHtml = template("pageData", data);  
+					$("#pageHtml").html(pageHtml);	
+					var totalHtml = template("totalinfo", data);  
+					$("#totalHtml").html(totalHtml);							
+				}
+			}
+		});	
+
+    }
+	function listToPage(id){
+		var ids = id
+		research(ids);
+		};
+    $(document).ready(function(){
+
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		
+		const charid = urlParams.get('charid');
+		const subgameid = urlParams.get('subgameid');
+		const subgametype = urlParams.get('subgametype');
+		const entertime = urlParams.get('entertime');
+		const leveltime = urlParams.get('leveltime');
+
+
+        if(charid != null){
+			$("#uid").val(charid);
+			$("#starttime").val(entertime)
+			$("#endtime").val(leveltime)
+			$("#sessions").find("option[value="+subgametype+"]").attr("selected",true);
+            listToPage();
+        }
+		
+        $("#gm_log_searchBtn").click(research);
+		let gameid = $.cookie("gameid");
+		
+		$.getJSON("js/json/game/1002.json", function(allplat){
+			jsonPlat = eval(allplat.data);
+			var html = " <option value='0'>请选择游戏</option>";
+			for(var i=0; i<jsonPlat.length; i++) {
+				if(subgameid == jsonPlat[i].subgameid){
+					html += "<option value='"+jsonPlat[i].subgameid+"' selected>"+jsonPlat[i].subgamename+"</option>";
+				}else{
+					html += "<option value='"+jsonPlat[i].subgameid+"'>"+jsonPlat[i].subgamename+"</option>";
+				}
+				
+			}
+			$("#sub_game").html(html)
+		});
+		$.getJSON("js/json/icon/icon.json", function(allplat){
+			jsonIcon = eval(allplat);
+			
+		});
+    });
+</script>
+</body>
+</html>

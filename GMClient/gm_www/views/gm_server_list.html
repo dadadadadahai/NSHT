@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    //$(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">
+    	<!-- jm-navbar start-->
+    	<div class="jm-navbar">
+        	<div class="jmform-search clearfix">
+            	 <form action="">
+                    <!--div class="jmform-group">
+                        <input id="packid-search" type="text" placeholder="母宝ID" class="jminput jminput-sm jminput-size04" name="">
+                    </div>
+                    <div class="jmform-group">
+                        <input id="platid-search" type="text" placeholder="渠道ID" class="jminput jminput-sm jminput-size04" name="">
+                    </div-->
+                    <div class="jmform-group">
+                        <a id="paymentSearch" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>查询</a>
+                    </div>
+                    <div class="jmform-group">
+                        <a id="paymentAdd" class="jmbtn jmbtn-info" href="javascript:void(0)"><span class="ico-add-w16"></span>新增</a>
+                    </div>
+                    <div class="jmform-group">
+                        <a id="paymentUpdate" class="jmbtn jmbtn-info" href="javascript:void(0)"><span class="ico-edit-w16"></span>修改</a>
+                    </div>
+                    <div class="jmform-group">
+                        <a id="paymentDel" class="jmbtn jmbtn-info" href="javascript:void(0)"><span class="ico-delete-w16"></span>删除</a>
+                    </div>
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">活动控制列表</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01">
+                <thead>
+                    <tr>
+                        <th class="allcheck_box"><label><input type="checkbox" class="selectAll" />全选</label></th>
+                        <th>ID</th>
+                        <th>外网IP</th>
+                        <th>外网Port</th>
+                        <th>内部IP</th>
+                        <th>内部名字</th>
+                        <th>LogicId</th>                        
+                        <th>服务器名字</th>
+                        <th>服务器状态</th>
+                        <th>服务器标识</th>
+                        <th>排序</th>
+                        <th>通知</th>
+                        <th></th>
+                    </tr>
+                </thead>
+               
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">						
+						<%for(i = 0; i < rdata.length; i++) {%>    
+						<tr class="tm_01" >
+							<td><input type='checkbox' value='<%=rdata[i].recordid%>' class='check_box' </td>							
+							<td><%=rdata[i].recordid%></td>
+							<td><%=rdata[i].externalIP%></td>
+							<td><%=rdata[i].externalPort%></td>
+							<td><%=rdata[i].internalIP%></td>
+							<td><%=rdata[i].internalName%></td>
+							<td><%=rdata[i].logicId%></td>
+							<td><%=rdata[i].logicName%></td>
+							<td><%=changeShowState(rdata[i].logicOpenStatus)%></td>
+                            <td><%=changeState(rdata[i].logicSpecialFlags)%></td>
+							<td><%=rdata[i].order%></td>
+							<td><%=rdata[i].notice%></td>
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div> 
+
+     <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+            <div class="jm-epages" id="pageHtml">
+            	<script type="text/html" id="pageData">
+				<%if(isenptydata(data)){%>
+					<div style="color:#ff6600" class="fleft">暂无查询记录！</div>
+				<%} else{%>
+					<div class = "fright">
+					<%if(curpage != 1) {%>   
+						<a href="javascript:listToPage(1);">首页</a>
+						<a href="javascript:listToPage(<%=curpage - 1%>);">上一页</a>
+					<%}%>
+					<%if(curpage == 1 && maxpage != 0 && maxpage != 1) {%>  
+						<a>首页</a>
+						<a>上一页</a>
+					<%}%>				
+					<%if(maxpage <= 8){%> 
+						<%for(i = 1; i <= maxpage; i++) {%>  
+						<%if(curpage == i) {%>  
+							<a href="#" class="on"><%=i%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+						<%}%>  
+					<%}%>  
+					<%}else {%>  
+						<%if(curpage == 1) {%>  
+							<a href="#" class="on">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							<a href="javascript:listToPage(3);">3</a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage < 6) {%>  
+							<%for(i = 1; i <= curpage - 1; i++ ) {%>  
+								<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+							<%}%>  
+							<span class="current"><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage >= 6 && curpage < maxpage - 4) {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<a href="javascript:listToPage(<%=curpage - 1%>);"><%=curpage - 1%></a>  
+							<span><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage-1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<%for(i = maxpage - 4; i <= maxpage; i++) {%>  
+								<%if(curpage == i) {%>  
+									<span class="on"><%=i%></span>  
+								<%}else {%>  
+									<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+								<%}%>  
+							<%}%>  
+						<%}%>  
+					<%}%>  
+					<%if(curpage < maxpage) {%>  
+						<a href="javascript:listToPage(<%=curpage + 1%>);">下一页</a>  
+						<a href="javascript:listToPage(<%=maxpage%>);">尾页</a>  
+					<%}%> 
+					<div>
+				<%}%>
+				</script>
+            </div>
+            <!-- epages -->
+        </div>    
+    </div>
+</div>
+
+<!-- 详细信息 start -->
+<div id="itemInfo" class="popupCon popupCon_payment" style="display:none">
+    <h2 class="f16 newTitle">修改</h2>
+    <a href="javascript:closeCont('itemInfo');" class="btnClose">×</a>
+    <!--popupBox start-->    
+    <div class="popupBox">
+        <div class="blockbox">
+            <div class="box-inner clearfix">
+                <div class="jmform-vertical add-itemInfo">
+                    <form action="testAction" id="testAction">
+                        <div class="jmform-group isempty">
+                            <label class="control-label-poptp">外网IP：</label>
+                            <input id="add-externalIP" type="text" class="jminput jminput-sm jminput-sizetp" name="" value=""/>
+                        </div>
+                        <div class="jmform-group isempty">
+                            <label class="control-label-poptp">外网Port：</label>
+                            <input id="add-externalPort" type="text" class="jminput jminput-sm jminput-sizetp" name="" value=""/>
+                        </div>
+                        
+                        <div class="jmform-group isempty">
+                            <label class="control-label-poptp">内部IP：</label>
+                            <input type="text" id="add-internalIP" class="jminput jminput-sm jminput-sizetp" name="" value=""/>
+                        </div>
+                        <div class="jmform-group isempty">
+                            <label class="control-label-poptp">内部名字：</label>
+                            <input type="text" id="add-internalName" class="jminput jminput-sm jminput-sizetp" name="" value="main"/>
+                        </div>
+
+                        <div class="jmform-group isempty">
+                            <label class="control-label-poptp">logicId：</label>
+                            <input type="text" id="add-logicId" class="jminput jminput-sm jminput-sizetp" name="" value="0"/>
+                        </div>
+
+                        <div class="jmform-group isempty">
+                            <label class="control-label-poptp">服务器名字：</label>
+                            <input type="text" id="add-logicName" class="jminput jminput-sm jminput-sizetp" name="" value=""/>
+                        </div>
+
+                        <div class="jmform-group isempty">
+                            <label class="control-label-poptp">服务器状态：</label>
+                            <select id="add-logicOpenStatus" name="select" class="jminput jminput-sm jminput-sizetp" name="" value=""/>
+                                <option value="0">show</option>
+                                <option value="1">maintain</option>
+                                <option value="2">hide</option>
+                            </select>
+                        </div>
+                        <div class="jmform-group isempty">
+                            <label class="control-label-poptp">服务器标识：</label>
+                            <!-- <input type="text" id="add-logicSpecialFlags" class="jminput jminput-sm jminput-sizetp" name="" value=""/> -->
+                            <select id="add-logicSpecialFlags" name="select" class="jminput jminput-sm jminput-sizetp" name="" value=""/>
+                                <option value="0">green</option>
+                                <option value="1">yellow</option>
+                                <option value="2">red</option>
+                                <option value="256">green+new</option>
+                                <option value="257">yellow+new</option>
+                                <option value="258">red+new</option>
+                                <option value="512">green+recomment</option>
+                                <option value="513">yellow+recomment</option>
+                                <option value="514">red+recommend</option>
+                                <!--option value="4">重载配置</option-->
+                            </select>
+                        </div>
+                        <div class="jmform-group isempty">
+                            <label class="control-label-poptp">排序：</label>
+                            <input type="text" id="add-order" class="jminput jminput-sm jminput-sizetp" name="" value="0"/>
+                        </div>
+
+                        <div class="jmform-group isempty">
+                            <label class="control-label-poptp">通知：</label>
+                            <input type="text" id="add-notice" class="jminput jminput-sm jminput-sizetp" name="" value=""/>
+                        </div>
+                        
+                    </form>                 
+                    <input type="hidden" id="add-recordid" name="add-recordid" value=""/>
+                </div>
+            </div>
+        </div>
+        <div class="mt15 clearfix">
+            <div class="jmbtn-group tcenter">           	
+                <a class="jmbtn jmbtn-lg jmbtn-info" id="addSbmBtns" href="javascript:submitPayment(1);">确定</a>
+                <a class="jmbtn jmbtn-lg jmbtn-info" id="modSbmBtns" style="display:none" href="javascript:submitPayment(2);">确定</a>
+                <a class="jmbtn jmbtn-lg jmbtn-default" href="javascript:closeCont('itemInfo');">取消</a>
+            </div>
+        </div>
+        
+    </div>
+    <!--popupBox end-->
+</div>
+<!-- 详细信息 end -->
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script>
+
+	template.helper('changeState', function (data) {    
+    if(data == 0){
+        return "+green"
+    }
+    var status = ""
+    if(data & 1){
+        status = status + "+yellow"
+    }
+    else if(data & 2){
+        status = status + "+red"
+    }else{
+        status = status + "+green"
+    }
+
+    if(data & 256){
+        status = status + "+new"
+    }
+
+    if(data & 512){
+        status = status + "+recommand"
+    }
+
+    return status
+   	});
+
+	template.helper('changeShowState', function (data) {    
+    if(data == 0){
+        return "Show"
+    }
+    if(data == 1){
+        return "Maintain"
+    }
+
+    if(data == 2){
+        return "Hide"
+    }
+
+    return status
+   	});
+	
+	template.helper('changeTime', function (data) {
+			return dateFormat(data,"yyyy-MM-dd hh:mm:ss");
+			
+   	});
+
+	//新增 弹窗显示
+	$('#paymentAdd').live('click',function(){
+		
+		showCont('itemInfo');
+		emptyInput();
+        $('#add-externalIP').val("0.0.0.0"); 
+        $('#add-externalPort').val(9999);
+        $('#add-internalIP').val("0.0.0.0");
+        $('#add-internalName').val("main");
+        $('#add-logicId').val(0);
+        $('#add-logicOpenStatus').val(0);
+        $('#add-logicSpecialFlags').val(0);
+        $('#add-order').val(0);
+		$('.newTitle').text('新增');
+		$(".jqtransform").jqTransform();
+		//$('.add-itemInfo input').removeAttr('disabled').val('');
+		$('#addSbmBtns').show();
+		$('#modSbmBtns').hide();
+		
+	});
+		
+	//修改 弹窗显示
+	$('#paymentDel').live('click',function(){
+		var _objcheckBox = $('.check_box:checked')
+		var checkLengtht = _objcheckBox.length;
+		//alert(checkLengtht);
+		if(checkLengtht>0 && checkLengtht==1){
+			//只选一个
+			var id = _objcheckBox.eq(0).val();
+
+			var gameid = Number($.cookie("gameid")) || 0;
+			var zoneid = Number($.cookie("zoneid")) || 0;			
+			var sCmd = 'gm_server_list';
+			var errStr = "删除失败，没有正确的区服信息！"
+			var recordid = id
+			var optype = 3;
+
+            if (!gameid || !zoneid) {
+                alert(errStr);
+                return;
+            }
+
+            var data = {cmd: "gm_server_list", zoneid: zoneid, gameid:gameid,curpage:0,optype:optype,recordid:recordid} 
+
+			$.ajax({
+				url:"/gm/http",
+				type:"post",
+				data: data,
+				dataType: 'json',				
+				success: function(data){					
+					if (!data) {
+                    	alert("请求超时");
+					}else{ 
+						
+						if(data.retcode !=0 ){
+							parent.layer.open({
+								type: 0,
+								title :'提示信息',
+								area: ['300px', '150px'],
+								shadeClose: true, //点击遮罩关闭
+								content: errStr
+							});
+						}else{
+							parent.layer.open({
+								type: 0,
+								title :'提示信息',
+								area: ['300px', '150px'],
+								shadeClose: true, //点击遮罩关闭
+								content: "删除成功"
+							});
+							gm_paymentList();
+						}
+							
+					}
+				}
+			});
+			
+		}else if(checkLengtht>0 && checkLengtht!=1){
+			//选择多个
+			parent.layer.open({
+				type: 0,
+				title :'提示信息',
+				area: ['300px', '150px'],
+				shadeClose: true, //点击遮罩关闭
+				content: '每次只能选择一条记录进行删除！'
+			});
+			return;			
+		}else{
+			parent.layer.open({
+				type: 0,
+				title :'提示信息',
+				area: ['300px', '150px'],
+				shadeClose: true, //点击遮罩关闭
+				content: '请选择需要删除的记录！'
+			});
+			return;			
+			}		
+		});
+
+	//修改
+	$('#paymentUpdate').live('click',function(){
+		var _objcheckBox = $('.check_box:checked')
+		var checkLengtht = _objcheckBox.length;
+		//alert(checkLengtht);
+		if(checkLengtht>0 && checkLengtht==1){
+			//只选一个
+			var id = _objcheckBox.eq(0).val();
+			showCont('itemInfo');
+			$('.newTitle').text('修改');
+			//$(".jqtransform").jqTransform();
+			
+			$('.add-itemInfo input').removeAttr('disabled').val('');
+			//$('#add-charid').attr("disabled","disabled").val(id);
+			$('#addSbmBtns').hide();
+			$('#modSbmBtns').show();
+			
+			//查询当前ID
+			
+			research(id);
+			
+		}else if(checkLengtht>0 && checkLengtht!=1){
+			//选择多个
+			parent.layer.open({
+				type: 0,
+				title :'提示信息',
+				area: ['300px', '150px'],
+				shadeClose: true, //点击遮罩关闭
+				content: '每次只能选择一条记录进行修改！'
+			});
+			return;			
+		}else{
+			parent.layer.open({
+				type: 0,
+				title :'提示信息',
+				area: ['300px', '150px'],
+				shadeClose: true, //点击遮罩关闭
+				content: '请选择需要修改的记录！'
+			});
+			return;			
+			}		
+		});
+		
+		
+			
+		//提交添加表单
+		function submitPayment(abtn){
+			var gameid = Number($.cookie("gameid")) || 0;
+			var zoneid = Number($.cookie("zoneid")) || 0;			
+			var sCmd = 'gm_server_list';
+			var errStr = "添加失败，请确认信息填写正确！"
+			var recordid = $('#add-recordid').val();
+			var optype = 1;
+			if(abtn == 2){				
+				optype = 2;
+				errStr = "修改失败，请确认信息填写正确！"	
+			}
+
+            if (!gameid || !zoneid) {
+                alert(errStr);
+                return;
+            }
+            var recordid   = $('#add-recordid').val();
+            var externalIP = $('#add-externalIP').val(); 
+            var externalPort = $('#add-externalPort').val();
+            var internalIP  = $('#add-internalIP').val();
+            var internalName = $('#add-internalName').val(); 
+            var logicId = $('#add-logicId').val();
+            var logicName = $('#add-logicName').val();
+            var logicOpenStatus = $('#add-logicOpenStatus').val();
+            var logicSpecialFlags = $('#add-logicSpecialFlags').val();
+            var order = $('#add-order').val();
+            var notice = $('#add-notice').val();
+
+            var data = {cmd: "gm_server_list", zoneid: zoneid, gameid:gameid,curpage:0,optype:optype,recordid:recordid, 
+                        externalip:externalIP,externalport:externalPort, internalip:internalIP, internalname:internalName, 
+                        logicid:logicId, logicname:logicName, logicopenstatus:logicOpenStatus, logicspecialflags:logicSpecialFlags,order:order, notice:notice}
+
+			$.ajax({
+				url:"/gm/http",
+				type:"post",
+				data: data,
+				dataType: 'json',				
+				success: function(data){					
+					if (!data) {
+                    	alert("请求超时");
+					}else{ 
+						
+						if(data.retcode !=0 ){
+							parent.layer.open({
+								type: 0,
+								title :'提示信息',
+								area: ['300px', '150px'],
+								shadeClose: true, //点击遮罩关闭
+								content: errStr
+							});
+						}else{
+                            closeCont('itemInfo');
+							gm_paymentList();
+						}
+							
+					}
+				}
+			});
+		}
+		$('#paymentSearch').live('click',function(){
+			gm_paymentList();
+			});
+		
+		//查询
+		function gm_paymentList(id) {
+			var gameid = Number($.cookie("gameid")) || 0;
+			var zoneid = Number($.cookie("zoneid")) || 0;			
+			var stId =  Number(id);
+			var toCurPage = stId ||1;			
+            var opType = 0;
+			var onLoadTip;				
+			$.ajax({
+				type: "post",
+				url:"/gm/http",
+				data:{cmd: "gm_server_list", zoneid: zoneid, gameid:gameid,curpage:toCurPage,optype:opType},
+				dataType:"json",
+				beforeSend: function(){
+					//加载中...提示
+					 onLoadTip = layer.load(1);
+					},
+				success: function(data){
+					//有返回值,则关闭加载
+					layer.close(onLoadTip);
+					if (!data) {
+						alert("请求超时");
+					} else {
+						if (data.rdata&&data.rdata.length>0) {
+			              var html = template("gm_cc_RecordData", data); 
+			              $("#gm_cc_RecordHtml").html(html);              
+			            }
+						// var html = template("gm_cc_RecordData", data); 
+						// $("#gm_cc_RecordHtml").html(html); 
+						var pageHtml = template("pageData", data);  
+						$("#pageHtml").html(pageHtml);						
+					}
+				}
+			});	
+		}	
+		
+		function listToPage(id){
+			var ids = id;
+			gm_paymentList(ids);
+		};
+		//判断是否有数据，记录为空
+		template.helper('isenptydata', function (data) {    
+			if($.isEmptyObject(data)){
+				return true;
+			}else{
+				return false;
+			}
+		})	
+		$(document).ready(function(){
+			$("#paymentSearch").click(gm_paymentList());
+			
+		});
+	
+	
+	
+	
+	//查询修修改的记录
+	function research(id) {
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;        
+		var sid = id;
+        var opType = 0;
+		//alert(sid);
+        $.post("/gm/http", {cmd: "gm_server_list", zoneid: zoneid, gameid:gameid,recordid:sid,optype:opType }, 
+            function(data){
+                if (!(data && data.rdata)) {
+                    alert("command timeout");
+                } else {
+					$('#add-recordid').val(data.rdata[0].recordid);
+					$('#add-externalIP').val(data.rdata[0].externalIP); 
+					$('#add-externalPort').val(data.rdata[0].externalPort);
+					$('#add-internalIP').val(data.rdata[0].internalIP);
+					$('#add-internalName').val(data.rdata[0].internalName);
+					$('#add-logicId').val(data.rdata[0].logicId);
+					$('#add-logicName').val(data.rdata[0].logicName);
+					$('#add-logicOpenStatus').val(data.rdata[0].logicOpenStatus);
+					$('#add-logicSpecialFlags').val(data.rdata[0].logicSpecialFlags);
+					$('#add-order').val(data.rdata[0].order);
+					$('#add-notice').val(data.rdata[0].notice);
+					
+					var _ostate = data.rdata[0].state;							
+					var _openstates = $("#openstates label");
+					$(_openstates).each(function(i) {			
+                        if(_openstates.eq(i).children('input').attr('id-st')==_ostate){
+							_openstates.eq(i).children('input').prop("checked", true);;							
+							}
+                    });
+                }
+            }, "json");
+    }
+	
+	function emptyInput(){
+		$('.isempty input').val('');
+		}
+</script>
+
+</body>
+</html>

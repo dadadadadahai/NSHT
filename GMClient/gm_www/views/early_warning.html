@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="js/template-native.js"></script>
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                <form action="">
+					<!-- <div class="jmform-group">
+						<div class=" fleft">
+							<select id="platid" name="select" style="width:150px;" class="select_new">
+							   
+								
+							</select>
+						</div>
+					</div> -->
+                    <div class="jmform-group">
+                       <input id="accid" type="text" placeholder="账号ID" class="jminput jminput-sm jminput-size04" name="">
+                   </div>
+                   <div class="jmform-group">
+                       <input id="charname" type="text" placeholder="昵称(模糊查找)" class="jminput jminput-sm jminput-size04" name="">
+                   </div>                 
+                   <div class="jmform-group">
+                       <div class=" fleft">
+                           <select id="controlvalue" name="select" class="select_new" >
+                                <option value="0"  selected>点控值</option>
+                                <option value="9000">大亏</option>
+                                <!-- <option value="7000">中亏</option>
+								<option value="8000">中小亏</option>
+                                <option value="9500">小亏</option> -->
+                                <option value="10000">默认</option>
+                                <option value="11000">小赚</option>
+                                <option value="15000">中赚</option>
+                                <option value="19000">大赚</option>                                  
+                           </select>
+                       </div>
+                   </div>
+                   <div class="jmform-group">
+                       <div class=" fleft">
+                           <select id="ordertype" name="select" class="select_new">
+                               <option value="0" selected>充值类型</option>
+                               <option value="1">已充值</option>
+                               <option value="2">未充值</option>
+                           </select>
+                       </div>
+                   </div>
+				   <div class="jmform-group">
+					<div class=" fleft">
+						<select id="controltype" name="select" class="select_new">
+							<option value="0" selected>点控类型</option>
+							<option value="1">自动</option>
+							<option value="2">手动</option>
+						</select>
+					</div>
+				</div>
+                   <div class="jmform-group">
+                       <a id="user_online_search" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>查询</a>
+					   <a id="user_online_search" class="jmbtn jmbtn-info releaseBtn" href="javascript:void(0)">修改点控</a>
+                   </div>
+                  
+               </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">自动点控预警</h3>
+			
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="user_list_table">
+
+                <thead>
+					
+                    <tr>
+						<th class="allcheck_box"><label><input type="checkbox" class="selectAll" />全选</label></th>
+                    	<th>玩家ID</th>
+                        <th>玩家昵称</th>
+                        <th>金币</th>
+						<th>点控</th>
+						<th>点控类型</th>
+						<th>总充值</th>
+						<th>累计金币兑换</th>
+						<th>累计推广兑换</th>
+						
+                        <th>点控时间</th>
+                    </tr>
+                </thead>
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">
+						<%for(i = 0; i < datas.length; i++) {%> 
+                            
+						<tr charid=<%=datas[i].charid%> >
+							<td><input type='checkbox' name="userid[]"></td>
+							<td><%=datas[i].charid%></td>
+							<td><a href="javascript:jumpToPage('user_info_search' , 'charid=<%=datas[i].charid%>')"><%=datas[i].charid%></a></td>
+							<td><%=datas[i].charname%></td>
+							<td><%=changechips(datas[i].chips) %></td>
+							<td><%= control(datas[i].controlvalue)%></td>
+							<td><%= datas[i].controltype == 1 ? "自动" : "手动"%></td>
+							<td><%=changechips(datas[i].totalrechargechips)%></td>
+							<td><%=changechips(datas[i].totalcovertchips)%></td>
+							<td><%=changechips(datas[i].promotionwithdrawchips)%></td>
+							<td><%=datas[i].time  %></td>
+							
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+           <div class="jm-epages" id="pageHtml">
+            	<script type="text/html" id="pageData">
+				<%if(isenptydata(datas)){%>
+					<div style="color:#ff6600" class="fleft">暂无查询记录！</div>
+				<%} else{%>
+					<div class = "fright">
+					<%if(curpage != 1) {%>
+						<a href="javascript:listToPage(1);">首页</a>
+						<a href="javascript:listToPage('<%=curpage - 1%>');">上一页</a>
+					<%}%>
+					<%if(curpage == 1 && maxpage != 0 && maxpage != 1) {%>
+						<a>首页</a>
+						<a>上一页</a>
+					<%}%>
+					<%if(maxpage <= 8){%>
+						<%for(i = 1; i <= maxpage; i++) {%>
+						<%if(curpage == i) {%>
+							<a href="#" class="on"><%=i%></a>
+						<%}else {%>
+							<a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+						<%}%>
+					<%}%>
+					<%}else {%>
+						<%if(curpage == 1) {%>
+							<a href="#" class="on">1</a>
+							<a href="javascript:listToPage(2);">2</a>
+							<a href="javascript:listToPage(3);">3</a>
+							...
+							<a href="javascript:listToPage('<%=maxpage - 1%>');"><%=Maxpage - 1%></a>
+							<a href="javascript:listToPage('<%=maxpage%>');"><%=Maxpage%></a>
+						<%}else if(curpage < 6) {%>
+							<%for(i = 1; i <= Curpage - 1; i++ ) {%>
+								<a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+							<%}%>
+							<span class="on"><%=curpage%></span>
+							<a href="javascript:listToPage('<%=curpage + 1%>');"><%=curpage + 1%></a>
+							...
+							<a href="javascript:listToPage('<%=maxpage - 1%>');"><%=maxpage - 1%></a>
+							<a href="javascript:listToPage('<%=maxpage%>');"><%=maxpage%></a>
+						<%}else if(curpage >= 6 && curpage < maxpage - 4) {%>
+							<a href="javascript:listToPage(1);">1</a>
+							<a href="javascript:listToPage(2);">2</a>
+							...
+							<a href="javascript:listToPage('<%=Curpage - 1%>');"><%=curpage - 1%></a>
+							<span class="on"><%=curpage%></span>
+							<a href="javascript:listToPage('<%=Curpage + 1%>');"><%=curpage + 1%></a>
+							...
+							<a href="javascript:listToPage('<%=maxpage-1%>');"><%=maxpage - 1%></a>
+							<a href="javascript:listToPage('<%=maxpage%>');"><%=maxpage%></a>
+						<%}else {%>
+							<a href="javascript:listToPage(1);">1</a>
+							<a href="javascript:listToPage(2);">2</a>
+							...
+							<%for(i = maxpage - 4; i <= maxpage; i++) {%>
+								<%if(curpage == i) {%>
+									<span class="on"><%=i%></span>
+								<%}else {%>
+									<a href="javascript:listToPage('<%=i%>');"><%=i%></a>
+								<%}%>
+							<%}%>
+						<%}%>
+					<%}%>
+					<%if(curpage < maxpage) {%>
+						<a href="javascript:listToPage('<%=curpage + 1%>');">下一页</a>
+						<a href="javascript:listToPage('<%=maxpage%>');">尾页</a>
+					<%}%>
+					<span>第<input type="text" id="choise_page" style="width: 30px;">页 <button type="button" onclick="choise()">跳转</button></span>
+					</div>
+				<%}%>
+				</script>
+            </div>
+            <!-- epages -->
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+<!-- 受控设置 -->
+<div id="itemMsg" class="popupCon feedbackpop" style="display:none;width: 500px;">
+    <h2 class="f16">修改点控值</h2>
+    <a href="javascript:closeCont('itemMsg');" class="btnClose">×</a>
+    
+    <div class="popupBox">
+    	
+        <div class="scrollbar">
+            <div class="track">
+                <div class="thumb">
+                    <div class="end"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="viewport">
+        	<div class="overview">
+        		
+                <!-- jmtab-con start -->
+                <div class="jmtab-con">                    
+                    <!-- jmtab-box start -->
+                    <div class="jmtab-box">
+                        <div class="msg01">
+                            <div class="blockbox">
+                                <div class="box-inner clearfix">
+                                    <div class="jmform-vertical">
+                                        <form action="">
+											<div class="input_group" style="display: none;">
+												<input type="text" id="userid" class="jminput jminput-size04" name="userid" value="" disabled/ >
+											</div>
+                                           	
+                                            <div class="jmform-group">
+                                                <label class="control-label-pop">类型：</label>
+                                                <select id="control_type" name="select" style="width:300px;padding: .5rem;border: 1px solid #ccc;border-radius: 5px;
+												color: #8d8d8d;">
+													<option value="0">默认-自动</option>
+													<option value="9000">大亏-手动</option>
+                                                    <!-- <option value="7000">中亏-手动</option>
+													<option value="8000">中小亏-手动</option>
+                                                    <option value="9500">小亏-手动</option> -->
+                                                    <option value="10000" selected>默认-手动</option>
+                                                    <option value="11000">小赚-手动</option>
+                                                    <option value="15000">中赚-手动</option>
+                                                    <option value="19000">大赚-手动</option>
+												</select>
+                                            </div>
+                                            
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt15 clearfix">
+                                <div class="jmbtn-group tcenter">
+                                    <a class="jmbtn jmbtn-lg jmbtn-default" href="javascript:closeCont('itemMsg');">取消</a>
+                                    
+                                    <a class="jmbtn jmbtn-lg jmbtn-info" href="javascript:control_sumit()">确定</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- jmtab-box end -->
+                </div>
+                <!-- jmtab-con end -->
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/effect.js"></script>
+<style>
+	.select_new{
+	  width:150px;height:36px; border:1px solid #ddd;border-radius: 5px;color: #555555
+	}
+	</style>
+<script type="text/javascript">
+	
+    template.helper('isenptydata', function (data) {    
+   		if($.isEmptyObject(data)){
+			return true;
+		}else{
+			return false;
+		}
+   	})
+	 template.helper("changechips" , function (data) {
+
+	return (data / 100).toFixed(2)
+
+	})
+	
+    function rolesearch(id) {
+
+        var accid  = Number($("#accid").val()) || 0;
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+		
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+		var controlvalue= Number($("#controlvalue").val()) || 0;
+		var ordertype = Number($("#ordertype").val()) || 0;
+        var charname = $("#charname").val() || "" ;
+		var controltype = $("#controltype").val() ||0;
+		var platid = Number($("#platid option:selected").val()) || 0;
+
+        var perpage = 100;
+		var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "early_warning", charid: accid, gameid:gameid, charname:charname, zoneid:zoneid,controlvalue:controlvalue,curpage:toCurPage,perpage:perpage,rechargetype:ordertype,optype:0,controltype:controltype,platid:platid},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.datas && data.datas.length>0) {
+						var html = template("gm_cc_RecordData", data); 
+						$("#gm_cc_RecordHtml").html(html);              
+	                }else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+					var pageHtml = template("pageData", data);  
+					$("#pageHtml").html(pageHtml);					
+				}
+			}
+		});	
+    }
+	template.helper('control', function (data) {    
+		switch(data){
+			case 5000:return "大亏";break;
+			case 9000:return "大亏";break;
+			case 7000:return "中亏";break;
+			case 8000:return "中小亏";break;
+			case 9500:return "小亏";break;
+			case 10000:return "默认";break;
+			case 11000:return "小赚";break;
+			case 15000:return "中赚";break;
+			case 19000:return "大赚";break;
+			default:return data;
+		}
+	})	
+	template.helper('dateFormat', function (date, format) {  
+		//return 1;
+		if(date == 0){
+			return date;
+		}
+        date = new Date(date * 1000);  
+        var map = {  
+           "M": date.getMonth() + 1, //月份   
+           "d": date.getDate(), //日   
+           "h": date.getHours(), //小时   
+           "m": date.getMinutes(), //分   
+           "s": date.getSeconds(), //秒   
+           "q": Math.floor((date.getMonth() + 3) / 3), //季度   
+           "S": date.getMilliseconds() //毫秒   
+        };  
+        format = format.replace(/([yMdhmsqS])+/g, function(all, t){  
+           var v = map[t];  
+           if(v !== undefined){  
+               if(all.length > 1){  
+                   v = '0' + v;  
+                   v = v.substr(v.length-2);  
+               }  
+               return v;  
+           }  
+           else if(t === 'y'){  
+               return (date.getFullYear() + '').substr(4 - all.length);  
+           }  
+           return all;  
+        });  
+        return format;  
+   }); 
+	
+	function listToPage(id){
+		var ids = id
+		rolesearch(ids);
+	};
+    $(document).ready(function(){
+        listToPage(1);
+        $("#user_online_search").click(rolesearch);
+		
+    });
+
+	//添加玩家受控
+	$('.releaseBtn').live('click', function(){
+		let stId = $(this).parent('td');	
+		let charid = $(stId).parent('tr').attr('charid');
+
+		$('#userid').val(charid)
+		showCont('itemMsg');
+	})
+	function control_sumit(){
+
+		let gameid 	= Number($.cookie("gameid")) || 0;
+        let zoneid 	= Number($.cookie("zoneid")) || 0;
+		let charid 	= $('#userid').val();
+		let controlvalue = $('#control_type').val();
+		let str = "";
+		
+		$('input[name="userid[]"]:checked').each(function()
+		{
+			stId = $(this).parent('td');
+			var ptype = $(stId).parent('tr').attr('charid');
+			str+=ptype+","; 
+		})
+
+		if(str == ""){
+			alert("请选择需要修改的玩家")
+			return false;
+		}
+
+		$.post("/gm/http", {cmd: "early_warning", gameid: gameid,zoneid:zoneid, charid:str, optype:1, controlvalue:controlvalue},
+        	function(data){
+				if (!data) {
+                    alert("执行超时");
+                } else if (data.retcode != 0){
+                    alert("执行失败");
+                } else {
+                    alert("执行成功");
+					$("#gm_cc_RecordHtml").html("");       
+					listToPage(1);
+                }
+				
+        }, "json");
+		
+		closeCont('itemMsg')
+	}
+</script>
+</body>
+</html>

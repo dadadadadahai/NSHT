@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- basic styles -->
+
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link rel="stylesheet" href="css/datepicker.css" />
+		<link rel="stylesheet" href="css/bootstrap-datetimepicker.css" />
+		<link rel="stylesheet" href="css/daterangepicker.css" />
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="css/font-awesome-ie7.min.css" />
+		<![endif]-->
+		<!-- ace styles -->
+		<link rel="stylesheet" href="css/ace.min.css" />
+		<link rel="stylesheet" href="css/gm.css" />
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+		<script src="js/jquery.cookie.js"></script>
+		<![endif]-->
+	</head>
+
+	<body class="login-layout">
+		<div class="main-container">
+			<div class="main-content">
+				<div class="row">
+					<div class="col-sm-10 col-sm-offset-1">
+						<div class="login-container pt50">
+							<div class="center pb30">
+								<h1>
+									<span class="white">5R5游戏运营平台</span>
+								</h1>								
+							</div>
+							<div class="position-relative">
+								<div id="login-box" class="login-box visible widget-box no-border">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header blue lighter bigger">
+												<i class="icon-laptop"></i>
+												登录
+											</h4>
+											<div class="space-6"></div>
+
+											<form>
+												<fieldset>
+													<input id="_xsrf" type="hidden" class="_xsrf" name="_xsrf" value={{._xsrf}} />
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input id="account" type="text" class="form-control" placeholder="用户名" />
+															<i class="icon-user"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input id="passwd" type="password" class="form-control" placeholder="密码" />
+															<i class="icon-lock"></i>
+														</span>
+													</label>
+
+													<div class="space"></div>
+
+													<div class="clearfix center">
+														<button type="button" class="center btn btn-lg login-btn" id="login">
+															<i class="icon-key"></i>
+															登录
+														</button>
+													</div>
+													<p class="Title-tips red" type="hidden">请输入正确的用户名密码</p>
+													<div class="space-4"></div>
+												</fieldset>
+											</form>
+
+											
+										</div><!-- /widget-main -->
+
+										
+									</div><!-- /widget-body -->
+								</div><!-- /login-box -->
+								
+								
+							</div><!-- /position-relative -->
+						</div>
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+	
+
+
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- inline scripts related to this page -->
+
+		<script type="text/javascript">
+			function show_box(id) {
+			 jQuery('.widget-box.visible').removeClass('visible');
+			 jQuery('#'+id).addClass('visible');
+			}
+		</script>
+
+		<script type="text/javascript">
+			function login(){
+				var account = $("#account").val();
+				var passwd = $("#passwd").val();
+				var xsrftoken = $("#_xsrf").val();
+				var host =  window.location.host
+				// if (host != "http://loucoop.bigfortuneslots.com:7009"){
+				// 	alert("请使用链接地址为: http://loucoop.bigfortuneslots.com:7009 登录后台");
+				// 	return false;
+				// }
+				// alert(window.location.host);
+				$("#passwd").val("");
+				if(account == "" || passwd == "" || xsrftoken == ""){
+					$(".Title-tips").show();
+					return
+				}
+				$.post("/monitor/http", {cmd: "user_login", account: account, passwd: passwd, _xsrf: xsrftoken}, function(data){
+					if (data.retcode == "0") {
+						//$.cookie('account',account);
+						top.location = "/gamelist.html";
+					} else {
+						$(".Title-tips").show();
+					}
+				}, "json");
+			}
+			$(document).ready(function(){
+				$(".Title-tips").hide();
+				$("#passwd").keypress(function(e){ if (e.which == 13) login();});
+				$("#login").click(login);
+			});
+		</script>
+	
+</html>

@@ -1,0 +1,5 @@
+gm.mycommand = function ()
+	unilight.debug("先设置GM指令")
+	unilight.debug("再用工具执行GM指令")
+	unilight.info("gm.mycommand test")
+end

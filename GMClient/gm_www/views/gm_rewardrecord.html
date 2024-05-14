@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">
+    	<!-- jm-navbar start-->
+    	<div class="jm-navbar">
+        	<div class="jmform-search clearfix">
+            	 <form action="">
+                    <div class="jmform-group">
+                        <input id="charid" type="text" placeholder="输入角色ID" class="jminput jminput-sm jminput-size05" name="">
+                    </div>
+                    <div class="jmform-group">
+                        <input id="charname" type="text" placeholder="输入角色名称" class="jminput jminput-sm jminput-size05" name="">
+                    </div>
+                    <div class="jmform-group">
+                        <input id="recordtime" type="text" placeholder="起始时刻" class="jminput jminput-sm jminput-size05 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy/MM/dd HH:mm:ss'})" value="" autocomplete="off">
+                    </div>
+                    <div class="jmform-group">
+                        <a id="recordsearch" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>搜索</a>
+                    </div>
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">补偿信息</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01">
+                <thead>
+                    <tr>
+                        <th>编号</th>                        
+                        <th>昵称</th>
+                        <th>补偿物品</th>
+                        <th>补偿原因</th>
+                        <th>补偿时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<tr>
+                    	<td>1</td>
+                        <td>龙之炫斗-劫</td>
+                        <td>处罚类型1</td>
+                        <td>因为违法交易</td>
+                        <td>2015-10-11</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+            <div class="jm-epages fright">
+                <span>首页</span>
+                <span>上一页</span>
+                <b>1</b>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <em>...</em>
+                <a href="#">10</a>
+                <a href="#">下一页</a>
+                <a href="#">尾页</a>
+            </div>
+            <!-- epages -->
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    function recordsearch(e) {
+        var charid = $("#charid").val();
+        var charname = $("#charname").val();
+        var recordtime = $("#recordtime").val();
+        if (!(charid || charname)) {
+            alert("charid or charname must have one input");
+            return;
+        }
+        var gameid = $.cookie("gameid")
+        var zoneid = $.cookie("zoneid")
+        $.post("/gm/http", {cmd: "user_record_search", charid: charid, charname: charname, recordtime:recordtime, gameid:gameid, zoneid:zoneid}, 
+            function(data){
+                if (data.retcode != 0){
+                    alert(data.retdesc);
+                } else {
+                    var text = ""
+                    for( tmp in data.data) {
+                        text += "<tr><td>"+tmp.recordid+"</td><td>"+tmp.state+"</td><td>"+tmp.gold+"</td><td>"+tmp.coin+"</td><td>"+tmp.starttime+"</td><td>"+tmp.endtime+"</td></tr>";
+                    }
+                    $(".jmtable-type01 tbody").html(text);
+                }
+            }, "json");
+    }
+    $(document).ready(function(){
+        $("#recordsearch").click(recordsearch);
+    });
+
+</script>
+</body>
+</html>

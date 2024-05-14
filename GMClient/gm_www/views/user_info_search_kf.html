@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<link rel="stylesheet" type="text/css" href="css/ui-dialog.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+<style>
+    .info{
+        font-size: 1.1rem;
+        color:#94c3d8;
+    }
+    th{
+        width: 120px;
+    }
+    .infotitle{
+        background: #94c3d8  !important;
+        color: #fff;
+    }
+    table tbody{
+        max-height: 1000px !important;
+    }
+    
+</style>
+</head>
+
+<body>
+<!-- 新项目报备 start -->
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">
+    	<!-- jm-navbar start-->
+    	<div class="jm-navbar">
+        	<div class="jmform-search clearfix">
+            	<form action="">
+                    <div class="jmform-group">
+                        <input id="charid" type="text" placeholder="输入玩家ID" class="jminput jminput-sm jminput-size04" name="">
+                    </div>
+                    <div class="jmform-group">
+                        <input id="charname1" type="text" placeholder="输入玩家账号" class="jminput jminput-sm jminput-size04" name="">
+                    </div>
+                    <div class="jmform-group">
+                        <input id="cpf" type="text" placeholder="输入玩家cpf信息" class="jminput jminput-sm jminput-size04" name="">
+                    </div>
+                    <div class="jmform-group">
+                        <a class="jmbtn jmbtn-succeed" href="javascript:;" id="rolesearch"><span class="ico-search-w16"></span>搜索</a>
+                    </div>
+                    <div class="updatepass" style="width: 100%;display:flex;">
+                        <div class="jmform-group">
+                            <input id="password" type="text" placeholder="输入密码" class="jminput jminput-sm jminput-size04" name="">
+                        </div>
+                        <div class="jmform-group">
+                            <a class="jmbtn jmbtn-succeed" href="javascript:;" id="updpassword">修改密码</a>
+                        </div>
+                    </div>
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01">
+                <tr >
+                    <th class="infotitle" colspan="4">注册信息</th>
+                </tr>
+                
+                <tr>
+                    <th >用户ID:</th><td id="accid"></td>
+                    <th >用户昵称:</th><td id="charname2"></td>
+                    <th >用户账号:</th><td id="plataccount"></td>
+                    <th >绑定手机号:</th><td id="phone"></td>
+                    <!-- <th >玩家姓名:</th><td id="truename"></td> -->
+                   
+                </tr>
+                <tr>
+                    
+                    <th >玩家注册时间 :</th><td id="register_time"></td>
+                    <th >注册ip:</th><td id="register_ip"></td>
+                    <th >注册机器码:</th><td id="register_machine"></td>
+                    <th >注册来源:</th> <td id="register_source"></td>
+                </tr>
+
+                <tr>
+                    <th >上次登录ip:</th><td id="last_login_ip"></td>
+                    <th >玩家最近登录时间:</th><td id="last_login_time"></td>   
+                    <th >上次登录机器码:</th><td id="last_login_machine"></td> 
+                    <th >登陆次数:</th><td id="login_times"></td>     
+                </tr>
+                <tr>
+                    <th >玩家账号状态:</th><td id="status"></td>
+                    <th >玩家在线状态 :</th><td id="isonline"></td>
+                    <th >上次离线时间:</th><td id="last_leave_time"></td>   
+                    <th>玩家类型</th><td id="usertype"></td>
+                </tr>
+                <tr >
+                    <th class="infotitle" colspan="4">用户信息</th>
+                </tr>
+                <tr>
+                    <th >玩家VIP等级:</th><td id="vip"></td>
+                    <th >玩家金币 :</th><td id="gold"></td>
+                    <!-- //新加 -->
+                    <th >提现要求流水 :</th><td id="cashoutrunning"></td>
+                    <th >玩家累计充值金额:</th><td id="all-order"></td>
+                   
+                </tr>
+                <tr>
+                    <th>累计金币兑换金额：</th><td id="totalcovertchips"></td>
+                    <th>累计推广兑换金额：</th><td id="promotionwithdrawchips"></td>
+                    <th>可兑换额度：</th><td id="cancovertchips"></td>
+                    <th>是否下载apk:</th><td id="isdownapk"></td>
+                </tr>
+                <tr >
+                    <th class="infotitle" colspan="4">提现信息</th>
+                </tr>
+
+                <tr>
+                    <th >Chave Pix:</th><td id="pix"></td>
+                    <th >玩家CPF信息:</th><td id="cpfinfo"></td>
+                    
+                    <!-- //新加 -->
+                    <th >提现手机号:</th><td id="cashoutphone"></td>
+                    <th >邮箱:</th><td id="email"></td>
+                  
+                </tr>
+                <tr >
+                    <th class="infotitle" colspan="4">邀请信息</th>
+                </tr>
+                <tr>
+                    <th>邀请总人数:</th><td id="inviternum"></td>
+                    <th>玩家上级ID:</th><td id="parentinviter"></td>
+                    <!-- //新加 -->
+                    <th>邀请返利金币:</th><td id="invitergold"></td>
+                    <th>团队返利金币:</th><td id="inviterteamgold"></td>
+                </tr>
+                <tr>
+                   
+                    <th>转盘本轮邀请人数:</th><td id="turninviternum"></td>
+                    <th>转盘本轮当前金额</th><td id="turninvitergold"></td></td>
+                    <th></th><td ></td>
+                    <th></th><td ></td>
+                </tr>
+                <tr >
+                    <th class="infotitle" colspan="4">奖金领取信息</th>
+                </tr>
+                <tr>
+                    <!-- <th>累计获赠金币:</th><td id="presentchips"></td> -->
+                    <!-- //新加 -->
+                    
+                    <th>等级签到金币：</th><td id="rewardlevel"></td>
+                    <th>红包雨金币：</th><td id="redenveloperain"></td>
+                    <th>损失返利金币：</th><td id="lossrebate"></td>
+                    <th>兑换码金币：</th><td id="redemptioncode"></td>
+                    
+                </tr>
+                <tr>
+                    
+                    <th>vip奖励金币:</th><td id="vipreward"></td>
+                    <th>活动领取金币:</th><td id="activities"></td>
+                    <th>幸运玩家领取金币：</th><td id="luckyuser"></td>
+                    <th>转盘获取金币：</th><td id="turntable"></td>
+                </tr>
+                <tr>
+                   
+                    <th>奖励活动金币:</th><td id="rewardactivites"></td>
+                    <th></th><td ></td>
+                    <th></th><td ></td>
+                    <th></th><td ></td>
+                </tr>
+                <tr >
+                    <th class="infotitle" colspan="4">控制状态信息</th>
+                </tr>
+                <tr>
+                   
+                    <th>当前rtp:</th><td id="rtp"></td>
+                    <th>最大允许金币:</th><td id="chargemax"></td>
+                    <th>剩余打码数</th><td id="statement"></td>
+                    <th>当前点控系数</th><td id="controlvalue"></td>
+                </tr>
+                <tr>
+                    <th>假金币:</th><td id="presentChips"></td>
+                    <th></th><td ></td>
+                    <th></th><td ></td>
+                    <th></th><td ></td>
+                    
+                </tr>
+                <tr >
+                    <th class="infotitle" colspan="4">游戏信息</th>
+                </tr>
+                <tr>
+                   
+                    <th>游戏局数:</th><td id="game_count"></td>
+                    <th>slots总下注:</th><td id="slots_bet"></td>
+                    <th>slots总赔付:</th><td id="slots_payout"></td>
+                    <th>非slots总下注:</th><td id="notslots_bet"></td>
+                </tr>
+
+                <tr>
+                    <th>非slots总赔付:</th><td id="notslots_payout"></td>
+                    <th>非充值玩家状态:</th><td id="freecontroltype"></td>
+                    <th></th><td ></td>
+                    <th></th><td ></td>
+                    
+                </tr>
+
+            
+            </table>
+        </div>
+    </div>
+</div>
+<!--jm-maincon warp end-->
+<div id="userSearchItem" class="popupCon popupTips">
+    <h2 class="f16">提示</h2>
+    <a href="javascript:closeCont('userSearchItem');" class="btnClose">×</a>
+    <div class="popupBox">
+    	<p class="tips-info">请您输入正确的查询条件！</p>
+    </div>
+</div>
+<!--<div id="TB_overlayBG">&nbsp;</div>-->
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    
+    function format_time(ts) {
+        if (!ts) {
+            return ""
+        }
+        var d = new Date(ts * 1000);
+        return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":"+d.getSeconds()
+    }
+    function rolesearch(e) {
+        
+        var charid = $("#charid").val();
+        var pid = $("#cpf").val();
+        var charname = $("#charname1").val();
+
+        if (!(charid || charname || pid)) {
+			parent.layer.open({
+				type: 0,
+				title :'提示信息',
+				area: ['300px', '150px'],
+				shadeClose: true, //点击遮罩关闭
+				content: '请您输入正确的查询条件！'
+			});
+            return;
+        }
+        var gameid = $.cookie("gameid")
+        var zoneid = $.cookie("zoneid")
+
+        $.post("/gm/http", {cmd: "user_info_search", charid: charid,pid:pid, charname: charname, gameid:gameid, zoneid:zoneid},
+            function(data){
+               
+                $('td').text("")
+                if (data.retcode != 0){
+                    alert(data.retdesc);
+                } else {
+          
+                    {
+                       
+                        $("#phone").text(data.data.phonenum);
+                        $("#accid").text(data.data.charid);
+                        $("#charname2").text(data.data.charname);
+                        $("#truename").text(data.data.realname);
+                        $("#cpfinfo").text(data.data.cpf);
+                        $("#plataccount").text(data.data.plataccount)
+                       
+                    }
+                    {
+                        $("#pix").text(data.data.chavepix)
+                        // $("#save_silver").text(data.data.savingpot_silver / 100);
+                        // $("#save_gold").text(data.data.savingpot_gold / 100);
+                        $("#vip").text(data.data.viplevel);
+
+                        // $("#gold").text((data.data.glodnum/ 100).toFixed(2) || 0);
+                        var gold = `<a href="javascript:jumpToPage('gm_log_currency' , 'charid=`+data.data.charid+`')">`+(data.data.glodnum/ 100).toFixed(2)+`</a>`
+                        $("#gold").html(gold);
+                        // $("#silver").text((data.data.money/ 100).toFixed(2) || 0);
+                        $("#change_gold").text((data.data.transgold/ 100).toFixed(2) || 0)
+                        // $("#silver_to_gold").text((data.data.goldrecovertnum/ 100).toFixed(2) || 0);
+                        if (data.data.totalrechargechips == 0){
+                            $("#usertype").text("非充值玩家");
+                        }else if(data.data.totalrechargechips <4000){
+                            $("#usertype").text("低充值玩家" );
+                        }else{
+                            $("#usertype").text("其他玩家" );
+                        }
+                        
+
+                        
+                    }
+                    {
+                        switch(data.data.isonline){
+                            case 0:$("#isonline").text("离线");break;
+                            case 1:$("#isonline").text("在线");break;
+                        }
+                        $("#register_time").text(data.data.createtime);
+                        $("#last_login_time").text(data.data.lastofftime);
+                        $("#register_ip").text(data.data.registip);
+                        $("#register_machine").text(data.data.imei);
+                        $("#last_leave_time").text(data.data.logouttime);
+                    }
+                    {
+                       
+                        $("#last_login_ip").text(data.data.lastloginip);
+                        $("#last_login_machine").text(data.data.lastloginimei);
+                        // $("#register_source").text(data.data.registersrc);
+                        $("#register_source").text(data.data.regflag == 1 ? "投放": "非投放");
+                        $("#login_times").text(data.data.loginnum);
+
+                        var order = `<a href="javascript:jumpToPage('gm_order_list' , 'charid=`+data.data.charid+`')">`+(data.data.totalrechargechips/100).toFixed(2)+`</a>`
+                        $("#all-order").html(order);
+                       
+                       
+                    }
+                    {
+                    
+                        $("#track").text(data.data.traceinfo);
+                        
+                        switch(data.data.banstatus){
+                            case 0:$("#status").text("正常");break;
+                            case 1:$("#status").text("冻结");break;
+                        }
+                        $("#accumulate_signin").text(data.data.signnum);
+                       
+                        // switch(data.data.controlvalue){
+                        //     case 5000:$("#controlvalue").text("大亏");break;
+                        //     case 9000:$("#controlvalue").text("大亏");break;
+                        //     case 7000:$("#controlvalue").text("中亏");break;
+                        //     case 9500:$("#controlvalue").text("小亏");break;
+                        //     case 10000:$("#controlvalue").text("默认");break;
+                        //     case 11000:$("#controlvalue").text("小赚");break;
+                        //     case 15000:$("#controlvalue").text("中赚");break;
+                        //     case 19000:$("#controlvalue").text("大赚");break;
+                        //     default:$("#controlvalue").text("");break;
+                        // }
+                       
+
+                        $("#controlvalue").text((data.data.controlvalue/100).toFixed(2));
+                        $("#chargemax").text((data.data.chargemax/100).toFixed(2));
+                        $("#statement").text(data.data.statement);
+                        $("#rtp").text(data.data.rtp);
+
+                        var totalcovertchips = `<a href="javascript:jumpToPage('cash_out_audit' , 'charid=`+data.data.charid+`')">`+(data.data.totalcovertchips/100).toFixed(2)+`</a>`
+                        $("#totalcovertchips").html(totalcovertchips);
+                        // $("#totalcovertchips").text((data.data.totalcovertchips/100).toFixed(2));
+                        
+                        
+                    }
+                    
+                    {
+                        $("#cancovertchips").text((data.data.cancovertchips/100).toFixed(2));
+                        $("#promotionwithdrawchips").text((data.data.promotionwithdrawchips/100).toFixed(2));
+                        $("#parentinviter").text(data.data.parentinviter);
+                        var inviternum = `<a href="javascript:jumpToPage('user_spread_info' , 'charid=`+data.data.charid+`')">`+data.data.inviternum+`</a>`
+                        $("#inviternum").html(inviternum);
+                        $("#promotionchips").text((data.data.promotionchips/100).toFixed(2));
+                        
+                    }
+                    {
+                        $("#football1").text(data.data.footballcoupon1);
+                        $("#football2").text(data.data.footballcoupon2);
+                        $("#football3").text(data.data.footballcoupon3);
+                        $("#football4").text(data.data.footballcoupon4);
+                        $("#football5").text(data.data.footballcoupon5);
+                        
+                    }
+                    {
+                        $("#running").text(((data.data.totalrechargechips - data.data.totalcovertchips) /100).toFixed(2))
+
+                        switch(data.data.subplatid){
+                            case 1:$("#platname").text("Slots Louco");break;
+                            case 2:$("#platname").text("Final slot");break;
+                            case 3:$("#platname").text("Slots Classic");break;
+                            case 4:$("#platname").text("Vegas Casino Slots");break;
+                            case 5:$("#platname").text("Regal Slot");break;
+                            case 6:$("#platname").text("DeLuxe Slot");break;
+                            case 7:$("#platname").text("Slot Magia");break;
+                            default:$("#platname").text("");break;
+                        }
+                    }
+                    {
+                       $("#kill_chips_max").text(data.data.kill_chips_max)
+                       $("#kill_low_charge").text(data.data.kill_low_charge)
+                       $("#kill_charge").text(data.data.kill_charge)
+                       $("#kill_trigger").text(data.data.kill_trigger)
+                       $("#exclusivenum").text((data.data.exclusivenum/100).toFixed(2))
+                     
+                       $("#game_count").text(data.data.slotscount)
+                       var gamecount = `<a href="javascript:jumpToPage('gm_log_matchmaking' , 'charid=`+data.data.charid+`')">`+data.data.slotscount+`</a>`
+                        $("#game_count").html(gamecount);
+                    }
+                    {
+                        $("#slots_bet").text((data.data.slotsbet/100).toFixed(2))
+                        $("#slots_payout").text((data.data.slotswin/100).toFixed(2))
+                        $("#notslots_bet").text((data.data.hundrebet/100).toFixed(2))
+                        $("#notslots_payout").text((data.data.hunderwin/100).toFixed(2))
+                        $("#presentchips").text((data.data.presentchips/100).toFixed(2))
+                        
+                    }
+                    {
+                        switch(data.data.freecontroltype){
+                            case 0:$("#freecontroltype").text("");break;
+                            case 1:$("#freecontroltype").text("放分");break;
+                            case 2:$("#freecontroltype").text("收分");break;
+                        }
+                        $("#nochargemax").text((data.data.nochargemax/100).toFixed(2))
+                        $("#nochargemin").text((data.data.nochargemin/100).toFixed(2))
+                        // $("#chargemax").text((data.data.chargemax/100).toFixed(2))
+                    }
+                    {
+                        switch(data.data.isdownapk){
+                            case 0:$("#isdownapk").text("否");break;
+                            case 1:$("#isdownapk").text("是");break;
+                        }
+                    }
+                    // 20240327新加
+                    {
+                        $("#cashoutrunning").text((data.data.cashoutrunning/100).toFixed(2));
+                        $("#cashoutphone").text(data.data.cashoutphonenum);
+                        $("#invitergold").text((data.data.invitergold/100).toFixed(2));
+                        $("#inviterteamgold").text((data.data.inviterteamgold/100).toFixed(2));
+                        $("#email").text(data.data.cashoutemail);
+                        var rewardlevel = `<a href="javascript:jumpToPage('gm_betting_level_log' , 'charid=`+data.data.charid+`')">`+(data.data.rewardactivities/100).toFixed(2)+`</a>`
+                        $("#rewardlevel").html(rewardlevel);
+
+                        var redenveloperain = `<a href="javascript:jumpToPage('red_envelope_rain_receive' , 'charid=`+data.data.charid+`')">`+(data.data.redenveloperain/100).toFixed(2)+`</a>`
+                        $("#redenveloperain").html(redenveloperain);
+
+                        var lossrebate = `<a href="javascript:jumpToPage('gm_loss_rebate_log' , 'charid=`+data.data.charid+`')">`+(data.data.lossrebate/100).toFixed(2)+`</a>`
+                        $("#lossrebate").html(lossrebate);
+
+                        var redemptioncode = `<a href="javascript:jumpToPage('redemption_code_use_log' , 'charid=`+data.data.charid+`')">`+(data.data.redemptioncode/100).toFixed(2)+`</a>`
+                        $("#redemptioncode").html(redemptioncode);
+
+                        var vipreward = `<a href="javascript:jumpToPage('user_vip_reward_log' , 'charid=`+data.data.charid+`')">`+(data.data.vipreward/100).toFixed(2)+`</a>`
+                        $("#vipreward").html(vipreward);
+
+                        var activities = `<a href="javascript:jumpToPage('gm_general_activities_detail_log' , 'charid=`+data.data.charid+`')">`+(data.data.activities/100).toFixed(2)+`</a>`
+                        $("#activities").html(activities);
+
+                        var luckyuser = `<a href="javascript:jumpToPage('gm_lucky_user_log' , 'charid=`+data.data.charid+`')">`+(data.data.luckyuser/100).toFixed(2)+`</a>`
+                        $("#luckyuser").html(luckyuser);
+
+                        var turntable = `<a href="javascript:jumpToPage('gm_user_turntable_log' , 'charid=`+data.data.charid+`')">`+(data.data.turntable/100).toFixed(2)+`</a>`
+                        $("#turntable").html(turntable);
+
+                        var rewardactivites = `<a href="javascript:jumpToPage('gm_reward_activities_log' , 'charid=`+data.data.charid+`')">`+(data.data.rewardactivites/100).toFixed(2)+`</a>`
+                        $("#rewardactivites").html(rewardactivites);
+
+                        $("#turninviternum").text(data.data.turninviternum);
+                        $("#turninvitergold").text((data.data.turninvitergold/100).toFixed(2));
+                        $("#presentChips").text((data.data.presentChips/100).toFixed(2));
+                        
+
+                    }
+                   
+                }
+            }, "json");
+    }
+    $(document).ready(function(){
+        const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		
+		const charid = urlParams.get('charid');
+
+		
+		$("#charid").val(charid);
+        if(charid != null){
+            rolesearch();
+        }
+        
+        $("#rolesearch").click(rolesearch);
+        $("#updpassword").click(updpassword);
+       
+    });
+    function updpassword(){
+        var charid = $("#charid").val();
+        var charname = $("#charname1").val();
+        var password = $("#password").val()
+        var gameid = $.cookie("gameid")
+        var zoneid = $.cookie("zoneid")
+        if (charid == "" && charname == ""){
+            alert("请输入需要修改密码的玩家id或者玩家账号");
+            return false;
+        }
+        if (password == ""){
+            alert("请输入要修改的密码");
+            return false;
+        }
+        
+        $.post("/gm/http", {cmd: "user_info_update_password", charid: charid,charname: charname, gameid:gameid, zoneid:zoneid,password:password},
+        function(data){
+            alert(data.retdesc);
+        }, "json");
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+body{
+	font-family:"Helvetica Neue";
+	background-color: #fff;
+}
+.brand-title, .nano-content , .navbar-content{
+	background-color: #689092;
+}
+#mainnav-menu ul a , strong , #mainnav-menu .list-header{
+	color: #000;
+}
+#content-container , .breadcrumb li, .breadcrumb li a , .page-header{
+	color: #000;
+}
+#mainnav-menu .active-link, .menu-popover .sub-menu ul .active-link a{
+	color: #000;
+}
+#mainnav-menu ul a:hover{
+	color: #000;
+}
+#container.mainnav-in .brand-title, #container.mainnav-sm .brand-title, #container.mainnav-lg .brand-title{
+	color: #000;
+}
+#content-container{
+	background-color: #fff;
+}
+#mainnav-menu>.active{
+	background-color:#689092;
+}
+.active-sub{
+	background-color: #81e3e8; 
+}
+.active-sub .active-link{
+	background-color: #81e3e8;
+}
+.active-sub li{
+	background-color: #689092;
+}
+thead{
+	background-color: #ced68b;
+}
+#mainnav-menu li{
+	border-bottom: 1px solid #689092;
+    border-top: 1px solid #658388;
+    text-shadow: 0px 1px 0px rgba(101, 54, 52, 0.5);
+}
+.btn{
+	line-height: 1;
+}
+

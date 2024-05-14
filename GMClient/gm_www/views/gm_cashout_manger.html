@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                <form action="">                 	               
+                    <div  class="top" style="width: 100%;float: left;">
+                        <span id="totalHtml">
+                            <script id="totalinfo" type="text/html">
+                                <div class="jmform-group">
+                                    默认自动同意提现最大值：
+                                    <input id="cashoutauto" type="text" class="jminput jminput-size05" name="cashoutauto" value="<%=dataaction(cashoutauto)%>" />
+                                </div>
+                                <div class="jmform-group">
+                                    <a id="gm_log_searchBtn" class="jmbtn jmbtn-info" href="javascript:;" onclick="submit()">修改</a>
+                                </div>
+                            </script>
+                            
+                        </span>
+                    </div>
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">提现管理</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+
+            
+            <table class="jmtable-type01" id="cc_loginprops_table">
+                <thead>
+                    <tr>
+                        
+                        <th>提现平台</th>
+                        <th>状态</th>
+						<th>操作</th>
+                    </tr>
+                </thead>               
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">
+						<%for(i = 0; i < data.length; i++) {%>    
+						<tr id=<%=data[i].id%> status1=<%=data[i].status1%> status2=<%=data[i].status2%> status3=<%=data[i].status3%>>
+                            <td><%=data[i].platname%></td>
+                            <td>
+                                <%=data[i].status1==0?"禁用(金币)":"启用(金币)"%>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <%=data[i].status2==0?"禁用(推广)":"启用(推广)"%>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <%=data[i].status3==0?"禁用(转盘)":"启用(转盘)"%>
+                            
+                            
+                            </td>
+                            <td>
+                                <%if(data[i].status1==0){%>
+                                    <a class='releaseBtn' style="color:blue;" onclick="actype(2)">启用(金币)</a>
+                                <%}else{%>
+                                    <a class='releaseBtn' style="color:red;" onclick="actype(2)">禁用(金币)</a>
+                                <%}%>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <%if(data[i].status2==0){%>
+                                    <a class='releaseBtn' style="color:blue;" onclick="actype(4)">启用(推广)</a>
+                                <%}else{%>
+                                    <a class='releaseBtn' style="color:red;" onclick="actype(4)">禁用(推广)</a>
+                                <%}%>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <%if(data[i].status3==0){%>
+                                    <a class='releaseBtn' style="color:blue;" onclick="actype(5)">启用(转盘)</a>
+                                <%}else{%>
+                                    <a class='releaseBtn' style="color:red;" onclick="actype(5)">禁用(转盘)</a>
+                                <%}%>
+                            </td>
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</div>
+<script type="text/javascript" src="js/effect.js"></script>
+<!--报表导出 js -->
+<script src="js/export/tableExport.js"></script>
+<script src="js/export/jquery.base64.js"></script>
+<style>
+	.select_new{
+	  width:150px;height:36px; border:1px solid #ddd;border-radius: 5px;color: #555555
+	}
+	</style>
+<script type="text/javascript">
+    var gameid = Number($.cookie("gameid")) || 0;
+    var zoneid = Number($.cookie("zoneid")) || 0;
+    var optype = 1;
+
+    $(document).ready(function(){
+        search();
+        
+    });
+
+    template.helper('dataaction', function (data) {    
+   		
+    return (data/100).toFixed(2)
+    })
+    function search(){
+        $.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "gm_order_manger", gameid: gameid,zoneid:zoneid,optype:1,reqtype:2},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.data&&data.data.length>0) {
+                        var html = template("gm_cc_RecordData", data); 
+                        $("#gm_cc_RecordHtml").html(html);              
+                    }else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+                    var totalHtml = template("totalinfo", data);  
+					$("#totalHtml").html(totalHtml);
+										
+				}
+			}
+		});	
+        
+    }
+    function actype(types){
+        optype = types
+    }
+        
+    $('.releaseBtn').live('click',function(){
+
+        let res = confirm('是否确认修改状态？');
+        if(res != true) {         
+            return;
+        }
+        var trItem = $(this).parent('td').parent('tr');
+        id = trItem.attr("id");
+        if(optype == 2){
+            status = trItem.attr("status1") == 1 ? 0 : 1;
+        }else if(optype==4){
+            status = trItem.attr("status2") == 1 ? 0 : 1;
+        }else if(optype == 5){
+            status = trItem.attr("status3") == 1 ? 0 : 1;
+        }
+        
+ 
+        $.post("/gm/http", {cmd: "gm_order_manger", gameid: gameid,zoneid:zoneid, optype: optype, id:id, status:status,reqtype:2},
+        function(data){
+            alert(data.retdesc);
+            if(data.retcode == 0){
+                search();
+            }
+        }, "json");
+
+    })
+    function submit(){
+        var cashoutauto = $("#cashoutauto").val() * 100;
+        $.post("/gm/http", {cmd: "gm_order_manger", gameid: gameid,zoneid:zoneid, optype: 3, reqtype:2, cashoutauto:cashoutauto},
+        function(data){
+            alert(data.retdesc);
+            if(data.retcode == 0){
+                search();
+            }
+        }, "json");
+    }
+	
+</script>
+</body>
+</html>

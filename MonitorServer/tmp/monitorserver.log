@@ -1,0 +1,10 @@
+[240422-10:25:00] MS ERROR net.InterfaceByName err:,route ip+net: invalid network interface name
+[240422-10:25:27] MS ERROR getExchangeRate  error:Error 1062: Duplicate entry '20240225-3' for key 'time_currency'
+[240422-10:25:56] MS ERROR getExchangeRate  error:Error 1062: Duplicate entry '20240225-3' for key 'time_currency'
+[240422-10:26:26] MS ERROR getExchangeRate  error:Error 1062: Duplicate entry '20240225-3' for key 'time_currency'
+[240422-10:26:56] MS ERROR getExchangeRate  error:Error 1062: Duplicate entry '20240225-3' for key 'time_currency'
+[240422-10:27:26] MS ERROR getExchangeRate  error:Error 1062: Duplicate entry '20240225-3' for key 'time_currency'
+[240422-10:27:56] MS ERROR getExchangeRate  error:Error 1062: Duplicate entry '20240225-3' for key 'time_currency'
+[240422-10:28:41] MS ERROR net.InterfaceByName err:,route ip+net: invalid network interface name
+[240422-10:29:11] MS ERROR getExchangeRate  error:Error 1062: Duplicate entry '20240225-3' for key 'time_currency'
+[240422-10:29:41] MS ERROR getExchangeRate  error:Error 1062: Duplicate entry '20240225-3' for key 'time_currency'

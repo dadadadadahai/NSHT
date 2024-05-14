@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<style>
+    .action .jmbtn {
+        padding: 4px 4px;
+    }
+</style>
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                 <form action="">                 	               
+					<div class="top" style="width: 100%;float: left;">
+						<!-- <div class="jmform-group">
+							<div class=" fleft">
+								<select id="platid" name="select" style="width:150px;" class="select_new">
+								   
+									
+								</select>
+							</div>
+						</div> -->
+						<div class="jmform-group">
+							<input id="uid" type="text" placeholder="玩家ID" class="jminput jminput-sm jminput-size04" name="">
+						</div>
+						<div class="jmform-group">
+							<input id="realname" type="text" placeholder="真实姓名" class="jminput jminput-sm jminput-size04" name="">
+						</div>
+						<div class="jmform-group">
+							<input id="cpf" type="text" placeholder="CPF信息" class="jminput jminput-sm jminput-size04" name="">
+						</div>
+						<div class="jmform-group">
+							<input id="orderid" type="text" placeholder="兑换编号" class="jminput jminput-sm jminput-size04" name="">
+						</div>
+						<div class="jmform-group">
+							<div class="jqtransform fleft">
+								<select id="regflag" name="select" style="width:150px;">
+									<option value="0" selected>注册来源</option>
+									<option value="1">投放</option>
+									<option value="2">非投放</option>
+								</select>
+							</div>
+						</div>
+
+					</div>
+					<div class="buttom">
+						
+						<div class="jmform-group">
+							<div class="jqtransform fleft">
+								<select id="ordertype" name="select" style="width:150px;">
+									<option value="0" selected>兑换类型</option>                                
+									<option value="1">金币兑换</option>
+									<option value="2">推广兑换</option>
+									<option value="3">转盘兑换</option>
+								</select>
+							</div>
+						</div>
+						<div class="jmform-group">
+							<input id="starttime" type="text" placeholder="开始时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" autocomplete="off">
+						</div>
+						<div class="jmform-group">
+							<input id="endtime" type="text" placeholder="结束时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" autocomplete="off">
+						</div>
+					</div>
+                   
+					
+                    <div class="jmform-group">
+                        <a id="gm_log_searchBtn" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>查询</a>
+						
+                    </div>
+                    
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">兑换审核</h3>
+			
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="cc_loginprops_table">
+                <thead>
+                    
+                    <tr>
+                        <th>兑换编号</th>
+						<th>兑换类型</th>
+                        <th>兑换时间</th>
+						<th>兑换成功时间</th>
+                        <th>玩家ID</th>
+                        <th>真实姓名</th>
+						<th>注册来源</th>
+                        <th>CPF信息</th>
+						<th>手机号码</th>
+						<th>邮箱</th>
+						<th>通道类型</th>
+                        <th>兑换订单金额</th>
+						<th>兑换消耗金币</th>
+						
+						<th>提现渠道</th>
+                        <th>状态</th>
+                        <th width="100px">操作</th>
+                    </tr>
+                </thead>               
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">
+						
+						<%for(i = 0; i < datas.length; i++) {%>    
+						<tr id =<%=datas[i].orderid%> orderchips=<%=changechips(datas[i].orderchips)%> >
+							<td><%=datas[i].orderid%></td>
+							<td><%=datas[i].ordertype == 1 ? "金币兑换": "推广兑换"%></td>
+							<td><%=datas[i].time%></td>
+							<td><%=datas[i].finishtime%></td>
+							<td><a href="javascript:jumpToPage('user_info_search_kf' , 'charid=<%=datas[i].charid%>')"><%=datas[i].charid%></a></td>
+							
+							<td><%=datas[i].realname%></td>
+							<td><%=ordertype(datas[i].ordertype)%></td>
+							
+							<td><%=change(datas[i].cfp)%></td>
+							<td><%=change(datas[i].phonenum)%></td>
+							<td><%=change(datas[i].email)%></td>
+							<td><%=typeMap(datas[i].typeMap)%></td>
+							<td><%=changechips(datas[i].orderchips)%></td>
+							<td><%=changechips(datas[i].consumechips)%></td>
+							<td><%=datas[i].platname%></td>
+                            <td><%=status(datas[i].status)%></td>
+							<td class="action"  width="100px">
+                                <p></p>
+                                <a class="jmbtn jmbtn-xs jmbtn-warn " href="javascript:changeAction(<%=datas[i].orderid%> ,<%=changechips(datas[i].orderchips)%> , 0 )">同意</a>
+                                <a class="jmbtn  jmbtn-xs  jmbtn-info" href="javascript:changeAction(<%=datas[i].orderid%> ,<%=changechips(datas[i].orderchips)%> ,1)">拒绝</a>						
+                            </td>
+							
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div>
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+            <div class="jm-epages" id="pageHtml">
+            	<script type="text/html" id="pageData">
+				<%if(isenptydata(datas)){%>
+					<div style="color:#ff6600" class="fleft">暂无查询记录！</div>
+				<%} else{%>
+					<div class = "fright">
+					<%if(curpage != 1) {%>   
+						<a href="javascript:listToPage(1);">首页</a>
+						<a href="javascript:listToPage(<%=curpage - 1%>);">上一页</a>
+					<%}%>
+					<%if(curpage == 1 && maxpage != 0 && maxpage != 1) {%>  
+						<a>首页</a>
+						<a>上一页</a>
+					<%}%>				
+					<%if(maxpage <= 8){%> 
+						<%for(i = 1; i <= maxpage; i++) {%>  
+						<%if(curpage == i) {%>  
+							<a href="#" class="on"><%=i%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+						<%}%>  
+					<%}%>  
+					<%}else {%>  
+						<%if(curpage == 1) {%>  
+							<a href="#" class="on">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							<a href="javascript:listToPage(3);">3</a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage < 6) {%>  
+							<%for(i = 1; i <= curpage - 1; i++ ) {%>  
+								<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+							<%}%>  
+							<span class="on"><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage >= 6 && curpage < maxpage - 4) {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<a href="javascript:listToPage(<%=curpage - 1%>);"><%=curpage - 1%></a>  
+							<span class="on"><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage-1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<%for(i = maxpage - 4; i <= maxpage; i++) {%>  
+								<%if(curpage == i) {%>  
+									<span class="on"><%=i%></span>  
+								<%}else {%>  
+									<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+								<%}%>  
+							<%}%>  
+						<%}%>  
+					<%}%>  
+					<%if(curpage < maxpage) {%>  
+						<a href="javascript:listToPage(<%=curpage + 1%>);">下一页</a>  
+						<a href="javascript:listToPage(<%=maxpage%>);">尾页</a>  
+					<%}%> 
+					<span>第<input type="text" id="choise_page" style="width: 30px;">页 <button type="button" onclick="choise()">跳转</button></span>
+					<div>
+				<%}%>
+				</script>
+            </div>
+            <!-- epages -->
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<!--报表导出 js -->
+<script src="js/export/tableExport.js"></script>
+<script src="js/export/jquery.base64.js"></script>
+<script type="text/javascript">
+	var curpage = 1;
+  
+   template.helper('isenptydata', function (data) {    
+   		if($.isEmptyObject(data)){
+			return true;
+		}else{
+			return false;
+		}
+   	})	
+    template.helper('change', function (str) {    
+        var len   = (str.toString().length) / 2;
+        if (len < 2 || str == ""){
+            return "";
+        }
+      var result = str.substr(0,len-2) + "****" + str.substr(len+2)
+
+      return result;
+   	})	
+	   template.helper('typeMap', function (data) {    
+		switch(data)
+		{
+			case 0:
+				return "CPF";
+				break;
+			case 1:
+				return "手机";
+				break;
+			case 2:
+				return "邮箱";
+				break;
+			default:return "";
+		}
+   	})
+	   template.helper('ordertype', function (data) {    
+		switch(data)
+		{
+			case 1:
+				return "金币兑换";
+				break;
+			case 2:
+				return "推广兑换";
+				break;
+			case 3:
+				return "转盘兑换";
+				break;
+			default:return "";
+		}
+   	})		
+	template.helper('status', function (data) {    
+		switch(data)
+		{
+			case 1:
+				return "待审核";
+				break
+			case 2:
+				return "已拒绝";
+				break
+			case 3:
+				return "兑换成功未下发";
+				break
+			case 7:
+				return "兑换失败";
+				break
+			case 5:
+				return "审核中";
+				break
+			case 6:
+				return "兑换成功已下发";
+				break
+            case 8:
+				return "已忽略";
+				break
+			default:return "";
+		}
+	})	
+	template.helper("changechips" , function (data) {
+
+		return (data / 100).toFixed(2)
+
+	})
+	
+
+    function research(id) {
+       
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+		var orderid = $("#orderid").val();
+		var uid = Number($("#uid").val());
+		var realname = $("#realname").val();
+		var cpf = $("#cpf").val();
+		var status = 5;
+		var ordertype = $("#ordertype").val();
+		var starttime =$("#starttime").val();
+        var endtime =$("#endtime").val();
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+		var optype = 1;
+		var perpage = 50;
+		var regflag = Number($("#regflag option:selected").val()) || 0;
+		var platid = Number($("#platid option:selected").val()) || 0;
+        
+		var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			
+			data:{cmd: "cash_out_audit", orderid: orderid, gameid:gameid, zoneid:zoneid, optype: optype, charid: uid,status:status,curpage:toCurPage,perpage:perpage,ordertype:ordertype,realname:realname,cpf:cpf,starttime:starttime,endtime:endtime,regflag:regflag,platid:platid},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.datas&&data.datas.length>0) {
+					
+						var html = template("gm_cc_RecordData", data); 
+						$("#gm_cc_RecordHtml").html(html);              
+					}else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+						var pageHtml = template("pageData", data);  
+						$("#pageHtml").html(pageHtml);						
+				}
+			}
+		});	
+    }
+	function listToPage(id){
+		var ids = id
+		research(ids);
+		};
+    $(document).ready(function(){
+        $("#gm_log_searchBtn").click(research);
+		research();
+    });
+	//兑换审核操作
+	
+	function changeAction(id ,chips , type){
+		var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+		let page = curpage;
+		let str = "";
+		let orderchips=""
+        str += id; 
+      
+        orderchips += chips; 
+		layer.confirm('是否确认执行此操作？操作订单金额：'+orderchips, function(index){
+			layer.close(layer.index);
+			
+			$.post("/gm/http", {cmd:"cash_out_audit" ,gameid:gameid, zoneid:zoneid, optype: 2, opvalue : type  , charids : str},
+            function(data){
+				layer.msg(data.retdesc);
+				if(data.retcode == 0){
+					research(page);
+				}
+            }, "json")
+		});
+
+	}
+</script>
+</body>
+</html>

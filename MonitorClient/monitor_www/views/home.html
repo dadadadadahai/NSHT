@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />
+		<title>5R5游戏运营平台</title>
+
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- basic styles -->
+
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="assets_ace/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="css/datepicker.css" />
+		<link rel="stylesheet" href="css/bootstrap-datetimepicker.css" />
+		<link rel="stylesheet" href="css/daterangepicker.css" />
+		<link rel="stylesheet" href="css/chosen.css">
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+
+		<!-- ace styles -->
+		<link rel="stylesheet" href="css/ace.min.css" />
+		<link rel="stylesheet" href="css/gm.css" />
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script src="js/ace-extra.min.js"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	
+
+	<body>
+		<div class="navbar navbar-default" id="navbar">
+			<script type="text/javascript">
+				try{ace.settings.check('navbar','fixed')}catch(e){}
+			</script>
+
+			<div class="navbar-container" id="navbar-container">
+				<div class="navbar-header pull-left">
+					<div href="#" class="navbar-brand">
+						<small>
+							<i class="icon-home"> </i>
+							5R5游戏运营平台
+						</small>
+					</div><!-- /.brand -->
+				</div><!-- /.navbar-header -->
+				
+
+				<div class="navbar-header pull-right logout">
+					<span class="gm-userName">您好！{{.Name}}<b></b></span>
+					<span class="ipDom"> 当前的IP为：{{.Ip}}</span>
+
+					<a href="/gamelist.html" ><i class="icon-th"> </i>返回游戏列表</a>
+					<a href="/login.html" ><i class="icon-off"> </i>退出登录</a>
+
+				</div>
+				<!-- /.navbar-header -->
+			</div><!-- /.container -->
+		</div>
+		
+
+		<div class="main-container ace-save-state" id="main-container">
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"> </span>
+				</a>
+				
+				<div class="sidebar responsive ace-save-state" id="sidebar">
+					<script type="text/javascript">
+						try{ace.settings.loadState('sidebar')}catch(e){}
+					</script>
+					<ul class="nav nav-list">
+						<li  id="monitor_1" class="hidden">
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-desktop fa fa-desktop"> </i>
+								<span class="menu-text">运营总况</span>
+
+								<b class="arrow icon-angle-down fa fa-angle-down"> </b>
+							</a>
+
+							<ul class="submenu">
+								<li class="active">
+									<a href="#" id="gen-survey">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										总概况
+									</a>
+								</li>
+								<li>
+									<a href="#" id="gen-realdata">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										实时数据
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li id="monitor_2" class="hidden">
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-group fa fa-users"> </i>
+								<span class="menu-text">用户分析</span>
+
+								<b class="arrow icon-angle-down fa fa-angle-down"> </b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="#" id="user_detail_info">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										基础信息
+									</a>
+								</li>
+								<li>
+									<a href="#" id="ana-user">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										注册分析
+									</a>
+								</li>
+								
+								<li>
+									<a href="#" id="ana-login">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										登陆分析
+									</a>
+								</li>
+							</ul>
+						</li>
+
+						<li id="monitor_3" class="hidden" >
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-beaker fa fa-flask"> </i>
+								<span class="menu-text">留存分析</span>
+
+								<b class="arrow icon-angle-down fa fa-angle-down"> </b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="#" id="ret-user">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										用户留存
+									</a>
+									
+								</li>
+								<li>
+									<a href="#" id="ret-first">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										首冲用户留存
+									</a>
+								</li>
+							</ul>
+						</li>
+
+						<li id="monitor_4" class="hidden">
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-credit-card fa fa-credit-card"> </i>
+								<span class="menu-text">充值分析</span>
+
+								<b class="arrow icon-angle-down fa fa-angle-down"> </b>
+							</a>
+
+							<ul class="submenu">
+								
+								<li>
+									<a href="#" id="rec-ltv">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										充值LTV
+									</a>
+								</li>
+								<li>
+									<a href="#" id="rec-ltv-cash">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										充值LTV(去提现)
+									</a>
+								</li>
+								<li>
+									<a href="#" id="rec-arppu">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										充值ARPPU(去提现)
+									</a>
+								</li>
+								<!-- <li>
+									<a href="#" id="rec-details">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										玩家明细
+									</a>
+								</li> -->
+							</ul>
+						</li>
+
+						<li id="monitor_5" class="hidden">
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-legal fa fa-gavel"> </i>
+								<span class="menu-text">货币分析</span>
+
+								<b class="arrow icon-angle-down fa fa-angle-down"> </b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="#" id="con-daliymoney">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										货币数据总览
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li id="monitor_6" class="hidden">
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-flag fa fa-flag"> </i>
+								<span class="menu-text">投放分析</span>
+
+								<b class="arrow icon-angle-down fa fa-angle-down"> </b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="#" id="recovery-data">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										回收数据(注册)
+									</a>
+								</li>
+								<li>
+									<a href="#" id="recovery-data-cash">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										回收数据(首冲)
+									</a>
+								</li>
+								<li>
+									<a href="#" id="recovery-examination-app">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										消耗核查
+									</a>
+								</li>
+								<li>
+									<a href="#" id="recovery-manage">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										渠道账户管理
+									</a>
+								</li>
+								<li>
+									<a href="#" id="exchange_rate">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										汇率管理
+									</a>
+								</li>
+								<li>
+									<a href="#" id="exchange_registerrsc">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										注册来源变化
+									</a>
+								</li>
+								<!-- <li>
+									<a href="#" id="fb_export">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										FB用户排除导出
+									</a>
+								</li> -->
+								<li>
+									<a href="#" id="fb_warning">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										包预警控制
+									</a>
+								</li>
+								
+							</ul>
+						</li>
+						<li id="monitor_7" class="hidden">
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-bar-chart fa fa-bar-chart"> </i>
+								<span class="game-manage menu-text">游戏管理</span>
+								<b class="arrow icon-angle-down fa fa-angle-down"> </b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="#" id="games-info">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										游戏列表
+									</a>
+								</li>
+								<li>
+									<a href="#" id="games-add">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										添加游戏
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li id="monitor_8" class="hidden">
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-cog fa fa-cog"> </i>
+								<span class="user-manage menu-text">用户管理</span>
+								<b class="arrow icon-angle-down fa fa-angle-down"> </b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="#" id="users-list">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										用户列表
+									</a>
+								</li>
+								<li>
+									<a href="#" id="users-add">
+										<i class="icon-double-angle-right fa fa-caret-right"> </i>
+										添加用户
+									</a>
+								</li>
+<!--								<li>-->
+<!--									<a href="#" id="users-setting">-->
+<!--										<i class="icon-double-angle-right"> </i>-->
+<!--										用户设置-->
+<!--									</a>-->
+<!--								</li>-->
+							</ul>
+						</li>
+					</ul>
+					<!-- /.nav-list -->
+
+					<div class="sidebar-collapse" id="sidebar-collapse">
+						<i class="icon-double-angle-left ace-save-state ace-icon fa fa-angle-double-left" data-icon1="icon-double-angle-left ace-icon fa fa-angle-double-left " data-icon2="icon-double-angle-right ace-icon fa fa-angle-double-right"></i>
+					</div>
+
+				</div>
+
+				<div class="main-content" id="right-iframeID">
+                	<iframe src="gen-survey.html" name="gen-survey" class="gen-survey" width="100%" id="iframepage" height="800" frameborder="0" scrolling='auto' onload="autoSize()"> </iframe>
+
+				</div><!-- /.main-content -->
+			</div><!-- /.main-container-inner -->
+
+			
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+		
+
+
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/typeahead-bs2.min.js"></script>
+
+		<!-- ace scripts -->
+
+		<script src="js/ace-elements.min.js"></script>
+		<script src="js/ace.min.js"></script>
+		<script src="js/jquery.cookie.js"></script>
+
+		<!-- inline scripts related to this page -->
+
+		<script type="text/javascript">
+
+			$('.submenu li').on('click',function(){
+				
+				var sframeitem = $(this).children('a').attr('id');
+				//$("#right-iframeID").children('iframe').hide();
+				if(!sframeitem==""){
+					$('.submenu li').removeClass('active');
+					$(this).addClass('active');
+					$("#right-iframeID").children('iframe').remove();
+					var iframeUrl = "<iframe src='"+sframeitem+".html' name='"+sframeitem+"'  class='"+sframeitem+"' id='iframepage' width='100%' height='800' frameborder='0' scrolling='auto' onload='autoSize()'> </iframe>";
+					$(iframeUrl).appendTo($("#right-iframeID"));
+				}else{
+					return false;
+				}
+			});
+
+			//iframe height  onload='setiframesize(this);'
+			/*function setiframesize(obj) {
+			    pTar=obj;
+			    if(!pTar){return;}
+			    var endheight = 1000;
+			    if(obj.contentWindow != null){
+			        endheight=obj.contentWindow.document.body.scrollHeight;
+			    }
+			    if(pTar.document){
+			        if(pTar.document.body) {endheight=pTar.document.body.scrollHeight;}//console.log('document.body.scrollHeight='+pTar.document.body.scrollHeight);
+			        else if(pTar.document.documentElement) {endheight=pTar.document.documentElement.scrollHeight;}//console.log('document.documentElement.scrollHeight='+pTar.document.documentElement.scrollHeight);
+			    }
+			    else if(pTar.Document){
+			        if(pTar.Document.body) {endheight=pTar.Document.body.scrollHeight;}//console.log('Document.body.scrollHeight='+pTar.Document.body.scrollHeight);
+			        else if(pTar.Document.documentElement) {endheight=pTar.Document.documentElement.scrollHeight;}//console.log('Document.documentElement.scrollHeight='+pTar.Document.documentElement.scrollHeight);
+			    }
+			    else if(pTar.contentDocument){
+			        if(pTar.contentDocument.body) {endheight=pTar.contentDocument.body.scrollHeight;}//console.log('contentDocument.body.scrollHeight='+pTar.contentDocument.body.scrollHeight);
+			        else if(pTar.contentDocument.documentElement) {endheight=pTar.contentDocument.documentElement.scrollHeight;}//console.log('contentDocument.documentElement.scrollHeight='+pTar.contentDocument.documentElement.scrollHeight);
+			    }
+			    $(pTar).height(endheight);
+			    setTimeout(function(){setiframesize(pTar); },500);
+			}*/
+
+		</script>
+		<script type="text/javascript" >
+
+			function priviliege() {
+				var gameid = Number($.cookie("gameid"));
+				//alert(gameid);
+				$.post("/monitor/http", {cmd: "user_getpri"},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								var priviliege = data.data;
+								//priviliege 权限等级
+								var id = 0;
+								
+								for(var i=1; i<13; i++) {
+									if (((1<<i)&priviliege) || priviliege==0) {
+										$("#monitor_"+i).show();
+										$("#monitor_"+i).removeClass('hidden');
+										if(id == 0){
+											id = i;
+											$("#monitor_"+i).addClass('active open firstLi');
+										}
+									}
+								}
+							}
+						}, "json");
+			}
+			$(document).ready(function(){
+				
+				priviliege();
+				// alert(123);
+				// var tt = $.cookie('account');
+				// alert(tt);
+			});
+		function autoSize(){
+			var _sheight = $("#navbar").height()+5;
+			document.getElementById("iframepage").style.height = ( document.documentElement["clientHeight"])-_sheight +'px';
+		}
+		autoSize();
+		window.onresize = autoSize;
+
+   </script>
+
+</body>
+</html>

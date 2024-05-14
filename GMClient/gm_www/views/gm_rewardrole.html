@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script> 
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">		
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">玩家补偿信息</h3>
+        </div>
+        <div class="box-inner jm-userInfoModify">
+            <div class="jmform-vertical">
+                <form action="">
+                    <div class="jmform-vgroup jm-pt10">
+                        <label class="control-label">角色昵称：</label>
+                        <div class="fillform">
+                            <input id="charid" type="text" placeholder="角色昵称ID" class="jminput jminput-size07 jminput-lm" name="charid" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup jm-pt10">
+                        <label class="control-label">补偿类型：</label>
+                        <div class="fillform"> 
+                             <div class="jqtransform fleft">
+                                <select name="select" id="rewardType">
+                                    <option value="物品类型1">物品类型1</option>
+                                    <option value="物品类型2">物品类型2</option>
+                                    <option value="物品类型3">物品类型3</option>
+                                    <option value="物品类型4">物品类型4</option>
+                                    <option value="物品类型5">物品类型5</option>
+                                </select>
+                            </div>
+                            <span class="fleft mlr5">-</span>
+                            <div class="jqtransform fleft">
+                                <select name="select" id="rewardTypeInfo">
+                                    <option value="物品道具">物品道具</option>
+                                    <option value="希灵犀剑">希灵犀剑</option>
+                                    <option value="卓越的光轮">卓越的光轮</option>
+                                    <option value="青冥黄金弓">青冥黄金弓</option>
+                                </select>
+                            </div>                            
+                            
+                            <div class="amount-box ml25">
+                                <a data-btnminus="customer" class="g-minus" href="javascript:;">－</a>
+                                <input type="text" id="rewardTypt_num" class="ipt_customer_num" value="1" onkeyup="this.value=this.value.replace(/\D+/g,'')">
+                                <a data-btnplus="customer" class="g-plus" href="javascript:;">+</a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup jm-pt10">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="fillform">
+                            <a class="jmbtn jmbtn-sm jmbtn-default" href="javascript:;" id="addRewardTobox">添加补偿类型</a> <span class="red-txt">请选择上面的补偿类型进行添加</span> 
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup jm-pt10">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="fillform">
+                            <div class="rewardroBox">
+                            	<ul class="rewardroBoxUl" id="rewardroBoxUl">
+                                	
+                                </ul>
+                            </div>
+                        </div>
+                    </div>                   
+                    
+                    <div class="jmform-vgroup jm-pt10">
+                        <label class="control-label">补偿描述：</label>
+                        <div class="fillform">
+                            <textarea class="textarea01 textarea05 txt-default">请输入补偿相关描述</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn-lgLm jmbtn-default" href="javascript:void(0)" id="">提交</a>  
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>            
+            
+        </div>        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    function user_info_modify(e) {
+        var charid = $("#charid").val();
+        var optype = $("#optype option:selected").val();
+        var content = $("#content").val();
+        if (!(optype && content && charid)){
+            alert("content can not empty");
+            return;
+        }
+        alert("optype:"+optype)
+        var gameid = $.cookie("gameid")
+        var zoneid = $.cookie("zoneid")
+        $.post("/gm/http", {cmd:"user_info_modify",charid:charid,optype:optype,content:content,gameid:gameid,zoneid:zoneid}, function(data){
+                alert(data)
+                if (data.retcode != 0){
+                    alert(data.retdesc);
+                } else {
+                    alert("execute success");
+                    $("#content").val("");
+                }
+            }, "json");
+    }
+    function cancle(){
+        $("#content").val("");
+    }
+    $(document).ready(function(){
+        $("#user_info_modify").click(user_info_modify);
+        $("#cancle").click(cancle);
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>GMTools管理系统</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="css/ui-dialog.css" media="all" />
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="js/template-native.js"></script>
+    <script src="js/layer/layer.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $(".jqtransform").jqTransform();
+        });
+    </script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                <form action="">
+                    <div class="jmform-group">
+                        <input id="charid" type="text" placeholder="角色ID" class="jminput jminput-sm jminput-size04" name="">
+                    </div>
+                    <!--                    <div class="jmform-group">-->
+                    <!--                        <input id="charname" type="text" placeholder="昵称(模糊查找)" class="jminput jminput-sm jminput-size04" name="">-->
+                    <!--                    </div>                 -->
+                    <!--                    <div class="jmform-group">-->
+                    <!--                        <div class="jqtransform fleft">-->
+                    <!--                            <select id="online_flag" name="select" style="width:150px;">-->
+                    <!--                            	<option value="0" selected>在线状态</option>                                -->
+                    <!--                            	<option value="1">在线</option>-->
+                    <!--                                <option value="2">离线</option>                                       -->
+                    <!--                            </select>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="jmform-group">-->
+                    <!--                        <input id="starttime" type="text" placeholder="开始时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy/MM/dd HH:mm:ss'})" value="">-->
+                    <!--                    </div>-->
+                    <!--                    <div class="jmform-group">-->
+                    <!--                        <input id="endtime" type="text" placeholder="结束时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy/MM/dd HH:mm:ss'})" value="">-->
+                    <!--                    </div>-->
+                    <div class="jmform-group">
+                        <a id="user_item_info_search" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>刷新</a>
+                    </div>
+                    <div class="jmform-group">
+                        <a id="add_types_message" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-add-w16"></span>添加类型</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- jm-navbar end-->
+
+
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">类型信息列表</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="user_list_table">
+                <thead>
+                <tr>
+                    <th>当前游戏名称</th>
+                    <th>修改类型id</th>
+                    <th>修改类型名称</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="gm_cc_RecordHtml">
+                <script id="gm_cc_RecordData" type="text/html">
+                    <%for(i = 0; i < data.length; i++) {%>
+                    <tr>
+                        <td><%=data[i].gamename%></td>
+                        <td><%=data[i].typeid%></td>
+                        <td><%=data[i].typename%></td>
+                        <!--							<td><a href="javascript:modify_user('<%=data[i].itemid%>')">设置</a><a href="javascript:delete_user('<%=data[i].itemid%>')">删除</a></td>-->
+                        <td><a href="javascript:modify_('<%=data[i].gameid%>','<%=data[i].gamename%>','<%=data[i].typeid%>','<%=data[i].typename%>')">设置</a> &nbsp;
+                            <a href="javascript:delete_('<%=data[i].gameid%>','<%=data[i].typeid%>')">删除</a></td>
+                    </tr>
+                    <%}%>
+                </script>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+            <!--           <div class="jm-epages" id="pageHtml">-->
+            <!--            	<script type="text/html" id="pageData">-->
+            <!--				<%if(isenptydata(data)){%>-->
+            <!--					<div style="color:#ff6600" class="fleft">暂无查询记录！</div>-->
+            <!--				<%} else{%>-->
+            <!--					<div class = "fright">-->
+            <!--					<%if(Curpage != 1) {%>-->
+            <!--						<a href="javascript:listToPage(1);">首页</a>-->
+            <!--						<a href="javascript:listToPage('<%=Curpage - 1%>');">上一页</a>-->
+            <!--					<%}%>-->
+            <!--					<%if(Curpage == 1 && Maxpage != 0 && Maxpage != 1) {%>-->
+            <!--						<a>首页</a>-->
+            <!--						<a>上一页</a>-->
+            <!--					<%}%>-->
+            <!--					<%if(Maxpage <= 8){%>-->
+            <!--						<%for(i = 1; i <= Maxpage; i++) {%>-->
+            <!--						<%if(Curpage == i) {%>-->
+            <!--							<a href="#" class="on"><%=i%></a>-->
+            <!--						<%}else {%>-->
+            <!--							<a href="javascript:listToPage('<%=i%>');"><%=i%></a>-->
+            <!--						<%}%>-->
+            <!--					<%}%>-->
+            <!--					<%}else {%>-->
+            <!--						<%if(Curpage == 1) {%>-->
+            <!--							<a href="#" class="on">1</a>-->
+            <!--							<a href="javascript:listToPage(2);">2</a>-->
+            <!--							<a href="javascript:listToPage(3);">3</a>-->
+            <!--							...-->
+            <!--							<a href="javascript:listToPage('<%=Maxpage - 1%>');"><%=Maxpage - 1%></a>-->
+            <!--							<a href="javascript:listToPage('<%=Maxpage%>');"><%=Maxpage%></a>-->
+            <!--						<%}else if(Curpage < 6) {%>-->
+            <!--							<%for(i = 1; i <= Curpage - 1; i++ ) {%>-->
+            <!--								<a href="javascript:listToPage('<%=i%>');"><%=i%></a>-->
+            <!--							<%}%>-->
+            <!--							<span class="on"><%=Curpage%></span>-->
+            <!--							<a href="javascript:listToPage('<%=Curpage + 1%>');"><%=Curpage + 1%></a>-->
+            <!--							...-->
+            <!--							<a href="javascript:listToPage('<%=Maxpage - 1%>');"><%=Maxpage - 1%></a>-->
+            <!--							<a href="javascript:listToPage('<%=Maxpage%>');"><%=Maxpage%></a>-->
+            <!--						<%}else if(Curpage >= 6 && Curpage < Maxpage - 4) {%>-->
+            <!--							<a href="javascript:listToPage(1);">1</a>-->
+            <!--							<a href="javascript:listToPage(2);">2</a>-->
+            <!--							...-->
+            <!--							<a href="javascript:listToPage('<%=Curpage - 1%>');"><%=Curpage - 1%></a>-->
+            <!--							<span class="on"><%=Curpage%></span>-->
+            <!--							<a href="javascript:listToPage('<%=Curpage + 1%>');"><%=Curpage + 1%></a>-->
+            <!--							...-->
+            <!--							<a href="javascript:listToPage('<%=Maxpage-1%>');"><%=Maxpage - 1%></a>-->
+            <!--							<a href="javascript:listToPage('<%=Maxpage%>');"><%=Maxpage%></a>-->
+            <!--						<%}else {%>-->
+            <!--							<a href="javascript:listToPage(1);">1</a>-->
+            <!--							<a href="javascript:listToPage(2);">2</a>-->
+            <!--							...-->
+            <!--							<%for(i = Maxpage - 4; i <= Maxpage; i++) {%>-->
+            <!--								<%if(Curpage == i) {%>-->
+            <!--									<span class="on"><%=i%></span>-->
+            <!--								<%}else {%>-->
+            <!--									<a href="javascript:listToPage('<%=i%>');"><%=i%></a>-->
+            <!--								<%}%>-->
+            <!--							<%}%>-->
+            <!--						<%}%>-->
+            <!--					<%}%>-->
+            <!--					<%if(Curpage < Maxpage) {%>-->
+            <!--						<a href="javascript:listToPage('<%=Curpage + 1%>');">下一页</a>-->
+            <!--						<a href="javascript:listToPage('<%=Maxpage%>');">尾页</a>-->
+            <!--					<%}%>-->
+            <!--					</div>-->
+            <!--				<%}%>-->
+            <!--				</script>-->
+            <!--            </div>-->
+            <!-- epages -->
+        </div>
+
+    </div>
+</div>
+<!--jm-maincon warp end-->
+<!--添加类型-->
+<div id="add_type" style="overflow-y: auto;" class="popupCon " >
+    <h2 class="f16 newTitle" >用户设置</h2>
+    <a href="javascript:closeCont('add_type');"   class="btnClose">×</a>
+    <!--popupBox start-->
+    <div class="popupBox" >
+        <div class="blockbox" >
+            <div class="box-inner clearfix" style="height:300px">
+                <div class="jmform-vertical add-itemInfo">
+                    <div class="jmform-group isempty">
+                        <label class="control-label-poptp">游戏选择:</label>
+                        <select id="gamelisthtml"  style="width: 112px;" class="jminput jminput-sm jminput-sizetp">
+                            <script id="gamelistData" type="text/html"  >
+                                <%for(i = 0; i < data.length; i++) {%>
+                                <option value="<%=data[i].Gameid%>"><%=data[i].Gamename%></option>
+                                <%}%>
+                            </script>
+                        </select>
+                    </div>
+
+                    <div class="jmform-group isempty">
+                        <label class="control-label-poptp">添加类型id:</label>
+                        <input id="add_typeid" type="text"  class="jminput jminput-sm jminput-sizetp" name="" />
+                    </div>
+                    <div class="jmform-group isempty">
+                        <label class="control-label-poptp">类型名称:</label>
+                        <input id="add_typename" type="text"  class="jminput jminput-sm jminput-sizetp" name="" />
+                    </div>
+                    <p></p>
+
+                </div>
+            </div>
+        </div>
+        <div class="mt15 clearfix">
+            <div class="jmbtn-group tcenter">
+                <a class="jmbtn jmbtn-lg jmbtn-info" id="priSbmBtns1" style="display:none" href="javascript:add_types();">添加</a>
+                <a class="jmbtn jmbtn-lg jmbtn-default" href="javascript:closeCont('add_type');">取消</a>
+            </div>
+        </div>
+
+    </div>
+    <!--popupBox end-->
+</div>
+<!-- 弹窗信息 start  修改类型  -->
+<div id="itemInfo" style="overflow-y: auto;" class="popupCon " >
+    <h2 class="f16 newTitle" >用户设置</h2>
+    <a href="javascript:closeCont('itemInfo');"   class="btnClose">×</a>
+    <!--popupBox start-->
+    <div class="popupBox" >
+        <div class="blockbox" >
+            <div class="box-inner clearfix" style="height:300px">
+                <div class="jmform-vertical add-itemInfo">
+                    <div class="jmform-group isempty">
+                        <label class="control-label-poptp">游戏名称:</label>
+                        <input id="gamename" type="text" readonly="readonly" class="jminput jminput-sm jminput-sizetp" name="" value=""/>
+                    </div>
+                    <div class="jmform-group isempty">
+                        <label class="control-label-poptp">游戏id:</label>
+                        <input id="gameid" type="text" readonly="readonly" class="jminput jminput-sm jminput-sizetp" name="" />
+                    </div>
+                    <div class="jmform-group isempty">
+                        <label class="control-label-poptp">类型id:</label>
+                        <input id="typeid" type="text" readonly="readonly" class="jminput jminput-sm jminput-sizetp" name="" />
+                    </div>
+
+                    <div class="jmform-group isempty">
+                        <label class="control-label-poptp">类型名称:</label>
+                        <input id="typename" type="text" class="jminput jminput-sm jminput-sizetp" name="" />
+                    </div>
+                    <p></p>
+
+                </div>
+            </div>
+        </div>
+        <div class="mt15 clearfix">
+            <div class="jmbtn-group tcenter">
+                <a class="jmbtn jmbtn-lg jmbtn-info" id="priSbmBtns" style="display:none" href="javascript:update_types();">确定</a>
+                <a class="jmbtn jmbtn-lg jmbtn-default" href="javascript:closeCont('itemInfo');">取消</a>
+            </div>
+        </div>
+
+    </div>
+    <!--popupBox end-->
+</div>
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    template.helper('isenptydata', function (data) {
+        if($.isEmptyObject(data)){
+            return true;
+        }else{
+            return false;
+        }
+    })
+    //删除类型信息
+    function delete_(gameid,typeid){
+        var mymessage=confirm("确认删除此数据?");
+        if(mymessage!=true){
+            return;
+        }
+        $.post("/gm/http", {cmd:"delete_modifytypes",gameid:gameid,typeid:typeid},
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                } else {
+                    if(data.retcode == 0){
+                        parent.layer.open({
+                            type: 0,
+                            title :'提示信息',
+                            area: ['300px', '150px'],
+                            shadeClose: true, //点击遮罩关闭
+                            content: "删除成功！"
+                        });
+                        get_types();
+                    }else if(data.retcode==1){
+                        parent.layer.open({
+                            type: 0,
+                            title :'提示信息',
+                            area: ['300px', '150px'],
+                            shadeClose: true, //点击遮罩关闭
+                            content: "删除失败！"
+                        });
+                    }
+                }
+            }, "json");
+    }
+    //添加类型信息
+    $("#add_types_message").click(function(){
+        showCont('add_type');
+        $('#priSbmBtns1').show();
+        var type = 1;
+        $.post("/gm/http", {cmd:"gm_get_gamelist",type:type,},
+            function(data){
+                if (!data) {
+                    alert("command timeout");
+                } else {
+                    if (data.data&&data.data.length>0) {
+                        var html = template("gamelistData", data);
+                        $("#gamelisthtml").html(html);
+                    }
+                }
+            }, "json");
+    })
+    //确认添加类型按钮
+    function add_types(){
+        var gameid = $("#gamelisthtml").val();
+        var typeid = $("#add_typeid").val()||0;
+        var typename = $("#add_typename").val();
+        if(typeid ==0||typename==""){
+            parent.layer.open({
+                type: 0,
+                title :'提示信息',
+                area: ['300px', '150px'],
+                shadeClose: true, //点击遮罩关闭
+                content: "请输入正确信息！"
+            });
+            return;
+        }
+        $.ajax({
+            type: "post",
+            url:"/gm/http",
+            data:{cmd: "add_modify_types", gameid: gameid,typeid:typeid,typename:typename,},
+            dataType:"json",
+            beforeSend: function(){
+                //加载中...提示
+                onLoadTip = layer.load(1);
+            },
+            success: function(data){
+                //有返回值,则关闭加载
+                layer.close(onLoadTip);
+                if (!data) {
+                    alert("command timeout");
+                } else {
+                    if(data.retcode == 0){
+                        parent.layer.open({
+                            type: 0,
+                            title :'提示信息',
+                            area: ['300px', '150px'],
+                            shadeClose: true, //点击遮罩关闭
+                            content: "添加成功！"
+                        });
+                        closeCont('add_type');
+                        get_types();
+                    }else if(data.retcode==1){
+                        parent.layer.open({
+                            type: 0,
+                            title :'提示信息',
+                            area: ['300px', '150px'],
+                            shadeClose: true, //点击遮罩关闭
+                            content: "添加失败！"
+                        });
+                    }
+                }
+            }
+        });
+
+    }
+    var old_typeid;
+    var old_gameid;
+    var old_typename;
+    //获取修改类信息
+    function modify_(gameid,gamename,typeid,typename){
+            showCont('itemInfo');
+            $('#priSbmBtns').show();
+        $("#gamename").val(gamename);
+        $("#gameid").val(gameid);
+        $("#typeid").val(typeid);
+        $("#typename").val(typename);
+        old_typeid = typeid;
+        old_typename = typename;
+        old_gameid = gameid;
+    }
+    //修改按钮
+    function  update_types(){
+        var typename = $("#typename").val();
+        if(typename == old_typename){
+            parent.layer.open({
+                type: 0,
+                title :'提示信息',
+                area: ['300px', '150px'],
+                shadeClose: true, //点击遮罩关闭
+                content: "请输入修改信息！"
+            });
+            return;
+        }
+        $.ajax({
+            type: "post",
+            url:"/gm/http",
+            data:{cmd: "modify_typesmessage", gameid:old_gameid, typename:typename,typeid:old_typeid},
+            dataType:"json",
+            beforeSend: function(){
+                //加载中...提示
+                onLoadTip = layer.load(1);
+            },
+            success: function(data){
+                //有返回值,则关闭加载
+                layer.close(onLoadTip);
+                if (!data) {
+                    alert("command timeout");
+                } else {
+                    if(data.retcode == 0){
+                        parent.layer.open({
+                            type: 0,
+                            title :'提示信息',
+                            area: ['300px', '150px'],
+                            shadeClose: true, //点击遮罩关闭
+                            content: "修改成功！"
+                        });
+                        closeCont('itemInfo');
+                        get_types();
+                    }else if(data.retcode==1){
+                        parent.layer.open({
+                            type: 0,
+                            title :'提示信息',
+                            area: ['300px', '150px'],
+                            shadeClose: true, //点击遮罩关闭
+                            content: "修改失败！"
+                        });
+                    }
+                }
+            }
+        });
+    }
+    //刷新
+    $("#user_item_info_search").click(function (){
+        get_types();
+    })
+    // function listToPage(id){
+    // 	var ids = id
+    // 	rolesearch(ids);
+    // 	};
+    //页面展示
+    function get_types(){
+        var gameid = $.cookie("gameid");
+        var curtype = 1;//获取修改信息列表
+        //alert(gameid+"  +"+zoneid);
+        $.ajax({
+            type: "post",
+            url:"/gm/http",
+            data:{cmd: "get_modify_typeslist",gameid:gameid, curtype:curtype},
+            dataType:"json",
+            beforeSend: function(){
+                //加载中...提示
+                onLoadTip = layer.load(1);
+            },
+            success: function(data){
+                //有返回值,则关闭加载
+                layer.close(onLoadTip);
+                if (!data) {
+                    alert("command timeout");
+                } else {
+                    if (data.data&&data.data.length>0) {
+                        var html = template("gm_cc_RecordData", data);
+                        $("#gm_cc_RecordHtml").html(html);
+                    }
+                }
+            }
+        });
+    }
+    $(document).ready(function(){
+        get_types();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                 <form action="">                 	               
+                    <!-- <div class="jmform-group">
+                        <a id="gm_log_searchBtn" class="jmbtn jmbtn-succeed add">添加</a>
+                    </div> -->
+                </form>
+            </div>           
+        </div>
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">自动点控充值档次配置</h3>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="cc_loginprops_table">
+                <thead>
+                    <tr>
+                        <th>配置编号</th>
+                        <th>金币下限</th>
+                        <th>金币上限</th>
+						<th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">
+						<%for(i = 0; i < datas.length; i++) {%>    
+						<tr number=<%=datas[i].id%> goldin=<%=changechips(datas[i].rechargemin) %> goldout=<%=changechips(datas[i].rechargemax)%>>
+							<td> <%=datas[i].id%> </td>
+							<td> <%=changechips(datas[i].rechargemin) %></td>
+                            <td> <%=changechips(datas[i].rechargemax)%></td>
+							
+							<td><a class='jmbtn jmbtn jmbtn-info update'>修改</a>
+                                <!-- <a class='jmbtn jmbtn jmbtn-success delete'>删除</a></td> -->
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div>
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+            <!-- <div class="jm-epages" id="pageHtml">
+            	<script type="text/html" id="pageData">
+				<%if(isenptydata(datas)){%>
+					<div style="color:#ff6600" class="fleft">暂无查询记录！</div>
+				<%} else{%>
+					<div class = "fright">
+					<%if(curpage != 1) {%>   
+						<a href="javascript:listToPage(1);">首页</a>
+						<a href="javascript:listToPage(<%=curpage - 1%>);">上一页</a>
+					<%}%>
+					<%if(curpage == 1 && maxpage != 0 && maxpage != 1) {%>  
+						<a>首页</a>
+						<a>上一页</a>
+					<%}%>				
+					<%if(maxpage <= 8){%> 
+						<%for(i = 1; i <= maxpage; i++) {%>  
+						<%if(curpage == i) {%>  
+							<a href="#" class="on"><%=i%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+						<%}%>  
+					<%}%>  
+					<%}else {%>  
+						<%if(curpage == 1) {%>  
+							<a href="#" class="on">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							<a href="javascript:listToPage(3);">3</a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage < 6) {%>  
+							<%for(i = 1; i <= curpage - 1; i++ ) {%>  
+								<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+							<%}%>  
+							<span class="on"><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage >= 6 && curpage < maxpage - 4) {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<a href="javascript:listToPage(<%=curpage - 1%>);"><%=curpage - 1%></a>  
+							<span class="on"><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage-1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<%for(i = maxpage - 4; i <= maxpage; i++) {%>  
+								<%if(curpage == i) {%>  
+									<span class="on"><%=i%></span>  
+								<%}else {%>  
+									<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+								<%}%>  
+							<%}%>  
+						<%}%>  
+					<%}%>  
+					<%if(curpage < maxpage) {%>  
+						<a href="javascript:listToPage(<%=curpage + 1%>);">下一页</a>  
+						<a href="javascript:listToPage(<%=maxpage%>);">尾页</a>  
+					<%}%> 
+					<div>
+				<%}%>
+				</script>
+            </div> -->
+            <!-- epages -->
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+<!-- 弹窗信息 start -->
+<div id="itemInfo" style="overflow-y: auto;width: 700px;" class="popupCon " sty>
+    <h2 class="f16 newTitle" >自动点控管理(非充值)</h2>
+    <a href="javascript:closeCont('itemInfo');"   class="btnClose">×</a>
+    <!--popupBox start-->
+    <div class="popupBox" >
+        <div class="blockbox" >
+            <div class="box-inner clearfix" style="min-height:300px">
+                <div class="jmform-vertical add-itemInfo">
+                    <div class="jmform-vgroup" id="number1">
+                        <label class="control-label" style="width: 25%;" >配置编号</label>
+                        <div class="fillform">
+                            <input id="number" type="text" class="jminput jminput-size05" name="target_stock" disabled/>
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">金币下限：</label>
+                        <div class="fillform">
+                            <input id="goldin" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup">
+                        <label class="control-label" style="width: 25%;">金币上限：</label>
+                        <div class="fillform">
+                            <input id="goldout" type="text" class="jminput jminput-size05" name="target_stock" />
+                        </div>
+                    </div>
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn jmbtn-info" href="javascript:void(0)" onclick="submit()">提交</a>  
+							<a class="jmbtn jmbtn jmbtn-default" href="javascript:closeCont('itemInfo');">取消</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--popupBox end-->
+</div>
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<!--报表导出 js -->
+<script src="js/export/tableExport.js"></script>
+<script src="js/export/jquery.base64.js"></script>
+<style>
+.select_new{
+  width:150px;height:36px; border:1px solid #ddd;border-radius: 5px;color: #555555
+}
+</style>
+<script type="text/javascript">
+	var number  = 0;
+	var goldin = 0;
+	var goldout    = 0;
+	var optype  = 9;
+    var perpage = 50;
+    template.helper("changechips" , function (data) {
+
+        return (data / 100).toFixed(2)
+
+    })
+    //判断是否有数据，记录为空
+    template.helper('isenptydata', function (data) {
+        if($.isEmptyObject(data)){
+            return true;
+        }else{
+            return false;
+        }
+    })
+    function research(id) {
+        optype = 9
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+        
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+        
+        var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "controll_order", gameid: gameid,zoneid:zoneid, optype: optype, curpage: toCurPage , perpage :perpage},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.datas&&data.datas.length>0) {
+                        var html = template("gm_cc_RecordData", data); 
+                        $("#gm_cc_RecordHtml").html(html);
+                    }else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+					
+				}
+			}
+		});
+    }
+	// function listToPage(id){
+	// 	var ids = id
+	// 	research(ids);
+	// 	};
+    $(document).ready(function(){
+
+        research(1);
+		
+    });
+    $('.update').live('click',function(){
+        var trItem = $(this).parent('td').parent('tr');
+        optype  = 10;
+
+        number  = trItem.attr("number");
+        goldin  = trItem.attr("goldin");
+        goldout = trItem.attr("goldout");
+     
+        $('#number').val(number);
+        $('#goldin').val(goldin);
+        $('#goldout').val(goldout);
+
+		showCont('itemInfo');
+
+	})
+	function submit(){
+        let gameid = $.cookie("gameid");
+        let zoneid = $.cookie("zoneid");
+  
+        let id       = Number($('#number').val());
+        let goldin   = Number($('#goldin').val() * 100);
+        let goldout  = Number($('#goldout').val() * 100);
+
+        // if(id == number && chips == gold && control == autocontrolvalue ){
+        //     alert("数据没有任何修改");
+        //     return false;
+        // }
+
+        let res = confirm('是否确认提交？');
+        if(res != true) {
+            return;
+        }
+
+        $.post("/gm/http", {cmd: "controll_order", gameid: gameid,zoneid:0, optype: optype, id:id,goldin:goldin,goldout:goldout},
+        function(data){
+            alert(data.retdesc);
+            if(data.retcode == 0){
+                closeCont('itemInfo');
+                research(1);
+            }
+        }, "json");
+        
+ 
+    }
+
+    
+</script>
+</body>
+</html>

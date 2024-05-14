@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script> 
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+    <div class="jm-plr15">
+        <!-- jm-navbar start-->
+        <div class="jm-navbar">
+            <div class="jmform-search clearfix">
+                 <form action="">         
+					<div class="jmform-group">
+                        <div class=" fleft">
+                            <select id="all_type" name="select" class="select_new">
+                                <option value="0" selected>总类型 </option>                                
+                            	<option value="1">slots</option>
+                                <option value="2">非slots</option>                             
+                            </select>
+                        </div>
+                    </div> 
+					<div class="jmform-group">
+                        <div class=" fleft">
+                            <select id="sub_game" name="select" class="select_new">
+                            	                                   
+                            </select>
+                        </div>
+                    </div>  
+                    <!-- <div class="jmform-group">
+                        <div class=" fleft">
+                            <select id="sessions" name="select" class="select_new">
+                            	<option value="0" selected>场次</option>                                
+                            	<option value="1">初级场</option>
+                                <option value="2">中级场</option>
+                                <option value="3">高级场</option>                                     
+                            </select>
+                        </div>
+                    </div>   -->
+					<div class="jmform-group">
+                        <div class=" fleft">
+                            <select id="usertype" name="select" class="select_new">
+                            	<option value="0" selected>玩家类型 </option>                                
+                            	<option value="1">进库存</option>
+                                <option value="2">不进库存</option>
+								                          
+                            </select>
+                        </div>
+                    </div>   
+					      
+                    <div class="jmform-group">
+                        <input id="starttime" type="text" placeholder="开始时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd'})" value="" autocomplete="off">
+                    </div>
+                    <div class="jmform-group">
+                        <input id="endtime" type="text" placeholder="结束时间" class="jminput jminput-sm jminput-size04 Wdate" name="" onfocus="WdatePicker({skin:'default',dateFmt:'yyyy-MM-dd'})" value="" autocomplete="off">
+                    </div>
+                    <div class="jmform-group">
+                        <a id="gm_log_searchBtn" class="jmbtn jmbtn-succeed" href="javascript:void(0)"><span class="ico-search-w16"></span>查询</a>
+                    </div>
+                    <!-- <div class="jmform-group">
+                        <a class="jmbtn jmbtn-succeed" href="javascript:;" onClick ="$('#cc_loginprops_table').tableExport({type:'excel',escape:'false'});">导出报表</a>
+                    </div> -->
+                    
+                </form>
+            </div>           
+        </div>
+        <!-- jm-navbar end-->
+        
+        
+        <div class="jm-TabTitle mt10">
+            <h3 class="h3type txt-white">总流水日志</h3>
+			<span id="totalHtml">
+				<script id="totalinfo" type="text/html">
+					<h4 class="h3type txt-white"><span id="all">总下注:<%= allbet?changechips(allbet):0%> &nbsp;总赔付：<%= allpayout?changechips(allpayout):0%> </span></h4>
+				</script>
+					
+			</span>
+        </div>
+        <!-- jm-section start-->
+        <div class="jm-section">
+            <table class="jmtable-type01" id="cc_loginprops_table">
+                <thead>
+                    <tr>
+                        <th align="center">日期</th>                        
+                        <th>游戏类型</th>
+                        <th>游戏名</th>
+                        <!-- <th>场次</th> -->
+                        <th>玩家类型</th>
+						<th>总下注</th>
+						<th>总赔付</th>
+						<th>赔付比</th>
+                    </tr>
+                </thead>               
+                <tbody id="gm_cc_RecordHtml">
+                	<script id="gm_cc_RecordData" type="text/html">
+						<%for(i = 0; i < data.length; i++) {%>    
+						<tr>
+							<td><%=data[i].datetime%></td>
+                            <td><%=gametypename(gametype)%></td>
+                            <td><%=gamename(subgameid)%></td>
+                            <!-- <td><%=getgametype(subgametype)%></td> -->
+                            <td><%=usertype(stocktype)%></td>
+                            <td><%=changechips(data[i].allbet)%></td>
+                            <td><%=changechips(data[i].allpayout)%></td>
+							<td><%=rate(data[i].allbet , data[i].allpayout)%></td>
+							
+						</tr>
+						<%}%>
+					</script>
+                </tbody>
+            </table>
+        </div>
+        <!-- jm-section end-->
+        <div class="jm-navbar clearfix">
+            <!-- jm-epages -->
+            <div class="jm-epages" id="pageHtml">
+            	<script type="text/html" id="pageData">
+				<%if(isenptydata(data)){%>
+					<div style="color:#ff6600" class="fleft">暂无查询记录！</div>
+				<%} else{%>
+					<div class = "fright">
+					<%if(curpage != 1) {%>   
+						<a href="javascript:listToPage(1);">首页</a>
+						<a href="javascript:listToPage(<%=curpage - 1%>);">上一页</a>
+					<%}%>
+					<%if(curpage == 1 && maxpage != 0 && maxpage != 1) {%>  
+						<a>首页</a>
+						<a>上一页</a>
+					<%}%>				
+					<%if(maxpage <= 8){%> 
+						<%for(i = 1; i <= maxpage; i++) {%>  
+						<%if(curpage == i) {%>  
+							<a href="#" class="on"><%=i%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+						<%}%>  
+					<%}%>  
+					<%}else {%>  
+						<%if(curpage == 1) {%>  
+							<a href="#" class="on">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							<a href="javascript:listToPage(3);">3</a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage < 6) {%>  
+							<%for(i = 1; i <= curpage - 1; i++ ) {%>  
+								<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+							<%}%>  
+							<span class="on"><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage - 1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else if(curpage >= 6 && curpage < maxpage - 4) {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<a href="javascript:listToPage(<%=curpage - 1%>);"><%=curpage - 1%></a>  
+							<span class="on"><%=curpage%></span>  
+							<a href="javascript:listToPage(<%=curpage + 1%>);"><%=curpage + 1%></a>  
+							...  
+							<a href="javascript:listToPage(<%=maxpage-1%>);"><%=maxpage - 1%></a>  
+							<a href="javascript:listToPage(<%=maxpage%>);"><%=maxpage%></a>  
+						<%}else {%>  
+							<a href="javascript:listToPage(1);">1</a>  
+							<a href="javascript:listToPage(2);">2</a>  
+							...  
+							<%for(i = maxpage - 4; i <= maxpage; i++) {%>  
+								<%if(curpage == i) {%>  
+									<span class="on"><%=i%></span>  
+								<%}else {%>  
+									<a href="javascript:listToPage(<%=i%>);"><%=i%></a>  
+								<%}%>  
+							<%}%>  
+						<%}%>  
+					<%}%>  
+					<%if(curpage < maxpage) {%>  
+						<a href="javascript:listToPage(<%=curpage + 1%>);">下一页</a>  
+						<a href="javascript:listToPage(<%=maxpage%>);">尾页</a>  
+					<%}%> 
+					<span>第<input type="text" id="choise_page" style="width: 30px;">页 <button type="button" onclick="choise()">跳转</button></span>
+					<div>
+				<%}%>
+				</script>
+            </div>
+            <!-- epages -->
+        </div>
+        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<!--报表导出 js -->
+<script src="js/export/tableExport.js"></script>
+<script src="js/export/jquery.base64.js"></script>
+<style>
+	.select_new{
+	  width:150px;height:36px; border:1px solid #ddd;border-radius: 5px;color: #555555
+	}
+	</style>
+<script type="text/javascript">
+	var jsonPlat;
+   	template.helper("changechips" , function (data) {
+
+		return (data / 100).toFixed(2)
+
+	})
+   template.helper('isenptydata', function (data) {    
+   		if($.isEmptyObject(data)){
+			return true;
+		}else{
+			return false;
+		}
+   	})	
+	template.helper('gametypename' , function (data) {
+		switch(data){
+            case 0:
+				return "总类型";
+			case 1:
+				return "slots";
+			
+			case 2 : 
+				return "非slots";
+		}
+	})
+	template.helper('rate' , function (data1 , data2) {
+
+		if (data1 != 0){
+			return (data2*100/data1).toFixed(2)+"%";
+		}else{
+			return "0%";
+		}
+				
+			
+	})
+
+    template.helper('gamename', function (data) {
+        var name = "所有游戏";
+        for(var i=0; i<jsonPlat.length; i++) {
+
+            if(jsonPlat[i].subgameid == data){
+
+                name =  jsonPlat[i].subgamename;
+                break;
+            }
+        }
+        return name;
+   	})
+    template.helper('getgametype', function (data) {    
+   		switch(data){
+			case 1:
+				return "初级场";
+			case 2 : 
+				return "中级场";
+			case 3 : 
+				return "高级场";
+            default:
+                return "所有场次"
+		}
+   	})
+    template.helper('usertype', function (data) {    
+   		switch(data){
+			case 1:
+				return "进库存玩家";
+			case 2 : 
+				return "不进库存玩家";
+            case 3 : 
+				return "低充值玩家";
+            default:
+                return "所有玩家"
+		}
+   	})
+	  
+	   
+    function research(id) {
+
+        var gameid = Number($.cookie("gameid")) || 0;
+        var zoneid = Number($.cookie("zoneid")) || 0;
+
+        var all_type = $("#all_type").val();
+        var sub_game = $("#sub_game").val();
+        var sessions = $("#sessions").val();
+        var usertype = $("#usertype").val();
+
+        var starttime = $("#starttime").val();
+        var endtime = $("#endtime").val();
+		var stId =  Number(id);
+		var toCurPage = stId ||1;
+		var perpage = 50;
+
+        if (starttime != ""){
+            starttime += " 00:00:00"
+        }
+        if (endtime != ""){
+            endtime += " 23:59:59"
+        }
+        
+		var onLoadTip;	
+		$.ajax({
+			type: "post",
+			url:"/gm/http",
+			data:{cmd: "gm_log_flowing_water",gameid:gameid, zoneid:zoneid, starttime: starttime, endtime: endtime,curpage:toCurPage , perpage:perpage,gametype:all_type,subgameid:sub_game,subgametype:sessions,stocktype:usertype},
+			dataType:"json",
+			beforeSend: function(){
+				//加载中...提示
+				 onLoadTip = layer.load(1);
+				},
+			success: function(data){
+				//有返回值,则关闭加载
+				layer.close(onLoadTip);
+				if (!data) {
+					alert("command timeout");
+				} else {
+					if (data.data&&data.data.length>0) {
+	                      var html = template("gm_cc_RecordData", data); 
+	                      $("#gm_cc_RecordHtml").html(html);              
+	                    }else{
+                        $("#gm_cc_RecordHtml").html("");
+                    } 
+					var pageHtml = template("pageData", data);  
+					$("#pageHtml").html(pageHtml);	
+					var totalHtml = template("totalinfo", data);  
+					$("#totalHtml").html(totalHtml);				
+				}
+			}
+		});	
+    }
+	function listToPage(id){
+		var ids = id
+		research(ids);
+		};
+    $(document).ready(function(){
+        $("#gm_log_searchBtn").click(research);
+    
+		let gameid = $.cookie("gameid");
+		
+		$.getJSON("js/json/game/1002.json", function(allplat){
+			jsonPlat = eval(allplat.data);
+			var html = " <option value='0'>请选择游戏</option>";
+			for(var i=0; i<jsonPlat.length; i++) {
+				
+				html += "<option value='"+jsonPlat[i].subgameid+"'>"+jsonPlat[i].subgamename+"</option>";
+				
+			}
+			$("#sub_game").html(html)
+		});
+		
+		research(1);
+
+        
+    });
+</script>
+</body>
+</html>

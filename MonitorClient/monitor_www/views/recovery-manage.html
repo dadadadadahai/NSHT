@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- basic styles -->
+
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+	
+		<link rel="stylesheet" href="css/chosen.css">
+		<link rel="stylesheet" href="css/ace.min.css" />
+		<link rel="stylesheet" href="css/gm.css" />
+		<link rel="stylesheet" href="css/multiple-select.min.css">
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+<body class="bg-layout">
+
+	<div class="page-content">
+		<div class="row">
+			<div class="table-search">
+				
+				<a class="btn btns-green btn-refresh btns-tables" href="javascript:add_gamemessage();" >添加</a>
+				<a class="btn btns-green btn-refresh btns-tables" href="javascript:modfily_gamemessage(1);" >批量修改</a>
+			</div>
+			<div class="table-header">
+				渠道信息列表
+			</div>
+			<div class="table-responsive content-details">
+				<table  id="sample-table-3" class="gameTable table table-hover">
+					<thead>
+						<tr>
+							<th align="center"></th>
+							<th align="center">记录ID</th>
+							<th align="center">包名</th>
+							<th align="center">渠道名</th>
+							<!-- <th>campaign_id</th> -->
+							<th>账户ID</th>
+							<th>代理ID</th>
+							<th>账户货币</th>
+							<th>状态</th>
+							
+							<th>添加时间</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>	
+	</div><!-- /.page-content -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+					<h4 class="modal-title" id="myModalLabel">操作</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group" id="recoredid" style="display: none;">
+						<label for="ad_account_id">账号ID</label>
+						<textarea name="id" id="id" cols="30" rows="3"  class="form-control"></textarea>
+					</div>
+					<div id="infogroup">
+						<div class="form-group">
+							<label for="appid">包名</label>
+							<div>
+								<select name="appid" style="width:180px;" id="appid" class="dept_select" tabIndex="1" class="form-control"> 
+								  
+									<option value="1" >5R5</option>
+									<option value="2" >5R5win2</option>
+									<option value="5" >5R5win5</option>
+									<option value="6" >5R5win6</option>
+									<option value="8" >5R5win8</option>
+								</select>
+							</div>
+							
+						</div>
+						<div class="form-group" >
+							<label for="modify_gamename">渠道名</label>
+							<div>
+								<select name="channel" style="width:180px;" id="channel" class="dept_select" tabIndex="1" class="form-control"> 
+								
+									<option value="unattributed">FaceBook推广</option>		
+									<option value="Google Ads ACI">Google推广</option>		
+									<option value="Kwai for Business">Kwai推广</option>	
+								</select>
+							</div>
+							
+						</div>
+						<!-- <div class="form-group">
+							<label for="keywords">关键字识别码</label>
+							<input type="text" name="keywords" class="form-control" id="keywords" style="width:260px;">
+						</div> -->
+						
+						<div class="form-group" >
+							<label for="ad_account_id">账户ID</label>
+							<input type="text" name="ad_account_id" class="form-control" id="ad_account_id" style="width:260px;">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="agent_id">代理id</label>
+						<input type="text" name="agent_id" class="form-control" id="agent_id" style="width:260px;">
+					</div>
+					<div class="form-group" >
+						<label for="modify_gamename">账户货币</label>
+						<div>
+							<select name="currency" style="width:180px;" id="currency" class="dept_select" tabIndex="1" class="form-control"> 
+								
+								<option value="1">美元</option>		
+								<option value="2">欧元</option>		
+								<option value="3">雷亚尔</option>		
+							</select>
+						</div>
+						
+					</div>
+					<div class="form-group">
+						<label for="token">口令</label>
+						<textarea name="token" id="token" cols="30" rows="10"  class="form-control"></textarea>
+					</div>
+					<div class="form-group">
+						<label for="status">状态</label>
+						<input type="radio" name="status" value="0" id="rad0" >未投放
+						<input type="radio" name="status" value="1" id="rad1">投放中
+					</div>
+					
+                </div>
+
+				<div class="modal-footer" style="background-color: #fff;border-top:#fff;text-align: left;">
+					<button type="button" id="btn_gamemodify" class="btn btn-primary" onclick="btn_gamemodify()">提交</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<!--删除框提示-->
+	<div class="modal fade" tabindex="-1" role="dialog" id="modal1">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+					<h4 class="modal-title">警告！</h4>
+				</div>
+				<div class="modal-body">
+					<p>确认删除此配置?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" aria-label="Close" id="confirm_delete" data-dismiss="modal">确认</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" >取消</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+		
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="js/bootstrap.min.js"></script>
+		
+		<script src="js/jquery.dataTables.min.js"></script>
+		<script src="js/jquery.dataTables.bootstrap.js"></script>
+
+		<script src="js/ace-elements.min.js"></script>
+		<script src="js/ace.min.js"></script>
+		
+		<script src="layer/layer.js"></script>
+		<script src="js/jquery.cookie.js"></script> 
+		<script src="js/multiple-select.min.js"></script> 
+		<!-- inline scripts related to this page -->
+		<script>
+			var channel  = 0;
+			var keywords = "";
+			var agent_id = "";
+			var ad_account_id = "";
+            var ids = "";
+			var type =  1;
+			var token = "";
+			var gameid = Number($.cookie("gameid")) || 0;
+			var status = 0;
+			var appid = 0;
+			var currency = 1;
+
+			function modfily_gamemessage(actype , id,channel,status,ad_account_id ,agent_id,token,appid,currency){
+				ids = ""
+				
+				if(actype == 1 ){
+					$("#recoredid").show();
+				
+					$("#infogroup").hide();
+					$("#keywords").val('');
+					$("#agent_id").val('');
+					$("#ad_account_id").val('');
+					$('#myModal').modal();
+					$("#token").val('');
+					$("#rad0").prop("checked" , true);
+					$("#rad1").prop("checked" , false);
+					type = 4;
+					$('input[name="orderid[]"]:checked').each(function()
+					{
+						ids += $(this).attr('id') + ",";
+					})
+					ids = $.trim(ids.slice(0, -1));
+				}else{
+					$("#infogroup").show();
+					$("#recoredid").hide();
+					$("#rad0").prop("checked" , false);
+					$("#rad1").prop("checked" , false);
+					$("#agent_id").val(agent_id);
+					$("#token").val(token);
+					$("#ad_account_id").val(ad_account_id);
+					$("#channel").find("option[value="+channel+"]").attr("selected",true);
+					$("#appid").find("option[value="+appid+"]").attr("selected",true);
+					$("#currency").find("option[value="+currency+"]").attr("selected",true);
+
+
+					$("#rad"+status).prop("checked" , true);
+					
+					$('#myModal').modal();
+					type = 2;
+					ids = id;
+					channel  = channel;
+					ad_account_id = ad_account_id;
+					agent_id = agent_id;
+					token=token;
+					status = status;
+					appid = appid;
+					currency=currency;
+				}
+
+				$("#id").val(ids)
+				
+
+				
+			}
+			function add_gamemessage(){   
+				$("#infogroup").show();
+				$("#id").val("")
+				$("#recoredid").hide();
+				$("#keywords").val('');
+				$("#agent_id").val('');
+				$("#ad_account_id").val('');
+				$('#myModal').modal();
+				$("#token").val('');
+				$("#rad0").prop("checked" , true);
+				$("#rad1").prop("checked" , false);
+				type = 1;
+			}
+			jQuery(function($) {
+				$('#sample-table-3').dataTable();
+			});
+
+			$(document).ready(function (){
+				$("#gamePlat").multipleSelect({
+					placeholder: "全部",
+					selectAllText:'全部',
+					allSelected:'全部'
+				});
+				//select全部选中
+				$("#gamePlat").multipleSelect('checkAll');		
+				searchallgameinfo();
+			})
+
+
+			function btn_gamemodify(){//修改信息
+				var token1 = $("#token").val();
+				var channel1 = $("#channel").val();
+				var appid1 = $("#appid").val();
+				var agent_id1 = $("#agent_id").val();
+				var ad_account_id1 = $("#ad_account_id").val();
+				var status1 = $('input[name="status"]:checked').val();
+				var ids = $("#id").val();
+				var currency = $('#currency').val();
+				
+				if(token== '' &&channel1== '' && agent_id1 == '' && ad_account_id1 == '' && appid1 == '' &&currency == '' ){
+					alert("请输入正确的参数！");
+					return
+				}
+
+				if (type == 4 && ids == ""){
+					alert("请输入需要批量操作的账号！");
+					return
+				}
+				$.post("/monitor/http", {
+                    cmd: "launch_keywords_action",
+                    token:token1,
+					status:status1,
+                    channel:channel1,
+					agent_id:agent_id1,
+					ad_account_id:ad_account_id1,
+                    id:ids,
+					type,type,
+					gameid:gameid,
+					appid:appid1,
+					currency:currency
+                },
+                function(data){
+                    if (data.retcode == 1) {
+                        alert(data.retdesc);
+                    } else {
+                        alert(data.retdesc);
+                        $("#cancel").click()
+                        searchallgameinfo();
+                    }
+                }, "json");
+			}
+
+
+			
+			function confirm_delete(id){//删除游戏
+				
+				var result = confirm("是否确认删除此条数据？")
+
+				if(result == false){
+					return  
+				}
+				$.post("/monitor/http", {
+							cmd: "launch_keywords_action",
+							id:id,
+							type:3,
+							gameid:gameid
+						},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								alert(data.retdesc);
+								searchallgameinfo();
+							}
+						}, "json");
+			}
+			function searchallgameinfo(){//查询所有投放渠道信息
+
+				$.post("/monitor/http", {cmd: "launch_channel_list" , gameid : gameid},
+						function(data){
+							if (data.retcode == 1) {
+								alert(data.retdesc);
+							} else {
+								
+								$('#sample-table-3').DataTable( {
+									"data":data.data,
+									"aoColumns": [
+										{ "data": null,"render":function(data1,type,row,meat){
+											var s = `<input type='checkbox' name="orderid[]" id="`+row.ad_account_id+`">`;
+											return s;
+										} },
+										
+										{ "data": "id" },
+										{ "data": null,"render":function(data1,type,row,meat){
+						                        switch(row.appid){
+													case 1:
+														return "5R5";
+													case 2:
+															return "5R5win2";
+													case 5:
+															return "5R5win5";
+													case 6:
+															return "5R5win6";
+													case 8:
+															return "5R5win8";
+													
+													default:
+														return "";
+                                
+												}
+											} },
+										{ "data": null,"render":function(data1,type,row,meat){
+						                        switch(row.launchid){
+													case "unattributed" :
+														return " FaceBook推广";
+													case "Google Ads ACI" :
+														return " Google推广";
+													case "Kwai for Business" :
+														return " Kwai推广";	
+                                
+												}
+											} },
+										{ "data": "ad_account_id"},
+										{ "data": "agent_id"},
+										{ "data": null,"render":function(data1,type,row,meat){
+												switch(row.currency){
+													case "1":
+														return "美元";
+													case "2":
+														return "欧元";
+													case "3":
+														return "雷亚尔";
+													default:
+														return "";
+												}
+											} },
+										{ "data": null,"render":function(data1,type,row,meat){
+						                        switch(row.status){
+													case 1 :
+														return "投放中";
+													case 0 :
+														return "未投放";
+                                
+												}
+											} },
+										
+										{ "data": "updated" },
+										{ "data": null,"render":function(data1,type,row,meat){
+												var html ="<a href=javascript:modfily_gamemessage(2," + row.id +",'" + row.launchid +"','" + row.status+"','" + row.ad_account_id+"','" + row.agent_id +"','"+row.token+"','"+row.appid+"','"+row.currency+"');>修改</a>";
+												html += "<a href='javascript:confirm_delete("+row.id+");'>删除</a>";
+												return html;
+											} },
+									],
+									"order": [[8, 'desc']]
+								});
+
+							}
+						}, "json");
+			}
+		</script>
+	
+	
+</body>
+</html>
+

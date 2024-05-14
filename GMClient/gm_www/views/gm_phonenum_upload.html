@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GMTools管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="form/css/jqtransform.css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="form/js/jquery.jqtransform.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script>
+<script src="js/jquery.cookie.js"></script> 
+<script type="text/javascript" src="My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript">
+$(function() {
+    $(".jqtransform").jqTransform();
+});
+</script>
+
+</head>
+
+<body>
+
+<!--jm-maincon warp start-->
+<div class="jm-maincon">
+	<div class="jm-plr15">		
+        <div class="jm-TabTitle mt10">
+        	<h3 class="h3type txt-white">电话号码上传</h3>
+        </div>
+        <div class="box-inner jm-userInfoModify">
+            <div class="jmform-vertical">
+                <form action="">
+
+                    <div class="jmform-vgroup">
+                        <input type="file" name="upload_file" id="upload_file" class="jminput-size05" accept=".txt"><br>
+                       
+                    </div>
+                    <div class="jmform-vgroup">
+                        <span style="color: red;">文件中电话号码以英文逗号隔开</span>
+                    </div>
+                  
+                    <div class="jmform-vgroup jm-ptb20">
+                        <div class="control-label clearfix">  
+                        	                      	
+                        </div>
+                        <div class="fillform"> 
+                        	<a class="jmbtn jmbtn-lgLm jmbtn-default" href="javascript:uploadfile()" >提交</a>  
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>            
+            
+        </div>        
+    </div>
+</div>
+<!--jm-maincon warp end-->
+
+
+<script type="text/javascript" src="js/effect.js"></script>
+<script type="text/javascript">
+    var filecontent = "";
+            var file_name = "";
+        var btn = document.getElementById("btn")      
+        
+        function verificationPicFile(){
+           
+            var file = $("#upload_file").prop('files')[0];
+            var reader = new FileReader();
+ 
+            reader.onload = function(e) {
+                if (e.target.readyState == 2) { // DONE state
+                    if (e.target.error) {
+                        
+                        alert("文件读取出错")
+                        return;
+                    }
+                   
+                    filecontent = e.target.result;
+                    tijiao();
+                }
+            };
+         
+            if (file) {
+                reader.readAsText(file); 
+               
+            }
+            
+        }
+        function uploadfile() {   
+            
+            verificationPicFile()
+
+        }
+        function tijiao(){
+            var formdata = new FormData();   
+            var gameid = Number($.cookie("gameid")) || 0;
+            var zoneid = Number($.cookie("zoneid")) || 0;
+          
+            $.ajax({
+            type: "post",
+            url:"/gm/http",
+            data:{cmd: "gm_phonenum_upload",gameid:gameid,zoneid:zoneid,file:filecontent},
+            dataType:"json",
+            beforeSend: function(){
+                //加载中...提示
+                onLoadTip = layer.load(1);
+            },
+            success: function(data){
+                //有返回值,则关闭加载
+                layer.close(onLoadTip);
+                if (!data) {
+                    alert("command timeout");
+                } else {
+                    if (data.retcode == 1) {
+						alert(data.retdesc);
+					} else {
+						alert(data.retdesc)
+					}
+                }
+            }
+        });
+    }
+    
+
+</script>
+</body>
+</html>
